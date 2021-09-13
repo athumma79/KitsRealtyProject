@@ -1,0 +1,50 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-kitsrealtyproject2-dev-155513-authRole",
+      "UnauthRoleArn": "arn:aws:iam::189599045699:role/amplify-kitsrealtyproject2-dev-155513-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::189599045699:role/amplify-kitsrealtyproject2-dev-155513-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-kitsrealtyproject2-dev-155513-deployment",
+      "UnauthRoleName": "amplify-kitsrealtyproject2-dev-155513-unauthRole",
+      "StackName": "amplify-kitsrealtyproject2-dev-155513",
+      "StackId": "arn:aws:cloudformation:us-east-1:189599045699:stack/amplify-kitsrealtyproject2-dev-155513/849fecc0-14cc-11ec-b81e-1269b8fe901f",
+      "AmplifyAppId": "dy2272uc2xngc"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "dy2272uc2xngc",
+          "type": "manual"
+        }
+      },
+      "auth": {
+        "kitsrealtyproject240eb1985": {
+          "userPoolId": "us-east-1_MQXokLX98",
+          "userPoolName": "KitsRealtyUserPool",
+          "webClientId": "2sepibtm1uo1dsrtjd4ojv81q9",
+          "nativeClientId": "2sepibtm1uo1dsrtjd4ojv81q9",
+          "identityPoolId": "us-east-1:ff62525f-602c-4d48-9e0d-23a2cecdc23c",
+          "identityPoolName": "KitsRealtyIdentityPool",
+          "allowUnauthenticatedIdentities": true,
+          "authRoleArn": "arn:aws:iam::189599045699:role/Cognito_KitsRealtyIdentityPoolAuth_Role",
+          "authRoleName": "Cognito_KitsRealtyIdentityPoolAuth_Role",
+          "unauthRoleArn": "arn:aws:iam::189599045699:role/Cognito_KitsRealtyIdentityPoolUnauth_Role",
+          "unauthRoleName": "Cognito_KitsRealtyIdentityPoolUnauth_Role"
+        }
+      },
+      "function": {
+        "KitsRealtyLambdaFunction2": {
+          "deploymentBucketName": "amplify-kitsrealtyproject2-dev-155513-deployment",
+          "s3Key": "amplify-builds/KitsRealtyLambdaFunction2-574e312b467338306749-build.zip"
+        }
+      },
+      "storage": {
+        "kitsrealtyproject201b1adba": {
+          "bucketName": "kits-realty-bucket",
+          "region": "us-east-1"
+        }
+      }
+    }
+  }
+}

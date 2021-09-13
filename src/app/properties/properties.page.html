@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Properties</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <div class="accordion" id="accordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            <ion-thumbnail slot="start">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw==">
+            </ion-thumbnail>
+            <ion-label>
+              <h3>Address</h3>
+              <p>County</p>
+              <p>Status | Property Type</p>
+            </ion-label>
+            <ion-label class="right">
+              <h3>$x</h3>
+              <p>Price Type</p>
+            </ion-label>
+          </button>
+          <ion-button class="details-button" (click)="openPropertyDetails()">View Details</ion-button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordion">
+          <div class="accordion-body">
+            <p># Beds: ---</p>
+            <p># Baths: ---</p>
+            <p>Land: x sq ft</p>
+            <p>Property: x sq ft</p>
+            <p>Year Built: ---</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-list>
+</ion-content>

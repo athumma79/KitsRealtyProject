@@ -1,0 +1,42 @@
+{
+  "paths": [
+    {
+      "name": "/properties",
+      "lambdaFunction": "KitsRealtyLambdaFunction2",
+      "privacy": {
+        "private": true,
+        "auth": [
+          "/POST",
+          "/GET",
+          "/PUT",
+          "/PATCH",
+          "/DELETE"
+        ]
+      },
+      "policyResourceName": "/properties"
+    }
+  ],
+  "resourceName": "KitsRealtyAPI2",
+  "apiName": "KitsRealtyAPI2",
+  "functionArns": [
+    {
+      "lambdaFunction": "KitsRealtyLambdaFunction2"
+    }
+  ],
+  "privacy": {
+    "auth": 1,
+    "unauth": 0,
+    "authRoleName": "amplify-kitsrealtyproject2-dev-155513-authRole",
+    "unAuthRoleName": "amplify-kitsrealtyproject2-dev-155513-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "KitsRealtyLambdaFunction2",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}
