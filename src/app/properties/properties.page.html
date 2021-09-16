@@ -5,36 +5,34 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list>
-    <div class="accordion" id="accordion">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingOne">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-            <ion-thumbnail slot="start">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw==">
-            </ion-thumbnail>
-            <ion-label>
-              <h3>Address</h3>
-              <p>County</p>
-              <p>Status | Property Type</p>
-            </ion-label>
-            <ion-label class="right">
-              <h3>$x</h3>
-              <p>Price Type</p>
-            </ion-label>
-          </button>
-          <ion-button class="details-button" (click)="openPropertyDetails()">View Details</ion-button>
-        </h2>
-        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordion">
-          <div class="accordion-body">
-            <p># Beds: ---</p>
-            <p># Baths: ---</p>
-            <p>Land: x sq ft</p>
-            <p>Property: x sq ft</p>
-            <p>Year Built: ---</p>
-          </div>
+  <div class="accordion" id="accordion">
+    <div class="accordion-item" *ngFor="let property of properties; index as i">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse-' + i">
+          <ion-thumbnail slot="start">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw==">
+          </ion-thumbnail>
+          <ion-label>
+            <h3>{{property.address.address}}</h3>
+            <p>{{property.address.county}}</p>
+            <p>{{property.status.propertyStatusDescription}} | {{property.essentials.propertyType}}</p>
+          </ion-label>
+          <ion-label class="right">
+            <h3>${{getPriceByStatus(property)}}</h3>
+            <p>{{getPriceTypeByStatus(property)}}</p>
+          </ion-label>
+        </button>
+        <ion-button class="details-button" (click)="openPropertyDetails()">View Details</ion-button>
+      </h2>
+      <div [attr.id]="'collapse-' + i" class="accordion-collapse collapse show" data-bs-parent="#accordion">
+        <div class="accordion-body">
+          <p># Beds: {{property.essentials.numBeds}}</p>
+          <p># Baths: {{property.essentials.numBaths}}</p>
+          <p>Land: {{property.essentials.landFootage}} sq ft</p>
+          <p>Property: {{property.essentials.propertyFootage}} sq ft</p>
+          <p>Year Built: {{property.essentials.yearBuilt}}</p>
         </div>
       </div>
     </div>
-  </ion-list>
+  </div>
 </ion-content>
