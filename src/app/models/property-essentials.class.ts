@@ -1,4 +1,5 @@
 export class PropertyEssentials {
+    essentialsId: number
     propertyType: string
     numBeds: number
     numBaths: number

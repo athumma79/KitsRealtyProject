@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { PropertyDetailsPage } from '../property-details/property-details.page';
 
-//API connection
-import { API } from 'aws-amplify';
+import { API, Storage } from 'aws-amplify';
+import * as $ from 'jquery';
+
 import { Property } from '../models/property.class';
 import { PropertyStatus } from '../models/property-status.class';
 import { OccupancyStatus } from '../models/occupancy-status.class';
@@ -28,30 +29,32 @@ export class PropertiesPage implements OnInit {
   
   ngOnInit() {
 
-    this.loadProperties();
-    
+    this.loadProperties(() => this.loadThumbnails());
+
   }
 
   public properties:Property[] = new Array();
 
-  async loadProperties() {
+  async loadProperties(callback) {
     API
       .get(this.apiName, '/properties', {})
       .then(response => {
         var dbProperties = response.properties;
-        console.log(dbProperties);
         for(var i = 0; i < dbProperties.length; i++) {
           var propertyStatus = new PropertyStatus();
+          propertyStatus.statusId = dbProperties[i]["STATUS_ID"];
           propertyStatus.propertyStatusDescription = dbProperties[i]["PROPERTY_STATUS_DESCRIPTION"];
           
           var occupancyStatus = new OccupancyStatus();
+          occupancyStatus.occupancyStatusId = dbProperties[i]["OCCUPANCY_STATUS_ID"];
           occupancyStatus.occupancyStatusDescription = dbProperties[i]["OCCUPANCY_STATUS_DESCRIPTION"];
 
           var coordinatorUserRole = new UserRole();
+          coordinatorUserRole.roleId = dbProperties[i]["ROLE_ID"];
           coordinatorUserRole.userRoleDescription = dbProperties[i]["USER_ROLE_DESCRIPTION"];
-          console.log(dbProperties[i]);
 
           var coordinator = new User();
+          coordinator.userCognitoId = dbProperties[i]["USER_COGNITO_ID"];
           coordinator.role = coordinatorUserRole;
           coordinator.firstName = dbProperties[i]["FIRST_NAME"];
           coordinator.lastName = dbProperties[i]["LAST_NAME"];
@@ -60,10 +63,12 @@ export class PropertiesPage implements OnInit {
           coordinator.ssn = dbProperties[i]["SSN"];
           
           var propertyAuction = new PropertyAuction();
+          propertyAuction.auctionId = dbProperties[i]["AUCTION_ID"];
           propertyAuction.auctionLocation = dbProperties[i]["AUCTION_LOCATION"];
           propertyAuction.dateOfAuction = dbProperties[i]["DATE_OF_AUCTION"];
 
           var propertyPrices = new PropertyPrices();
+          propertyPrices.pricesId = dbProperties[i]["PROPERTY_PRICES"];
           propertyPrices.buyValue = dbProperties[i]["BUY_VALUE"];
           propertyPrices.expectedValue = dbProperties[i]["EXPECTED_VALUE"];
           propertyPrices.sellValue = dbProperties[i]["SELL_VALUE"];
@@ -71,12 +76,14 @@ export class PropertiesPage implements OnInit {
           propertyPrices.marketPrice = dbProperties[i]["MARKET_PRICE"];
 
           var propertyAddress = new PropertyAddress();
+          propertyAddress.addressId = dbProperties[i]["ADDRESS_ID"];
           propertyAddress.address = dbProperties[i]["ADDRESS"];
           propertyAddress.county = dbProperties[i]["COUNTY"];
           propertyAddress.zipcode = dbProperties[i]["ZIPCODE"];
           propertyAddress.state = dbProperties[i]["STATE"];
 
           var propertyEssentials = new PropertyEssentials();
+          propertyEssentials.essentialsId = dbProperties[i]["ESSENTIALS_ID"];
           propertyEssentials.propertyType = dbProperties[i]["PROPERTY_TYPE"];
           propertyEssentials.numBeds = dbProperties[i]["NUM_BEDS"];
           propertyEssentials.numBaths = dbProperties[i]["NUM_BATHS"];
@@ -86,11 +93,13 @@ export class PropertiesPage implements OnInit {
           propertyEssentials.zillowLink = dbProperties[i]["ZILLOW_LINK"];
 
           var propertyLoan = new PropertyLoan();
+          propertyLoan.loanId = dbProperties[i]["LOAN_ID"];
           propertyLoan.amount = dbProperties[i]["AMOUNT"];
           propertyLoan.month = dbProperties[i]["MONTH"];
           propertyLoan.year = dbProperties[i]["YEAR"];
 
           var property = new Property();
+          property.propertyId = dbProperties[i]["PROPERTY_ID"];
           property.name = dbProperties[i]["NAME"];
           property.status = propertyStatus;
           property.occupancyStatus = occupancyStatus;
@@ -107,12 +116,12 @@ export class PropertiesPage implements OnInit {
           property.subdivision = dbProperties[i]["SUBDIVISION"];
           property.countyAssessment = dbProperties[i]["COUNTY_ASSESSMENT"];
           property.notes = dbProperties[i]["NOTES"];
-          property.propertyFolderPath = dbProperties[i]["PROPERTY_FOLDER_PATH"];
             
-          console.log(property);
           this.properties.push(property);
         }
-        console.log(this.properties);
+        $(function() {
+          callback();
+        });
       })
       .catch(error => {
         console.log(error);
@@ -147,6 +156,36 @@ export class PropertiesPage implements OnInit {
       default:
         return "";
     }
+  }
+
+  async loadThumbnails() {
+    console.log('loading');
+    for (var i = 0; i < this.properties.length; i++) {
+      var property = this.properties[i];
+      console.log(property);
+      console.log($(".thumbnail-" + property.propertyId));
+      $(".thumbnail-" + property.propertyId).append("<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png\"/>");
+      // $(".thumbnail-" + property.propertyId).append("<img src=\"" + await this.getThumbnail(this.properties[i]) + "\"/>");
+    }
+  }
+
+  async getThumbnail(property: Property) {
+    console.log("called");
+    await Storage.list("properties/" + property.propertyId + "/thumbnail/")
+    .then(response => {
+      console.log(response);
+      Storage.get(response[1].key)
+      .then(response => {
+        console.log(response);
+        return response;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
 
   async openPropertyDetails() {

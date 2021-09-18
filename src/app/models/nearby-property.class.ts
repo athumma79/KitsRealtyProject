@@ -5,6 +5,7 @@ import { Property } from "./property.class";
 
 
 export class NearbyProperty {
+    nearbyPropertyId: string
     property: Property
     prices: PropertyPrices
     address: PropertyAddress

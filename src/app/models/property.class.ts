@@ -9,6 +9,7 @@ import { PropertyStatus } from "./property-status.class";
 import { User } from "./user.class";
 
 export class Property {
+    propertyId: number
     name: string
     status: PropertyStatus
     occupancyStatus: OccupancyStatus
@@ -25,5 +26,4 @@ export class Property {
     subdivision: string
     countyAssessment: number
     notes: string
-    propertyFolderPath: string
 }

@@ -3,6 +3,7 @@ import { ExpenseStatus } from "./expense-status.class";
 import { Property } from "./property.class";
 
 export class Revenue {
+    revenueId: number
     property: Property
     contractor: Contractor
     expenseStatus: ExpenseStatus
@@ -11,6 +12,5 @@ export class Revenue {
     expenseDueDate: Date
     amountPaid: number
     revenueDescription: string
-    revenueFolderPath: string
     dateIncurred: Date
 }

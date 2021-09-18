@@ -6,25 +6,25 @@
 
 <ion-content [fullscreen]="true">
   <div class="accordion" id="accordion">
-    <div class="accordion-item" *ngFor="let property of properties; index as i">
+    <div class="accordion-item" *ngFor="let property of properties">
       <h2 class="accordion-header">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse-' + i">
-          <ion-thumbnail slot="start">
-            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw==">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse-' + property.propertyId">
+          <ion-thumbnail [attr.class]="'thumbnail-' + property.propertyId" slot="start">       
+            <!-- <img [attr.src]="getThumbnail(property)"/> -->
           </ion-thumbnail>
           <ion-label>
             <h3>{{property.address.address}}</h3>
             <p>{{property.address.county}}</p>
             <p>{{property.status.propertyStatusDescription}} | {{property.essentials.propertyType}}</p>
           </ion-label>
-          <ion-label class="right">
+          <ion-label>
             <h3>${{getPriceByStatus(property)}}</h3>
             <p>{{getPriceTypeByStatus(property)}}</p>
           </ion-label>
         </button>
-        <ion-button class="details-button" (click)="openPropertyDetails()">View Details</ion-button>
+        <ion-button (click)="openPropertyDetails()">View Details</ion-button>
       </h2>
-      <div [attr.id]="'collapse-' + i" class="accordion-collapse collapse show" data-bs-parent="#accordion">
+      <div [attr.id]="'collapse-' + property.propertyId" class="accordion-collapse collapse show" data-bs-parent="#accordion">
         <div class="accordion-body">
           <p># Beds: {{property.essentials.numBeds}}</p>
           <p># Baths: {{property.essentials.numBaths}}</p>
