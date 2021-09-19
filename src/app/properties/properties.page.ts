@@ -159,33 +159,31 @@ export class PropertiesPage implements OnInit {
   }
 
   async loadThumbnails() {
-    console.log('loading');
     for (var i = 0; i < this.properties.length; i++) {
       var property = this.properties[i];
-      console.log(property);
-      console.log($(".thumbnail-" + property.propertyId));
-      $(".thumbnail-" + property.propertyId).append("<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png\"/>");
-      // $(".thumbnail-" + property.propertyId).append("<img src=\"" + await this.getThumbnail(this.properties[i]) + "\"/>");
+      await this.getThumbnail(this.properties[i], (response) => { 
+        $(".thumbnail-" + property.propertyId).append("<img src=\"" + response + "\"/>");
+      })
     }
   }
 
-  async getThumbnail(property: Property) {
-    console.log("called");
+  async getThumbnail(property: Property, callback) {
     await Storage.list("properties/" + property.propertyId + "/thumbnail/")
-    .then(response => {
-      console.log(response);
-      Storage.get(response[1].key)
-      .then(response => {
-        console.log(response);
-        return response;
+      .then(async response => {
+        if (!response || response.length < 2) {
+          return;
+        }
+        await Storage.get(response[1].key)
+          .then(response => {
+            callback(response);
+          })
+          .catch(err => {
+            console.log(err);
+          });
       })
       .catch(err => {
         console.log(err);
       });
-    })
-    .catch(err => {
-      console.log(err);
-    });
   }
 
   async openPropertyDetails() {
