@@ -6,12 +6,10 @@
 
 <ion-content [fullscreen]="true">
   <div class="accordion" id="accordion">
-    <div class="accordion-item" *ngFor="let property of properties">
+    <div class="accordion-item" *ngFor="let property of properties; index as i">
       <h2 class="accordion-header">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse-' + property.propertyId">
-          <ion-thumbnail [attr.class]="'thumbnail-' + property.propertyId" slot="start">       
-            <!-- <img [attr.src]="getThumbnail(property)"/> -->
-          </ion-thumbnail>
+          <ion-thumbnail [attr.class]="'thumbnail-' + property.propertyId" slot="start"></ion-thumbnail>
           <ion-label>
             <h3>{{property.address.address}}</h3>
             <p>{{property.address.county}}</p>
@@ -22,7 +20,7 @@
             <p>{{getPriceTypeByStatus(property)}}</p>
           </ion-label>
         </button>
-        <ion-button (click)="openPropertyDetails()">View Details</ion-button>
+        <ion-button (click)="openPropertyDetails(i)">View Details</ion-button>
       </h2>
       <div [attr.id]="'collapse-' + property.propertyId" class="accordion-collapse collapse show" data-bs-parent="#accordion">
         <div class="accordion-body">

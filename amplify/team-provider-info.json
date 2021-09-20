@@ -26,17 +26,17 @@
           "nativeClientId": "2sepibtm1uo1dsrtjd4ojv81q9",
           "identityPoolId": "us-east-1:ff62525f-602c-4d48-9e0d-23a2cecdc23c",
           "identityPoolName": "KitsRealtyIdentityPool",
-          "allowUnauthenticatedIdentities": true,
-          "authRoleArn": "arn:aws:iam::189599045699:role/Cognito_KitsRealtyIdentityPoolAuth_Role",
-          "authRoleName": "Cognito_KitsRealtyIdentityPoolAuth_Role",
-          "unauthRoleArn": "arn:aws:iam::189599045699:role/Cognito_KitsRealtyIdentityPoolUnauth_Role",
-          "unauthRoleName": "Cognito_KitsRealtyIdentityPoolUnauth_Role"
+          "allowUnauthenticatedIdentities": false,
+          "authRoleArn": "arn:aws:iam::189599045699:role/amplify-kitsrealtyproject2-dev-155513-authRole",
+          "authRoleName": "amplify-kitsrealtyproject2-dev-155513-authRole",
+          "unauthRoleArn": "arn:aws:iam::189599045699:role/amplify-kitsrealtyproject2-dev-155513-unauthRole",
+          "unauthRoleName": "amplify-kitsrealtyproject2-dev-155513-unauthRole"
         }
       },
       "function": {
         "KitsRealtyLambdaFunction2": {
           "deploymentBucketName": "amplify-kitsrealtyproject2-dev-155513-deployment",
-          "s3Key": "amplify-builds/KitsRealtyLambdaFunction2-567156384f445074656d-build.zip"
+          "s3Key": "amplify-builds/KitsRealtyLambdaFunction2-587945416c693842444a-build.zip"
         }
       },
       "storage": {

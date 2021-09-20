@@ -33,7 +33,7 @@ export class PropertiesPage implements OnInit {
 
   }
 
-  public properties:Property[] = new Array();
+  properties:Property[] = new Array();
 
   async loadProperties(callback) {
     API
@@ -186,9 +186,12 @@ export class PropertiesPage implements OnInit {
       });
   }
 
-  async openPropertyDetails() {
+  async openPropertyDetails(index: number) {
     const propertyDetailsModal = await this.modalController.create({
-      component: PropertyDetailsPage
+      component: PropertyDetailsPage,
+      componentProps: {
+        'property': this.properties[index],
+      }
     });
     return await propertyDetailsModal.present();
   }

@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavParams } from '@ionic/angular';
+
+import { API, Storage } from 'aws-amplify';
+import * as $ from 'jquery';
+
+import { Property } from '../models/property.class';
+import { Contractor } from '../models/contractor.class';
 
 @Component({
   selector: 'app-property-details',
@@ -8,9 +14,50 @@ import { ModalController } from '@ionic/angular';
 })
 export class PropertyDetailsPage implements OnInit {
 
-  constructor(public modalController: ModalController) { }
+  apiName = 'KitsRealtyAPI2';
+
+  constructor(
+    public modalController: ModalController, 
+    public navParams: NavParams
+  ) { }
+
+  public property: Property;
+  public contractors: Contractor;
 
   ngOnInit() {
+    this.property = this.navParams.data.property;
+    this.loadContractors();
+    this.getThumbnail(this.property);
+  }
+
+  async loadContractors() {
+    API
+      .get(this.apiName, '/contractors/' + this.property.propertyId, {})
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
+  async getThumbnail(property: Property) {
+    await Storage.list("properties/" + property.propertyId + "/thumbnail/")
+      .then(async response => {
+        if (!response || response.length < 2) {
+          return;
+        }
+        await Storage.get(response[1].key)
+          .then(response => {
+            $(".thumbnail").attr("src", response as string);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   dismiss() {
