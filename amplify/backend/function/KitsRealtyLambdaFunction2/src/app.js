@@ -70,7 +70,7 @@ app.get('/properties/*', function(req, res) {
   res.json({success: 'get call succeed!', url: req.url});
 });
 
-app.get('/contractors/{propertyid}', function(req, res) {
+app.get('/contractors/:propertyid', function(req, res) {
 
   pool.getConnection(function(error, connection) {
 
@@ -80,7 +80,7 @@ app.get('/contractors/{propertyid}', function(req, res) {
     LEFT OUTER JOIN CONTRACTOR_TYPE ON CONTRACTOR.CONTRACTOR_TYPE_ID = CONTRACTOR_TYPE.CONTRACTOR_TYPE_ID \
     LEFT OUTER JOIN USERS ON CONTRACTOR.CONTRACTOR_COGNITO_ID = USERS.USER_COGNITO_ID \
     LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID \
-    WHERE PROPERTY_ID" + propertyid + ";"
+    WHERE PROPERTY_ID = " + req.params.propertyid + ";"
 
     connection.query(query, function(err, rows, fields) {
       if (err) throw err
