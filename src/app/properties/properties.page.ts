@@ -78,6 +78,7 @@ export class PropertiesPage implements OnInit {
           var propertyAddress = new PropertyAddress();
           propertyAddress.addressId = dbProperties[i]["ADDRESS_ID"];
           propertyAddress.address = dbProperties[i]["ADDRESS"];
+          propertyAddress.city = dbProperties[i]["CITY"];
           propertyAddress.county = dbProperties[i]["COUNTY"];
           propertyAddress.zipcode = dbProperties[i]["ZIPCODE"];
           propertyAddress.state = dbProperties[i]["STATE"];
@@ -112,7 +113,6 @@ export class PropertiesPage implements OnInit {
           property.dateOfPurchase = dbProperties[i]["DATE_OF_PURCHASE"];
           property.dateOfSale = dbProperties[i]["DATE_OF_SALE"];
           property.trusteeName = dbProperties[i]["TRUSTEE_NAME"];
-          property.time = dbProperties[i]["TIME"];
           property.subdivision = dbProperties[i]["SUBDIVISION"];
           property.countyAssessment = dbProperties[i]["COUNTY_ASSESSMENT"];
           property.notes = dbProperties[i]["NOTES"];

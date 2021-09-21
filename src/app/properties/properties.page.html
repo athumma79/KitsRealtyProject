@@ -11,7 +11,7 @@
         <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse-' + property.propertyId">
           <ion-thumbnail [attr.class]="'thumbnail-' + property.propertyId" slot="start"></ion-thumbnail>
           <ion-label>
-            <h3>{{property.address.address}}</h3>
+            <h3>{{property.address.address}} {{property.address.city}}, {{property.address.state}} {{property.address.zipcode}}</h3>
             <p>{{property.address.county}}</p>
             <p>{{property.status.propertyStatusDescription}} | {{property.essentials.propertyType}}</p>
           </ion-label>

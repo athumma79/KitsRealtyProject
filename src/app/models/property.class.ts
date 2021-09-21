@@ -22,7 +22,6 @@ export class Property {
     dateOfPurchase: Date
     dateOfSale: Date
     trusteeName: string
-    time: Time
     subdivision: string
     countyAssessment: number
     notes: string
