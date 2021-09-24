@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { PropertiesPageRoutingModule } from './properties-routing.module';
 
 import { PropertiesPage } from './properties.page';
+import { PropertyDetailsPage } from '../property-details/property-details.page';
 
 @NgModule({
   imports: [
@@ -14,6 +15,6 @@ import { PropertiesPage } from './properties.page';
     IonicModule,
     PropertiesPageRoutingModule,
   ],
-  declarations: [PropertiesPage]
+  declarations: [PropertiesPage, PropertyDetailsPage]
 })
 export class PropertiesPageModule {}

@@ -33,7 +33,7 @@ export class PropertiesPage implements OnInit {
 
   }
 
-  properties:Property[] = new Array();
+  properties: Property[] = new Array();
 
   async loadProperties(callback) {
     API
@@ -119,7 +119,7 @@ export class PropertiesPage implements OnInit {
             
           this.properties.push(property);
         }
-        $(function() {
+        $(document).ready(function() {
           callback();
         });
       })

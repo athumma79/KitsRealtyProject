@@ -3,6 +3,7 @@ import { ModalController, NavParams } from '@ionic/angular';
 
 import { API, Storage } from 'aws-amplify';
 import * as $ from 'jquery';
+import * as bootstrap from 'bootstrap';
 
 import { Property } from '../models/property.class';
 import { Contractor } from '../models/contractor.class';
@@ -21,13 +22,14 @@ export class PropertyDetailsPage implements OnInit {
     public navParams: NavParams
   ) { }
 
-  public property: Property;
-  public contractors: Contractor;
+  property: Property;
+  contractors: Contractor;
+  progressImages: string[] = new Array();
 
   ngOnInit() {
     this.property = this.navParams.data.property;
     this.loadContractors();
-    this.getThumbnail(this.property);
+    this.getThumbnail();
   }
 
   async loadContractors() {
@@ -41,8 +43,8 @@ export class PropertyDetailsPage implements OnInit {
       })
   }
 
-  async getThumbnail(property: Property) {
-    await Storage.list("properties/" + property.propertyId + "/thumbnail/")
+  async getThumbnail() {
+    await Storage.list("properties/" + this.property.propertyId + "/thumbnail/")
       .then(async response => {
         if (!response || response.length < 2) {
           return;
@@ -60,8 +62,46 @@ export class PropertyDetailsPage implements OnInit {
       });
   }
 
-  onAlbumDocSelected(event) {
-    window.open( event, '_blank' );
+  async loadProgressImages() {
+      await this.getProgressImages((response) => {
+        this.progressImages.push(response);
+      });
+      console.log(this.progressImages);
+      $(document).ready(function() {
+        $(".progress-image-0").addClass("active");
+        var carousel = document.querySelector('#progressImageCarousel');
+        carousel.addEventListener('slide.bs.carousel', function (e: any) {
+          $(".progress-image-" + e.from).addClass("carousel-item-start");
+          $(".progress-image-" + e.to).addClass("carousel-item-next");
+        })
+        carousel.addEventListener('slid.bs.carousel', function (e: any) {
+          $(".progress-image-" + e.from).removeClass("carousel-item-start");
+          $(".progress-image-" + e.to).removeClass("carousel-item-next");
+          $(".progress-image-" + e.from).removeClass("active");
+          $(".progress-image-" + e.to).addClass("active");
+        })
+      });
+  }
+
+  async getProgressImages(callback) {
+    await Storage.list("properties/" + this.property.propertyId + "/progress_images/")
+      .then(async response => {
+        if (!response || response.length < 2) {
+          return;
+        }
+        for (let i = 1; i < response.length; i++) {
+          await Storage.get(response[i].key)
+            .then(response => {
+              callback(response);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   dismiss() {
