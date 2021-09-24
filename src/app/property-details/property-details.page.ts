@@ -60,6 +60,10 @@ export class PropertyDetailsPage implements OnInit {
       });
   }
 
+  onAlbumDocSelected(event) {
+    window.open( event, '_blank' );
+  }
+
   dismiss() {
     // using the injected ModalController this page
     // can "dismiss" itself and optionally pass back data

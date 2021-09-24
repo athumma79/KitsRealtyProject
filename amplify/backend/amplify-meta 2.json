@@ -1,0 +1,115 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-kitsrealtyproject2-dev-155513-authRole",
+      "UnauthRoleArn": "arn:aws:iam::189599045699:role/amplify-kitsrealtyproject2-dev-155513-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::189599045699:role/amplify-kitsrealtyproject2-dev-155513-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-kitsrealtyproject2-dev-155513-deployment",
+      "UnauthRoleName": "amplify-kitsrealtyproject2-dev-155513-unauthRole",
+      "StackName": "amplify-kitsrealtyproject2-dev-155513",
+      "StackId": "arn:aws:cloudformation:us-east-1:189599045699:stack/amplify-kitsrealtyproject2-dev-155513/849fecc0-14cc-11ec-b81e-1269b8fe901f",
+      "AmplifyAppId": "dy2272uc2xngc",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-kitsrealtyproject2-dev-155513-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    }
+  },
+  "hosting": {
+    "amplifyhosting": {
+      "service": "amplifyhosting",
+      "providerPlugin": "awscloudformation",
+      "type": "manual",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-kitsrealtyproject2-dev-155513-deployment/amplify-cfn-templates/hosting/amplifyhosting-template.json",
+        "logicalId": "hostingamplifyhosting"
+      },
+      "lastPushTimeStamp": "2021-09-20T20:56:12.794Z",
+      "output": {},
+      "lastPushDirHash": "/+VZ33seFFqAr6wbtptwbINUfSA="
+    }
+  },
+  "auth": {
+    "kitsrealtyproject240eb1985": {
+      "service": "Cognito",
+      "serviceType": "imported",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "output": {
+        "UserPoolId": "us-east-1_MQXokLX98",
+        "UserPoolName": "KitsRealtyUserPool",
+        "AppClientID": "2sepibtm1uo1dsrtjd4ojv81q9",
+        "AppClientIDWeb": "2sepibtm1uo1dsrtjd4ojv81q9",
+        "IdentityPoolId": "us-east-1:ff62525f-602c-4d48-9e0d-23a2cecdc23c",
+        "IdentityPoolName": "KitsRealtyIdentityPool"
+      },
+      "lastPushTimeStamp": "2021-09-13T19:59:23.507Z"
+    }
+  },
+  "function": {
+    "KitsRealtyLambdaFunction2": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "lastBuildTimeStamp": "2021-09-20T20:54:09.246Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2021-09-20T20:54:10.112Z",
+      "distZipFilename": "KitsRealtyLambdaFunction2-61613237334958387176-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-kitsrealtyproject2-dev-155513-deployment",
+        "s3Key": "amplify-builds/KitsRealtyLambdaFunction2-61613237334958387176-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-kitsrealtyproject2-dev-155513-deployment/amplify-cfn-templates/function/KitsRealtyLambdaFunction2-cloudformation-template.json",
+        "logicalId": "functionKitsRealtyLambdaFunction2"
+      },
+      "lastPushTimeStamp": "2021-09-20T20:56:12.807Z",
+      "output": {
+        "Region": "us-east-1",
+        "Arn": "arn:aws:lambda:us-east-1:189599045699:function:KitsRealtyLambdaFunction2-dev",
+        "Name": "KitsRealtyLambdaFunction2-dev",
+        "LambdaExecutionRole": "kitsrealtyproject2LambdaRole21e0b825-dev"
+      },
+      "lastPushDirHash": "QSPY2reF4hEGbxcmox8GNM+CTPs="
+    }
+  },
+  "api": {
+    "KitsRealtyAPI2": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "KitsRealtyLambdaFunction2",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ],
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-kitsrealtyproject2-dev-155513-deployment/amplify-cfn-templates/api/KitsRealtyAPI2-cloudformation-template.json",
+        "logicalId": "apiKitsRealtyAPI2"
+      },
+      "lastPushTimeStamp": "2021-09-20T20:56:12.807Z",
+      "output": {
+        "ApiName": "KitsRealtyAPI2",
+        "RootUrl": "https://9j7858i214.execute-api.us-east-1.amazonaws.com/dev",
+        "ApiId": "9j7858i214"
+      },
+      "lastPushDirHash": "LwYzt2RXzcUBWiEQak9rPr0a+Jg="
+    }
+  },
+  "storage": {
+    "kitsrealtyproject201b1adba": {
+      "service": "S3",
+      "serviceType": "imported",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "output": {
+        "BucketName": "kits-realty-bucket",
+        "Region": "us-east-1"
+      },
+      "lastPushTimeStamp": "2021-09-13T20:06:49.604Z"
+    }
+  }
+}
