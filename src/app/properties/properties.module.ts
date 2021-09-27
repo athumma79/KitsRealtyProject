@@ -16,5 +16,6 @@ import { PropertyDetailsPage } from '../property-details/property-details.page';
     PropertiesPageRoutingModule,
   ],
   declarations: [PropertiesPage, PropertyDetailsPage]
+  // entryComponents: [PropertyDetailsPage]
 })
 export class PropertiesPageModule {}

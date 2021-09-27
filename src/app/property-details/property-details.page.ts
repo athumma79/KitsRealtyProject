@@ -24,7 +24,12 @@ export class PropertyDetailsPage implements OnInit {
 
   property: Property;
   contractors: Contractor;
-  progressImages: string[] = new Array();
+  purchaseDocs: string[] = new Array();
+  purchaseDocsNames: string[] = new Array();
+  salesDocs: string[] = new Array();
+  salesDocsNames: string[] = new Array();
+  utilitiesDocs: string[] = new Array();
+  utilitiesDocsNames: string[] = new Array();
 
   ngOnInit() {
     this.property = this.navParams.data.property;
@@ -62,46 +67,81 @@ export class PropertyDetailsPage implements OnInit {
       });
   }
 
-  async loadProgressImages() {
-      await this.getProgressImages((response) => {
-        this.progressImages.push(response);
-      });
-      console.log(this.progressImages);
-      $(document).ready(function() {
-        $(".progress-image-0").addClass("active");
-        var carousel = document.querySelector('#progressImageCarousel');
-        carousel.addEventListener('slide.bs.carousel', function (e: any) {
-          $(".progress-image-" + e.from).addClass("carousel-item-start");
-          $(".progress-image-" + e.to).addClass("carousel-item-next");
-        })
-        carousel.addEventListener('slid.bs.carousel', function (e: any) {
-          $(".progress-image-" + e.from).removeClass("carousel-item-start");
-          $(".progress-image-" + e.to).removeClass("carousel-item-next");
-          $(".progress-image-" + e.from).removeClass("active");
-          $(".progress-image-" + e.to).addClass("active");
-        })
-      });
-  }
-
-  async getProgressImages(callback) {
-    await Storage.list("properties/" + this.property.propertyId + "/progress_images/")
+  async getFiles(path: string) {
+    this.resetFiles(path);
+    await Storage.list("properties/" + this.property.propertyId + "/" + path)
       .then(async response => {
         if (!response || response.length < 2) {
           return;
         }
-        for (let i = 1; i < response.length; i++) {
-          await Storage.get(response[i].key)
+        for (var i = 0; i < response.length; i++) {
+          let filePath = response[i].key;
+          let fileName = filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length);
+          await Storage.get(filePath)
             .then(response => {
-              callback(response);
+              this.storeFile(path, response, fileName);
             })
             .catch(err => {
               console.log(err);
             });
-        }
+          }
       })
       .catch(err => {
         console.log(err);
       });
+  }
+
+  resetFiles(path: string) {
+    switch(path) {
+      case 'purchase_docs':
+        this.purchaseDocs = new Array();
+        this.purchaseDocsNames = new Array();
+        break;
+      case 'utilities_docs':
+        this.utilitiesDocs = new Array();
+        this.utilitiesDocsNames = new Array();
+        break;
+      case 'sales_docs':
+        this.salesDocs = new Array();
+        this.salesDocsNames = new Array();
+        break;
+    }
+  }
+
+  storeFile(path, file, fileName) {
+    if (path == 'purchase_docs' && fileName.length != 0) { 
+      this.purchaseDocs.push(file as any);
+      this.purchaseDocsNames.push(fileName); 
+    }
+    else if (path == 'utilities_docs' && fileName.length != 0) { 
+      this.utilitiesDocs.push(file as any);
+      this.utilitiesDocsNames.push(fileName); 
+    }
+    else if (path == 'sales_docs' && fileName.length != 0) { 
+      this.salesDocsNames.push(file as any); 
+      this.salesDocs.push(fileName);
+    }
+  }
+
+  public fileToUpload: any;
+
+  selectFileToUpload(e) {
+    this.fileToUpload = e.target.files[0]
+  }
+
+  async uploadFile(path: string) {
+    try {
+      await Storage.put('properties/' + this.property.propertyId + '/' + path + '/' + this.fileToUpload.name + "-" + Date.now(), this.fileToUpload, {});
+      console.log(this.purchaseDocsNames);
+      this.getFiles(path);
+      console.log(this.purchaseDocsNames);
+    } catch (err) {
+      console.log(err);
+    }  
+  }
+
+  onAlbumImageSelected(event) {
+    window.open(event, '_blank');
   }
 
   dismiss() {

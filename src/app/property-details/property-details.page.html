@@ -74,66 +74,71 @@
     </div>
     <div class="accordion-item">
       <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-D" (click)="loadProgressImages()">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-D">
           Remodeling Progress Images
         </button>
       </h2>
       <div id="collapse-D" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-          <div id="progressImageCarousel" class="carousel slide" data-bs-ride="carousel" data-interval="false">
-            <div class="carousel-indicators">
-              <button type="button" *ngFor="let progressImage of progressImages; index as i" [attr.class]="'progress-image-' + i" data-bs-target="#progressImageCarousel" data-bs-slide-to="i"></button>
-            </div>
-            <div class="carousel-inner">
-              <div *ngFor="let progressImage of progressImages; index as i" [attr.class]="'carousel-item progress-image-' + i">
-                <img src={{progressImage}} class="d-block w-100">
-              </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#progressImageCarousel" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#progressImageCarousel" data-bs-slide="next">
-              <span class="carousel-control-next-icon"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
+          <amplify-s3-album 
+            framework="ionic"
+            path="properties/{{property.propertyId}}/progress_images/" 
+            (click)="onAlbumImageSelected($event)">
+          </amplify-s3-album>
         </div>
       </div>
     </div>
     <div class="accordion-item">
       <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-E">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-E" (click)="getFiles('purchase_docs')">
           Purchase Documents
         </button>
       </h2>
       <div id="collapse-E" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-          stuff
+          <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
+          <ion-button (click)="uploadFile('purchase_docs')"></ion-button>
+          <ion-list>
+            <div *ngFor="let purchaseDoc of purchaseDocs; index as i">
+              <ion-item>            
+                <a href={{purchaseDoc}} target="_blank">{{purchaseDocsNames[i]}}</a>
+              </ion-item>
+            </div>
+          </ion-list>
         </div>
       </div>
     </div>
     <div class="accordion-item">
       <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-F">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-F" (click)="getFiles('utilities_docs')">
           Utilities Documents
         </button>
       </h2>
       <div id="collapse-F" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-          <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+          <ion-list>
+            <div *ngFor="let utilitiesDoc of utilitiesDocs; index as i">
+              <ion-item>            
+                <a href={{utilitiesDoc}} target="_blank">{{utilitiesDocsNames[i]}}</a>
+              </ion-item>
+            </div>
+          </ion-list>
         </div>
       </div>
     </div>
     <div class="accordion-item">
       <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-G">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-G" (click)="getFiles('sales_docs')">
           Sales Documents
         </button>
       </h2>
       <div id="collapse-G" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-          <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+          <div *ngFor="let salesDoc of salesDocs; index as i">
+            <ion-item>
+              <a href={{salesDoc}} target="_blank">{{salesDocsNames[i]}}</a>
+            </ion-item>
+          </div>
         </div>
       </div>
     </div>
