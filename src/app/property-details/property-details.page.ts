@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavParams } from '@ionic/angular';
+import { ModalController, NavParams, PickerController } from '@ionic/angular';
 
 import { API, Storage } from 'aws-amplify';
 import * as $ from 'jquery';
-import * as bootstrap from 'bootstrap';
 
 import { Property } from '../models/property.class';
 import { Contractor } from '../models/contractor.class';
@@ -19,6 +18,7 @@ export class PropertyDetailsPage implements OnInit {
 
   constructor(
     public modalController: ModalController, 
+    public pickerController: PickerController,
     public navParams: NavParams
   ) { }
 
@@ -142,6 +142,102 @@ export class PropertyDetailsPage implements OnInit {
 
   onAlbumImageSelected(event) {
     window.open(event, '_blank');
+  }
+
+  async changeStatus(statusId: string) {
+    this.property.status.statusId = statusId;
+    console.log(statusId);
+    const putInit = {
+      body: {
+        statusId: statusId,
+      }, // replace this with attributes you need
+      headers: { 
+      }
+    };
+    API
+    .put(this.apiName, '/properties/' + this.property.propertyId + '/status/' + statusId, putInit)
+    .then(response => {
+      console.log(response);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }
+
+  async getStatus() {
+    const picker = await this.pickerController.create({  
+      buttons: [
+        {
+          text: "Cancel",
+          role: 'cancel'
+        },
+        {
+        text: 'Confirm',
+        handler: (value) => {
+          this.changeStatus(value.status.value);
+          }
+        }
+      ],
+      columns: [
+        {
+          name: 'status',
+          options: [
+            {
+              text: 'Researched',
+              value: '1'
+            },
+            {
+              text: 'Pending Purchase',
+              value: '2'
+            },
+            {
+              text: 'Purchased',
+              value: '3'
+            },
+            {
+              text: 'Undergoing Remodeling',
+              value: '4'
+            },
+            {
+              text: 'Finished Remodeling',
+              value: '5'
+            },
+            {
+              text: 'For Sale',
+              value: '6'
+            },
+            {
+              text: 'Sold',
+              value: '7'
+            },
+          ]
+        }
+      ]
+    });
+    await picker.present();
+  }
+
+  async deleteProperty() {
+    if (window.confirm("Are you sure that you want to DELETE this property?")) {
+      const deleteInit = {
+        body: {
+          id: this.property.propertyId
+        }, // replace this with attributes you need
+        headers: { 
+          //Authorization: `Bearer ${(await Auth.currentSession()).getAccessToken().getJwtToken()}`,
+        } // OPTIONAL
+    };
+    API
+    .del(this.apiName, '/deleteproperties/'+ this.property.propertyId, deleteInit)
+    .then(response => {
+      if (response.error) {
+        window.alert("You cannot delete this property because it is referenced by a revenue.")
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      });
+    }
   }
 
   dismiss() {

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Property Details</ion-title>
-    <ion-icon name="close-outline" slot="end" button (click)='dismiss()'>Close</ion-icon>
+    <i class="fal fa-times-circle" (click)='dismiss()' slot="end"></i>
   </ion-toolbar>
 </ion-header>
 
@@ -156,6 +156,6 @@
     </div>
   </div>
 
-  <ion-button>Select for Purchase</ion-button>
-  <ion-button>Delete</ion-button>
+  <ion-button (click)='getStatus()'>Change Property Status</ion-button>
+  <ion-button (click)='deleteProperty()'>Delete</ion-button>
 </ion-content>

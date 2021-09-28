@@ -1,6 +1,21 @@
 {
     "paths": [
         {
+            "name": "/contractors/{propertyid}",
+            "lambdaFunction": "KitsRealtyLambdaFunction2",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            },
+            "policyResourceName": "/contractors/*"
+        },
+        {
             "name": "/properties",
             "lambdaFunction": "KitsRealtyLambdaFunction2",
             "privacy": {
@@ -16,7 +31,7 @@
             "policyResourceName": "/properties"
         },
         {
-            "name": "/contractors/{propertyid}",
+            "name": "/deleteproperties/{propertyid}",
             "lambdaFunction": "KitsRealtyLambdaFunction2",
             "privacy": {
                 "private": true,
@@ -28,7 +43,7 @@
                     "/DELETE"
                 ]
             },
-            "policyResourceName": "/contractors/*"
+            "policyResourceName": "/deleteproperties/*"
         }
     ],
     "resourceName": "KitsRealtyAPI2",
@@ -39,7 +54,7 @@
         }
     ],
     "privacy": {
-        "auth": 2,
+        "auth": 3,
         "unauth": 0,
         "authRoleName": "amplify-kitsrealtyproject2-dev-155513-authRole",
         "unAuthRoleName": "amplify-kitsrealtyproject2-dev-155513-unauthRole"
@@ -54,5 +69,5 @@
             ]
         }
     ],
-    "uuid": "e701d903"
+    "uuid": "b9eabd2c"
 }
