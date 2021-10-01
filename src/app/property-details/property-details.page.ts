@@ -222,22 +222,43 @@ export class PropertyDetailsPage implements OnInit {
       const deleteInit = {
         body: {
           id: this.property.propertyId
-        }, // replace this with attributes you need
-        headers: { 
-          //Authorization: `Bearer ${(await Auth.currentSession()).getAccessToken().getJwtToken()}`,
-        } // OPTIONAL
-    };
-    API
-    .del(this.apiName, '/deleteproperties/'+ this.property.propertyId, deleteInit)
-    .then(response => {
-      if (response.error) {
-        window.alert("You cannot delete this property because it is referenced by a revenue.")
+        }
+      };
+      location.reload();
+      API
+      .del(this.apiName, '/deleteproperties/'+ this.property.propertyId, deleteInit)
+      .then(response => {
+        if (response.error) {
+          window.alert("You cannot delete this property because it is referenced by a revenue.")
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        });
       }
-    })
-    .catch(error => {
-      console.log(error);
-      });
-    }
+      Storage.list("properties/" + this.property.propertyId + "/")
+        .then(response => {
+          for (let i = 0; i < response.length; i++) {
+            Storage.remove(response[i].key)
+              .then(response => {
+                console.log(response);
+              })
+              .catch(err => {
+                console.log(err);
+              })
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+  }
+
+  editProperty() {
+    $("ion-input").removeAttr("readonly");
+  }
+
+  saveProperty() {
+    $("ion-input").attr("readonly");
   }
 
   dismiss() {

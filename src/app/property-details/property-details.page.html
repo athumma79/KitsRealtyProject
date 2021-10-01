@@ -12,27 +12,72 @@
   <p>{{property.address.county}}</p>
   <p>{{property.status.propertyStatusDescription}}</p>
 
+  <ion-button (click)='editProperty()'>Edit</ion-button>
+  <ion-button (click)='saveProperty()'>Save</ion-button>
+
   <ion-list class="row">
     <div class="col-6">
-      <ion-item>Property type: {{property.propertyType}}</ion-item>
-      <ion-item># Beds: {{property.essentials.numBeds}}</ion-item>
-      <ion-item>Land area: {{property.landFootage}}</ion-item>
-      <ion-item>Date of purchase: {{property.dateOfPurchase}}</ion-item>
-      <ion-item>Occupancy status: {{property.occupancyStatus.description}}</ion-item>
-      <ion-item>Trustee name: {{property.trusteeName}}</ion-item>
+      <ion-item>
+        <ion-label>Property type: </ion-label>
+        <ion-input [(ngModel)]="property.propertyType" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label># Beds: </ion-label>
+        <ion-input [(ngModel)]="property.essentials.numBeds" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Land area: </ion-label>
+        <ion-input [(ngModel)]="property.landFootage" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Date of purchase: </ion-label>
+        <ion-input [(ngModel)]="property.dateOfPurchase" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Occupancy status: </ion-label>
+        <ion-input [(ngModel)]="property.occupancyStatus.description" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Trustee name: </ion-label>
+        <ion-input [(ngModel)]="property.trusteeName" readonly></ion-input>
+      </ion-item>
     </div>
 
     <div class="col-6">
-      <ion-item>Year built: {{property.essentials.yearBuilt}}</ion-item>
-      <ion-item># Baths: {{property.essentials.numBaths}}</ion-item>
-      <ion-item>Living area: {{property.propertyFootage}}</ion-item>
-      <ion-item>Date of sale: {{property.dateOfSale}}</ion-item>
-      <ion-item>Subdivision: {{property.subdivision}}</ion-item>
-      <ion-item>County assessment: {{property.countyAssessment}}</ion-item>
+      <ion-item>
+        <ion-label>Year built: </ion-label>
+        <ion-input [(ngModel)]="property.essentials.yearBuilt" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label># Baths: </ion-label>
+        <ion-input [(ngModel)]="property.essentials.numBaths" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Living area: </ion-label>
+        <ion-input [(ngModel)]="property.propertyFootage" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Date of sale: </ion-label>
+        <ion-input [(ngModel)]="property.dateOfSale" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Subdivision: </ion-label>
+        <ion-input [(ngModel)]="property.subdivision" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>County assessment: </ion-label>
+        <ion-input [(ngModel)]="property.countyAssessment" readonly></ion-input>
+      </ion-item>
     </div>
 
-    <ion-item>Zillow link: {{property.essentials.zillowLink}}</ion-item>
-    <ion-item>Notes: {{property.notes}}</ion-item>
+    <ion-item>
+      <ion-label>Zillow link: </ion-label>
+      <ion-input [(ngModel)]="property.essentials.zillowLink" readonly></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Notes: </ion-label>
+      <ion-input [(ngModel)]="property.notes" readonly></ion-input>
+    </ion-item>
   </ion-list>
 
   <div class="accordion" id="modal-accordion">

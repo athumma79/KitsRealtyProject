@@ -145,79 +145,74 @@ app.delete('/deleteproperties/:propertyid', function(req, res) {
     connection.query(propertyRevenuesQuery, function(err, rows, fields) {
       if (err) throw err
 
-      console.log(rows);
-      if (rows.length != 0) {
+      if (rows.length == 0) {
         var propertyDependenciesQuery = "SELECT PRICES_ID, ADDRESS_ID, ESSENTIALS_ID, LOAN_ID \
         FROM PROPERTY \
         WHERE PROPERTY_ID = " + req.params.propertyid;
 
-        connection.query(propertyDependenciesQuery, function(err, rows, fields) {
+        connection.query(propertyDependenciesQuery, function(err, dependenciesRows, fields) {
           if (err) throw err
-    
-          var pricesId = rows[0];
-          var addressId = rows[1];
-          var essentialsId = rows[2];
-          var loanId = rows[3];
-
-          if (pricesId) {
-            var pricesQuery = "DELETE FROM PROPERTY_PRICES \
-            WHERE PRICES_ID = " + pricesId;
-
-            connection.query(pricesQuery, function(err, rows, fields) {
-              if (err) throw err        
-            })
-          }
-          if (addressId) {
-            var addressQuery = "DELETE FROM PROPERTY_ADDRESS \
-            WHERE ADDRESS_ID = " + addressId;
-
-            connection.query(addressQuery, function(err, rows, fields) {
-              if (err) throw err        
-            })
-          }
-          if (essentialsId) {
-            var essentialsQuery = "DELETE FROM PROPERTY_ESSENTIALS \
-            WHERE ESSENTIALS_ID = " + essentialsId;
-
-            connection.query(essentialsQuery, function(err, rows, fields) {
-              if (err) throw err        
-            })
-          }
-          if (loanId) {
-            var loanQuery = "DELETE FROM PROPERTY_LOAN \
-            WHERE LOAN_ID = " + loanId;
-
-            connection.query(loanQuery, function(err, rows, fields) {
-              if (err) throw err        
-            })
-          }
 
           var propertyContractorQuery = "DELETE FROM PROPERTY_CONTRACTOR \
           WHERE PROPERTY_ID = " + req.params.propertyid;
 
           connection.query(propertyContractorQuery, function(err, rows, fields) {
-            if (err) throw err        
+            if (err) throw err     
+            
+            var nearbyPropertiesQuery = "DELETE FROM NEARBY_PROPERTY \
+            WHERE PROPERTY_ID = " + req.params.propertyid;
+
+            connection.query(nearbyPropertiesQuery, function(err, rows, fields) {
+              if (err) throw err    
+              
+              var propertyQuery = "DELETE FROM PROPERTY \
+              WHERE PROPERTY_ID = " + req.params.propertyid;
+    
+              connection.query(propertyQuery, function(err, rows, fields) {
+                if (err) throw err    
+
+                if (dependenciesRows[0].PRICES_ID) {
+                  var pricesQuery = "DELETE FROM PROPERTY_PRICES \
+                  WHERE PRICES_ID = " + dependenciesRows[0].PRICES_ID;
+      
+                  connection.query(pricesQuery, function(err, rows, fields) {
+                    if (err) throw err        
+                  })
+                }
+                if (dependenciesRows[0].ADDRESS_ID) {
+                  var addressQuery = "DELETE FROM PROPERTY_ADDRESS \
+                  WHERE ADDRESS_ID = " + dependenciesRows[0].ADDRESS_ID;
+      
+                  connection.query(addressQuery, function(err, rows, fields) {
+                    if (err) throw err        
+                  })
+                }
+                if (dependenciesRows[0].ESSENTIALS_ID) {
+                  var essentialsQuery = "DELETE FROM PROPERTY_ESSENTIALS \
+                  WHERE ESSENTIALS_ID = " + dependenciesRows[0].ESSENTIALS_ID;
+      
+                  connection.query(essentialsQuery, function(err, rows, fields) {
+                    if (err) throw err        
+                  })
+                }
+                if (dependenciesRows[0].LOAN_ID) {
+                  var loanQuery = "DELETE FROM PROPERTY_LOAN \
+                  WHERE LOAN_ID = " + dependenciesRows[0].LOAN_ID;
+      
+                  connection.query(loanQuery, function(err, rows, fields) {
+                    if (err) throw err        
+                  })
+                }
+                
+                res.json();
+                connection.release()
+              })
+            })
           })
-
-          var nearbyPropertiesQuery = "DELETE FROM NEARBY_PROPERTY \
-          WHERE PROPERTY_ID = " + req.params.propertyid;
-
-          connection.query(nearbyPropertiesQuery, function(err, rows, fields) {
-            if (err) throw err        
-          })
-
-          var propertyQuery = "DELETE FROM PROPERTY \
-          WHERE PROPERTY_ID = " + req.params.propertyid;
-
-          connection.query(propertyQuery, function(err, rows, fields) {
-            if (err) throw err    
-          })
-
-          connection.release()
         })
       }
       else {
-        res.json({ error: "property is connected to a revenue" })
+        res.json({ error: "property is connected to a revenue" });
         connection.release()
       }
     })
