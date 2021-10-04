@@ -44,6 +44,21 @@
                 ]
             },
             "policyResourceName": "/deleteproperties/*"
+        },
+        {
+            "name": "/putproperties/{property}",
+            "lambdaFunction": "KitsRealtyLambdaFunction2",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            },
+            "policyResourceName": "/putproperties/*"
         }
     ],
     "resourceName": "KitsRealtyAPI2",
@@ -54,7 +69,7 @@
         }
     ],
     "privacy": {
-        "auth": 3,
+        "auth": 4,
         "unauth": 0,
         "authRoleName": "amplify-kitsrealtyproject2-dev-155513-authRole",
         "unAuthRoleName": "amplify-kitsrealtyproject2-dev-155513-unauthRole"
@@ -69,5 +84,5 @@
             ]
         }
     ],
-    "uuid": "b9eabd2c"
+    "uuid": "35256caf"
 }

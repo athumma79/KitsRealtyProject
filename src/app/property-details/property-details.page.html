@@ -8,14 +8,50 @@
 <ion-content>
   <img src="#" class="thumbnail"/>
   
-  <h3>{{property.address.address}} {{property.address.city}}, {{property.address.state}} {{property.address.zipcode}}</h3>
-  <p>{{property.address.county}}</p>
-  <p>{{property.status.propertyStatusDescription}}</p>
-
   <ion-button (click)='editProperty()'>Edit</ion-button>
   <ion-button (click)='saveProperty()'>Save</ion-button>
 
   <ion-list class="row">
+    <ion-item>
+      <ion-label>Address: </ion-label>
+      <ion-input [(ngModel)]="property.address.address" readonly></ion-input>
+    </ion-item>
+
+    <div class="col-6">
+      <ion-item>
+        <ion-label>City: </ion-label>
+        <ion-input [(ngModel)]="property.address.city" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>County: </ion-label>
+        <ion-input [(ngModel)]="property.address.county" readonly></ion-input>
+      </ion-item>
+    </div>
+
+    <div class="col-6">
+      <ion-item>
+        <ion-label>State: </ion-label>
+        <ion-input [(ngModel)]="property.address.state" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Zipcode: </ion-label>
+        <ion-input [(ngModel)]="property.address.zipcode" readonly></ion-input>
+      </ion-item>
+    </div>
+
+    <ion-item>
+      <ion-label class="status-label">Status: </ion-label>
+      <ion-select placeholder={{property.status.propertyStatusDescription}} (ionChange)="updateStatus($event)">
+        <ion-select-option value="researched">Researched</ion-select-option>
+        <ion-select-option value="pending-purchase">Pending Purchase</ion-select-option>
+        <ion-select-option value="purchased">Purchased</ion-select-option>
+        <ion-select-option value="undergoing-remodeling">Undergoing Remodeling</ion-select-option>
+        <ion-select-option value="finished-remodeling">Finished Remodeling</ion-select-option>
+        <ion-select-option value="for-sale">For Sale</ion-select-option>
+        <ion-select-option value="sold">Sold</ion-select-option>
+      </ion-select>
+    </ion-item>
+
     <div class="col-6">
       <ion-item>
         <ion-label>Property type: </ion-label>
@@ -27,7 +63,7 @@
       </ion-item>
       <ion-item>
         <ion-label>Land area: </ion-label>
-        <ion-input [(ngModel)]="property.landFootage" readonly></ion-input>
+        <ion-input [(ngModel)]="property.essentials.landFootage" readonly></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Date of purchase: </ion-label>
@@ -54,7 +90,7 @@
       </ion-item>
       <ion-item>
         <ion-label>Living area: </ion-label>
-        <ion-input [(ngModel)]="property.propertyFootage" readonly></ion-input>
+        <ion-input [(ngModel)]="property.essentials.propertyFootage" readonly></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Date of sale: </ion-label>

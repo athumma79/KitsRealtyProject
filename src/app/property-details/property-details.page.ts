@@ -6,6 +6,7 @@ import * as $ from 'jquery';
 
 import { Property } from '../models/property.class';
 import { Contractor } from '../models/contractor.class';
+import { PropertyStatus } from '../models/property-status.class';
 
 @Component({
   selector: 'app-property-details',
@@ -219,14 +220,9 @@ export class PropertyDetailsPage implements OnInit {
 
   async deleteProperty() {
     if (window.confirm("Are you sure that you want to DELETE this property?")) {
-      const deleteInit = {
-        body: {
-          id: this.property.propertyId
-        }
-      };
       location.reload();
       API
-      .del(this.apiName, '/deleteproperties/'+ this.property.propertyId, deleteInit)
+      .del(this.apiName, '/deleteproperties/'+ this.property.propertyId, {})
       .then(response => {
         if (response.error) {
           window.alert("You cannot delete this property because it is referenced by a revenue.")
@@ -258,7 +254,56 @@ export class PropertyDetailsPage implements OnInit {
   }
 
   saveProperty() {
-    $("ion-input").attr("readonly");
+    $("ion-input").attr("readonly", "readonly");
+    const putInit = {
+      body: {
+        property: this.property
+      }
+    };
+    API
+      .put(this.apiName, '/properties/', putInit)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  updateStatus(e) {
+    let updatedStatus = new PropertyStatus();
+    switch (e.detail.value) {
+      case "researched":
+        updatedStatus.statusId = "1";
+        updatedStatus.propertyStatusDescription = "Researched";
+        break;
+      case "pending-purchase":
+        updatedStatus.statusId = "2";
+        updatedStatus.propertyStatusDescription = "Pending Purchase";
+        break;
+      case "purchased":
+        updatedStatus.statusId = "3";
+        updatedStatus.propertyStatusDescription = "Purchased";
+        break;
+      case "undergoing-remodeling":
+        updatedStatus.statusId = "4";
+        updatedStatus.propertyStatusDescription = "Undergoing Remodeling";
+        break;
+      case "finished-remodeling":
+        updatedStatus.statusId = "5";
+        updatedStatus.propertyStatusDescription = "Finished Remodeling";
+        break;
+      case "for-sale":
+        updatedStatus.statusId = "6";
+        updatedStatus.propertyStatusDescription = "For Sale";
+        break;
+      case "sold":
+        updatedStatus.statusId = "7";
+        updatedStatus.propertyStatusDescription = "Sold";
+        break;
+    }
+    this.property.status = updatedStatus;
+    console.log(this.property.status);
   }
 
   dismiss() {
