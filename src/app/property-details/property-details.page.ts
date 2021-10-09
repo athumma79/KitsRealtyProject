@@ -36,6 +36,8 @@ export class PropertyDetailsPage implements OnInit {
     this.property = this.navParams.data.property;
     this.loadContractors();
     this.getThumbnail();
+
+    console.log(JSON.stringify(this.property));
   }
 
   async loadContractors() {
@@ -145,79 +147,6 @@ export class PropertyDetailsPage implements OnInit {
     window.open(event, '_blank');
   }
 
-  async changeStatus(statusId: string) {
-    this.property.status.statusId = statusId;
-    console.log(statusId);
-    const putInit = {
-      body: {
-        statusId: statusId,
-      }, // replace this with attributes you need
-      headers: { 
-      }
-    };
-    API
-    .put(this.apiName, '/properties/' + this.property.propertyId + '/status/' + statusId, putInit)
-    .then(response => {
-      console.log(response);
-    })
-    .catch(error => {
-      console.log(error);
-    });
-  }
-
-  async getStatus() {
-    const picker = await this.pickerController.create({  
-      buttons: [
-        {
-          text: "Cancel",
-          role: 'cancel'
-        },
-        {
-        text: 'Confirm',
-        handler: (value) => {
-          this.changeStatus(value.status.value);
-          }
-        }
-      ],
-      columns: [
-        {
-          name: 'status',
-          options: [
-            {
-              text: 'Researched',
-              value: '1'
-            },
-            {
-              text: 'Pending Purchase',
-              value: '2'
-            },
-            {
-              text: 'Purchased',
-              value: '3'
-            },
-            {
-              text: 'Undergoing Remodeling',
-              value: '4'
-            },
-            {
-              text: 'Finished Remodeling',
-              value: '5'
-            },
-            {
-              text: 'For Sale',
-              value: '6'
-            },
-            {
-              text: 'Sold',
-              value: '7'
-            },
-          ]
-        }
-      ]
-    });
-    await picker.present();
-  }
-
   async deleteProperty() {
     if (window.confirm("Are you sure that you want to DELETE this property?")) {
       location.reload();
@@ -254,7 +183,7 @@ export class PropertyDetailsPage implements OnInit {
     $("ion-textarea").removeAttr("readonly");
   }
 
-  saveProperty() {
+  async saveProperty() {
     $("ion-input").attr("readonly", "readonly");
     $("ion-textarea").attr("readonly", "readonly");
     const putInit = {
@@ -263,7 +192,7 @@ export class PropertyDetailsPage implements OnInit {
       }
     };
     API
-      .put(this.apiName, '/properties/', putInit)
+      .put(this.apiName, '/properties', putInit)
       .then(response => {
         console.log(response);
       })

@@ -113,41 +113,59 @@ app.post('/properties/*', function(req, res) {
 ****************************/
 
 app.put('/properties', function(req, res) {
+  
   let newProperty = req.body.property;
 
-  let propertyQuery = "UPDATE PROPERTY \
-  SET \
-    PROPERTY_TYPE = " + newProperty.propertyType + ", \
-    NOTES = " + newProperty.notes + ", \
-    DATE_OF_PURCHASE = " + newProperty.dateOfPurchase + ", \
-    TRUSTEE_NAME = " + newProperty.trusteeName + ", \
-    DATE_OF_SALE = " + newProperty.dateOfSale + ", \
-    SUBDIVISION = " + newProperty.subdivision + ", \
-    COUNTY_ASSESSMENT = " + newProperty.countyAssessment + ", \
-    PROPERTY_STATUS_ID = " + newProperty.status.statusId + " \
-    OCCUPANCY_STATUS_ID = " + newProperty.occupancyStatus.occupancyStatusId + " \
-  WHERE PROPERTY_ID = " + newProperty.propertyId + ";"
+  pool.getConnection(function(error, connection) {
 
-  let addressQuery = "UPDATE PROPERTY_ADDRESS \
-  SET \
-    ADDRESS = " + newProperty.address.address + ", \
-    CITY = " + newProperty.address.city + ", \
-    COUNTY = " + newProperty.address.county + ", \
-    STATE = " + newProperty.address.state + ", \
-    ZIPCODE = " + newProperty.address.zipcode + " \
-  WHERE PROPERTY_ID = " + newProperty.propertyId + ";"
+    let propertyQuery = "UPDATE PROPERTY \
+    SET \
+      NOTES = '" + newProperty.notes + "', \
+      DATE_OF_PURCHASE = '" + newProperty.dateOfPurchase + "', \
+      TRUSTEE_NAME = '" + newProperty.trusteeName + "', \
+      DATE_OF_SALE = '" + newProperty.dateOfSale + "', \
+      SUBDIVISION = '" + newProperty.subdivision + "', \
+      COUNTY_ASSESSMENT = '" + newProperty.countyAssessment + "', \
+      STATUS_ID = " + newProperty.status.statusId + ", \
+      OCCUPANCY_STATUS_ID = " + newProperty.occupancyStatus.occupancyStatusId + " \
+    WHERE PROPERTY_ID = " + newProperty.propertyId + ";"
 
-  let essentialsQuery = "UPDATE PROPERTY_ESSENTIALS \
-  SET \
-    NUM_BEDS = " + newProperty.essentials.numBeds + ", \
-    LAND_FOOTAGE = " + newProperty.essentials.landFootage + ", \
-    YEAR_BUILT = " + newProperty.essentials.yearBuilt + ", \
-    NUM_BATHS = " + newProperty.essentials.numBaths + ", \
-    PROPERTY_FOOTAGE = " + newProperty.essentials.propertyFootage + ", \
- 	ZILLOW_LINK = " + newProperty.essentials.zillowLink + " \
-  WHERE PROPERTY_ID = " + newProperty.propertyId + ";"
+    let addressQuery = "UPDATE PROPERTY_ADDRESS \
+    SET \
+      ADDRESS = '" + newProperty.address.address + "', \
+      CITY = '" + newProperty.address.city + "', \
+      COUNTY = '" + newProperty.address.county + "', \
+      STATE = '" + newProperty.address.state + "', \
+      ZIPCODE = '" + newProperty.address.zipcode + "' \
+    WHERE ADDRESS_ID = " + newProperty.address.addressId + ";"
 
-  res.json({property: req.body.property});
+    let essentialsQuery = "UPDATE PROPERTY_ESSENTIALS \
+    SET \
+      PROPERTY_TYPE = '" + newProperty.essentials.propertyType + "', \
+      NUM_BEDS = " + newProperty.essentials.numBeds + ", \
+      LAND_FOOTAGE = " + newProperty.essentials.landFootage + ", \
+      YEAR_BUILT = " + newProperty.essentials.yearBuilt + ", \
+      NUM_BATHS = " + newProperty.essentials.numBaths + ", \
+      PROPERTY_FOOTAGE = " + newProperty.essentials.propertyFootage + ", \
+      ZILLOW_LINK = '" + newProperty.essentials.zillowLink + "' \
+    WHERE ESSENTIALS_ID = " + newProperty.essentials.essentialsId + ";"
+
+    connection.query(propertyQuery, function(err, rows, fields) {
+      if (err) throw err   
+    })
+
+    connection.query(addressQuery, function(err, rows, fields) {
+      if (err) throw err   
+    })
+
+    connection.query(essentialsQuery, function(err, rows, fields) {
+      if (err) throw err   
+    })
+
+    res.json()
+    connection.release()
+  })
+
 });
 
 app.put('/properties/*', function(req, res) {

@@ -113,9 +113,9 @@
     <ion-item>
       <ion-label>Notes: </ion-label>
       <ion-textarea
-      readonly
-      [(ngModel)]="property.notes">
-    </ion-textarea>
+      [(ngModel)]="property.notes"
+      readonly>
+      </ion-textarea>
     </ion-item>
   </ion-list>
 
@@ -128,64 +128,49 @@
       </h2>
       <div id="collapse-A" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-         
-          <div class="col-6">
-            <h3>Loan Info</h3>
-            <ion-item>
-              <ion-label>Prices type: </ion-label>
-              <ion-input [(ngModel)]="property.propertyPrices.pricesId" readonly></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label>
-                <p>{{getPriceTypeByStatus(property)}}</p>
-                <p>${{getPriceByStatus(property)}}</p>
-              </ion-label>
-            </ion-item>
-            <ion-item>
-              <ion-label>Land area: </ion-label>
-              <ion-input [(ngModel)]="property.essentials.landFootage" readonly></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label>Date of purchase: </ion-label>
-              <ion-input [(ngModel)]="property.dateOfPurchase" readonly></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label>Occupancy status: </ion-label>
-              <ion-input [(ngModel)]="property.occupancyStatus.description" readonly></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label>Trustee name: </ion-label>
-              <ion-input [(ngModel)]="property.trusteeName" readonly></ion-input>
-            </ion-item>
-          </div>
-
-          <div class="col-6">
-            <h3>Price Info</h3>
-            <ion-item>
-              <ion-label>Property type: </ion-label>
-              <ion-input [(ngModel)]="property.propertyType" readonly></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label># Beds: </ion-label>
-              <ion-input [(ngModel)]="property.essentials.numBeds" readonly></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label>Land area: </ion-label>
-              <ion-input [(ngModel)]="property.essentials.landFootage" readonly></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label>Date of purchase: </ion-label>
-              <ion-input [(ngModel)]="property.dateOfPurchase" readonly></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label>Occupancy status: </ion-label>
-              <ion-input [(ngModel)]="property.occupancyStatus.description" readonly></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label>Trustee name: </ion-label>
-              <ion-input [(ngModel)]="property.trusteeName" readonly></ion-input>
-            </ion-item>
-          </div>
+          <h3>Price Info</h3>
+          <ion-item>
+            <ion-label>Buy Value: $</ion-label>
+            <ion-input [(ngModel)]="property.prices.buyValue" readonly></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Expected Value: $</ion-label>
+            <ion-input [(ngModel)]="property.prices.expectedValue" readonly></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Sell Value: $</ion-label>
+            <ion-input [(ngModel)]="property.prices.sellValue" readonly></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Bidding Price: $</ion-label>
+            <ion-input [(ngModel)]="property.prices.biddingPrice" readonly></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Market Price: $</ion-label>
+            <ion-input [(ngModel)]="property.prices.marketPrice" readonly></ion-input>
+          </ion-item>
+          <h3>Auction Info</h3>
+          <ion-item>
+            <ion-label>Auction Location: </ion-label>
+            <ion-input [(ngModel)]="property.auction.auctionLocation" readonly></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Date of Auction: </ion-label>
+            <ion-input [(ngModel)]="property.auction.dateOfAuction" readonly></ion-input>
+          </ion-item>       
+          <h3>Loan Info</h3>
+          <ion-item>
+            <ion-label>Loan Amount: </ion-label>
+            <ion-input [(ngModel)]="property.loan.amount" readonly></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Month Due: </ion-label>
+            <ion-input [(ngModel)]="property.loan.month" readonly></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Year Due: </ion-label>
+            <ion-input [(ngModel)]="property.loan.year" readonly></ion-input>
+          </ion-item>
         </div>
       </div>
     </div>

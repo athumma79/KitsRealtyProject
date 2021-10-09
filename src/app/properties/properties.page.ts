@@ -68,7 +68,7 @@ export class PropertiesPage implements OnInit {
           propertyAuction.dateOfAuction = dbProperties[i]["DATE_OF_AUCTION"];
 
           var propertyPrices = new PropertyPrices();
-          propertyPrices.pricesId = dbProperties[i]["PROPERTY_PRICES"];
+          propertyPrices.pricesId = dbProperties[i]["PRICES_ID"];
           propertyPrices.buyValue = dbProperties[i]["BUY_VALUE"];
           propertyPrices.expectedValue = dbProperties[i]["EXPECTED_VALUE"];
           propertyPrices.sellValue = dbProperties[i]["SELL_VALUE"];
