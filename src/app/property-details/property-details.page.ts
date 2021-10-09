@@ -251,10 +251,12 @@ export class PropertyDetailsPage implements OnInit {
 
   editProperty() {
     $("ion-input").removeAttr("readonly");
+    $("ion-textarea").removeAttr("readonly");
   }
 
   saveProperty() {
     $("ion-input").attr("readonly", "readonly");
+    $("ion-textarea").attr("readonly", "readonly");
     const putInit = {
       body: {
         property: this.property

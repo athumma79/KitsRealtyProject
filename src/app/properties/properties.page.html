@@ -1,6 +1,7 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Properties</ion-title>
+    <h2 id='title'><strong>Properties</strong></h2>
+    <ion-item slot='end'><amplify-sign-out></amplify-sign-out></ion-item>
   </ion-toolbar>
 </ion-header>
 
@@ -10,7 +11,7 @@
       <h2 class="accordion-header">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse-' + property.propertyId">
           <ion-thumbnail [attr.class]="'thumbnail-' + property.propertyId" slot="start"></ion-thumbnail>
-          <ion-label>
+          <ion-label class='description'>
             <h3>{{property.address.address}} {{property.address.city}}, {{property.address.state}} {{property.address.zipcode}}</h3>
             <p>{{property.address.county}}</p>
             <p>{{property.status.propertyStatusDescription}} | {{property.essentials.propertyType}}</p>
@@ -20,7 +21,6 @@
             <p>{{getPriceTypeByStatus(property)}}</p>
           </ion-label>
         </button>
-        <ion-button (click)="openPropertyDetails(i)">View Details</ion-button>
       </h2>
       <div [attr.id]="'collapse-' + property.propertyId" class="accordion-collapse collapse" data-bs-parent="#accordion">
         <div class="accordion-body">
@@ -30,6 +30,7 @@
           <p>Property: {{property.essentials.propertyFootage}} sq ft</p>
           <p>Year Built: {{property.essentials.yearBuilt}}</p>
         </div>
+        <ion-button slot='end' (click)="openPropertyDetails(i)">View Details</ion-button>
       </div>
     </div>
   </div>
