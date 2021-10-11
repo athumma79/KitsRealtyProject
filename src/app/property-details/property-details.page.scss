@@ -9,3 +9,10 @@ ion-select {
 .col-6 {
     display: inline-block;
 }
+
+.delete-btn {
+    --background: red;
+    width: 50px;
+    font-size: 1em;
+    text-align: center;
+}

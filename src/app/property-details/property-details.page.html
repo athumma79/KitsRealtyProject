@@ -223,11 +223,16 @@
       <div id="collapse-E" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
           <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
-          <ion-button (click)="uploadFile('purchase_docs')"></ion-button>
+          <ion-button (click)="uploadFile('purchase_docs')">Upload</ion-button>
+          <ion-button class="edit-btn-purchase" (click)="editFiles('purchase')">Edit</ion-button>
+          <ion-button class="save-btn-purchase d-none" (click)="saveFiles('purchase')">Save</ion-button>
           <ion-list>
             <div *ngFor="let purchaseDoc of purchaseDocs; index as i">
               <ion-item>            
                 <a href={{purchaseDoc}} target="_blank">{{purchaseDocsNames[i]}}</a>
+                <ion-button class="delete-btn delete-btn-purchase d-none" slot="end" (click)="deleteFile('purchase_docs', purchaseDocsNames[i])">
+                  <i class="far fa-trash-alt"></i>
+                </ion-button>
               </ion-item>
             </div>
           </ion-list>
@@ -242,10 +247,17 @@
       </h2>
       <div id="collapse-F" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
+          <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
+          <ion-button (click)="uploadFile('utilities_docs')">Upload</ion-button>
+          <ion-button class="edit-btn-utilities" (click)="editFiles('utilities')">Edit</ion-button>
+          <ion-button class="save-btn-utilities d-none" (click)="saveFiles('utilities')">Save</ion-button>
           <ion-list>
             <div *ngFor="let utilitiesDoc of utilitiesDocs; index as i">
               <ion-item>            
                 <a href={{utilitiesDoc}} target="_blank">{{utilitiesDocsNames[i]}}</a>
+                <ion-button class="delete-btn delete-btn-utilities d-none" slot="end" (click)="deleteFile('utilities_docs', utilitiesDocsNames[i])">
+                  <i class="far fa-trash-alt"></i>
+                </ion-button>
               </ion-item>
             </div>
           </ion-list>
@@ -260,23 +272,20 @@
       </h2>
       <div id="collapse-G" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-          <div *ngFor="let salesDoc of salesDocs; index as i">
-            <ion-item>
-              <a href={{salesDoc}} target="_blank">{{salesDocsNames[i]}}</a>
-            </ion-item>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-H">
-          Nearby Properties
-        </button>
-      </h2>
-      <div id="collapse-H" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
-        <div class="accordion-body">
-          <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+          <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
+          <ion-button (click)="uploadFile('sales_docs')">Upload</ion-button>
+          <ion-button class="edit-btn-sales" (click)="editFiles('sales')">Edit</ion-button>
+          <ion-button class="save-btn-sales d-none" (click)="saveFiles('sales')">Save</ion-button>
+          <ion-list>
+            <div *ngFor="let salesDoc of salesDocs; index as i">
+              <ion-item>            
+                <a href={{salesDoc}} target="_blank">{{salesDocsNames[i]}}</a>
+                <ion-button class="delete-btn delete-btn-sales d-none" slot="end" (click)="deleteFile('sales_docs', salesDocsNames[i])">
+                  <i class="far fa-trash-alt"></i>
+                </ion-button>
+              </ion-item>
+            </div>
+          </ion-list>
         </div>
       </div>
     </div>

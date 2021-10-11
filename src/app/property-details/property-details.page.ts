@@ -74,12 +74,14 @@ export class PropertyDetailsPage implements OnInit {
     this.resetFiles(path);
     await Storage.list("properties/" + this.property.propertyId + "/" + path)
       .then(async response => {
-        if (!response || response.length < 2) {
+        console.log(response);
+        if (!response || response.length < 1 || (response.length < 2 && response[0].size == 0)) {
           return;
         }
         for (var i = 0; i < response.length; i++) {
           let filePath = response[i].key;
           let fileName = filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length);
+          console.log(filePath);
           await Storage.get(filePath)
             .then(response => {
               this.storeFile(path, response, fileName);
@@ -121,8 +123,8 @@ export class PropertyDetailsPage implements OnInit {
       this.utilitiesDocsNames.push(fileName); 
     }
     else if (path == 'sales_docs' && fileName.length != 0) { 
-      this.salesDocsNames.push(file as any); 
-      this.salesDocs.push(fileName);
+      this.salesDocs.push(file as any); 
+      this.salesDocsNames.push(fileName);
     }
   }
 
@@ -132,15 +134,68 @@ export class PropertyDetailsPage implements OnInit {
     this.fileToUpload = e.target.files[0]
   }
 
+  editFiles(filetype: string) {
+    $(function() {
+      switch (filetype) {
+        case 'purchase':
+          $(".edit-btn-purchase").addClass("d-none");
+          $(".save-btn-purchase").removeClass("d-none");
+          $(".delete-btn-purchase").removeClass("d-none");
+          break;
+        case 'utilities':
+          $(".edit-btn-utilities").addClass("d-none");
+          $(".save-btn-utilities").removeClass("d-none");
+          $(".delete-btn-utilities").removeClass("d-none");
+          break;
+        case 'sales':
+          $(".edit-btn-sales").addClass("d-none");
+          $(".save-btn-sales").removeClass("d-none");
+          $(".delete-btn-sales").removeClass("d-none");
+          break;
+      }
+    });
+  }
+
+  saveFiles(filetype: string) {
+    $(function() {
+      switch (filetype) {
+        case 'purchase':
+          $(".edit-btn-purchase").removeClass("d-none");
+          $(".save-btn-purchase").addClass("d-none");
+          $(".delete-btn-purchase").addClass("d-none");
+          break;
+        case 'utilities':
+          $(".edit-btn-utilities").removeClass("d-none");
+          $(".save-btn-utilities").addClass("d-none");
+          $(".delete-btn-utilities").addClass("d-none");
+          break;
+        case 'sales':
+          $(".edit-btn-sales").removeClass("d-none");
+          $(".save-btn-sales").addClass("d-none");
+          $(".delete-btn-sales").addClass("d-none");
+          break;
+      }
+    });
+  }
+
   async uploadFile(path: string) {
     try {
       await Storage.put('properties/' + this.property.propertyId + '/' + path + '/' + this.fileToUpload.name + "-" + Date.now(), this.fileToUpload, {});
-      console.log(this.purchaseDocsNames);
       this.getFiles(path);
-      console.log(this.purchaseDocsNames);
     } catch (err) {
       console.log(err);
     }  
+  }
+
+  async deleteFile(path: string, fileToDelete: string) {
+    if (window.confirm("Are you sure that you want to DELETE this file?")) {
+      try {
+        await Storage.remove('properties/' + this.property.propertyId + '/' + path + '/' + fileToDelete, {});
+        this.getFiles(path);
+      } catch (err) {
+        console.log(err);
+      }  
+    }
   }
 
   onAlbumImageSelected(event) {
@@ -184,21 +239,23 @@ export class PropertyDetailsPage implements OnInit {
   }
 
   async saveProperty() {
-    $("ion-input").attr("readonly", "readonly");
-    $("ion-textarea").attr("readonly", "readonly");
-    const putInit = {
-      body: {
-        property: this.property
-      }
-    };
-    API
-      .put(this.apiName, '/properties', putInit)
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    if (window.confirm("Save property information?")) {
+      $("ion-input").attr("readonly", "readonly");
+      $("ion-textarea").attr("readonly", "readonly");
+      const putInit = {
+        body: {
+          property: this.property
+        }
+      };
+      API
+        .put(this.apiName, '/properties', putInit)
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }
 
   updateStatus(e) {
