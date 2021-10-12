@@ -70,7 +70,7 @@ app.get('/properties/*', function(req, res) {
   res.json({success: 'get call succeed!', url: req.url});
 });
 
-app.get('/contractors/:propertyid', function(req, res) {
+app.post('/contractors', function(req, res) {
 
   pool.getConnection(function(error, connection) {
 
@@ -80,7 +80,7 @@ app.get('/contractors/:propertyid', function(req, res) {
     LEFT OUTER JOIN CONTRACTOR_TYPE ON CONTRACTOR.CONTRACTOR_TYPE_ID = CONTRACTOR_TYPE.CONTRACTOR_TYPE_ID \
     LEFT OUTER JOIN USERS ON CONTRACTOR.CONTRACTOR_COGNITO_ID = USERS.USER_COGNITO_ID \
     LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID \
-    WHERE PROPERTY_ID = " + req.params.propertyid + ";"
+    WHERE PROPERTY_ID = " + req.body.propertyid + ";"
 
     connection.query(query, function(err, rows, fields) {
       if (err) throw err
@@ -187,11 +187,11 @@ app.delete('/properties/*', function(req, res) {
   res.json({success: 'delete call succeed!', url: req.url});
 });
 
-app.delete('/deleteproperties/:propertyid', function(req, res) {
+app.delete('/properties', function(req, res) {
   pool.getConnection(function(error, connection) {
 
     var propertyRevenuesQuery = "SELECT * FROM REVENUE \
-    WHERE PROPERTY_ID = " + req.params.propertyid;
+    WHERE PROPERTY_ID = " + req.body.propertyid;
 
     connection.query(propertyRevenuesQuery, function(err, rows, fields) {
       if (err) throw err
@@ -199,25 +199,25 @@ app.delete('/deleteproperties/:propertyid', function(req, res) {
       if (rows.length == 0) {
         var propertyDependenciesQuery = "SELECT PRICES_ID, ADDRESS_ID, ESSENTIALS_ID, LOAN_ID \
         FROM PROPERTY \
-        WHERE PROPERTY_ID = " + req.params.propertyid;
+        WHERE PROPERTY_ID = " + req.body.propertyid;
 
         connection.query(propertyDependenciesQuery, function(err, dependenciesRows, fields) {
           if (err) throw err
 
           var propertyContractorQuery = "DELETE FROM PROPERTY_CONTRACTOR \
-          WHERE PROPERTY_ID = " + req.params.propertyid;
+          WHERE PROPERTY_ID = " + req.body.propertyid;
 
           connection.query(propertyContractorQuery, function(err, rows, fields) {
             if (err) throw err     
             
             var nearbyPropertiesQuery = "DELETE FROM NEARBY_PROPERTY \
-            WHERE PROPERTY_ID = " + req.params.propertyid;
+            WHERE PROPERTY_ID = " + req.body.propertyid;
 
             connection.query(nearbyPropertiesQuery, function(err, rows, fields) {
               if (err) throw err    
               
               var propertyQuery = "DELETE FROM PROPERTY \
-              WHERE PROPERTY_ID = " + req.params.propertyid;
+              WHERE PROPERTY_ID = " + req.body.propertyid;
     
               connection.query(propertyQuery, function(err, rows, fields) {
                 if (err) throw err    

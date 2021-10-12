@@ -7,6 +7,9 @@ import * as $ from 'jquery';
 import { Property } from '../models/property.class';
 import { Contractor } from '../models/contractor.class';
 import { PropertyStatus } from '../models/property-status.class';
+import { UserRole } from '../models/user-role.class';
+import { User } from '../models/user.class';
+import { ContractorType } from '../models/contractor-type.class';
 
 @Component({
   selector: 'app-property-details',
@@ -24,7 +27,7 @@ export class PropertyDetailsPage implements OnInit {
   ) { }
 
   property: Property;
-  contractors: Contractor;
+  contractors: Contractor[] = new Array();
   purchaseDocs: string[] = new Array();
   purchaseDocsNames: string[] = new Array();
   salesDocs: string[] = new Array();
@@ -37,18 +40,92 @@ export class PropertyDetailsPage implements OnInit {
     this.loadContractors();
     this.getThumbnail();
 
-    console.log(JSON.stringify(this.property));
+    console.log(this.property.coordinator);
+    console.log(this.contractors);
   }
 
   async loadContractors() {
+    const postInit = {
+      body: {
+        propertyid: this.property.propertyId
+      }
+    };
     API
-      .get(this.apiName, '/contractors/' + this.property.propertyId, {})
+      .post(this.apiName, '/contractors', postInit)
       .then(response => {
-        console.log(response);
+        var dbContractors = response.contractors;
+        for(var i = 0; i < dbContractors.length; i++) {
+          var userRole = new UserRole();
+          userRole.roleId = dbContractors[i]["ROLE_ID"];
+          userRole.userRoleDescription = dbContractors[i]["USER_ROLE_DESCRIPTION"];
+
+          var user = new User();
+          user.userCognitoId = dbContractors[i]["USER_COGNITO_ID"];
+          user.role = userRole;
+          user.firstName = dbContractors[i]["FIRST_NAME"];
+          user.lastName = dbContractors[i]["LAST_NAME"];
+          user.email = dbContractors[i]["EMAIL"];
+          user.username = dbContractors[i]["USERNAME"];
+          user.ssn = dbContractors[i]["SSN"];
+
+          var contractorType = new ContractorType();
+          contractorType.contractorTypeId = dbContractors[i]["CONTRACTOR_TYPE_ID"];
+          contractorType.contractorTypeDescription = dbContractors[i]["CONTRACTOR_TYPE_DESCRIPTION"];
+
+          var contractor = new Contractor();
+          contractor.contractorCognitoId = dbContractors[i]["CONTRACTOR_COGNITO_ID"];
+          contractor.contractorUser = user;
+          contractor.contractorType = contractorType;
+          contractor.dateHired = dbContractors[i]["DATE_HIRED"];
+          contractor.startDate = dbContractors[i]["START_DATE"];
+          contractor.endDate = dbContractors[i]["END_DATE"];
+          contractor.company = dbContractors[i]["COMPANY"];
+            
+          this.contractors.push(contractor);
+        }
       })
       .catch(err => {
         console.log(err);
       })
+  }
+
+  editContractors() {
+    $(function() {
+      $(".edit-btn-contractors").addClass("d-none");
+      $(".save-btn-contractors").removeClass("d-none");
+      $(".delete-btn-contractor").removeClass("d-none");
+    });
+  }
+
+  saveContractors() {
+    $(function() {
+      $(".edit-btn-contractors").removeClass("d-none");
+      $(".save-btn-contractors").addClass("d-none");
+      $(".delete-btn-contractor").addClass("d-none");
+    });
+  }
+
+  deleteContractor(contractor: Contractor) {
+    if (window.confirm("Are you sure that you want to DELETE this file?")) {
+      const deleteInit = {
+        body: {
+          contractorCognitoId: contractor.contractorCognitoId,
+          propertyId: this.property.propertyId
+        }
+      };
+      API
+      .del(this.apiName, '/contractors', deleteInit)
+      .then(response => {})
+      .catch(error => {
+        console.log(error);
+      });
+    }
+  }
+
+  deleteCoordinator() {
+    if (window.confirm("Are you sure that you want to DELETE this file?")) {
+      
+    }
   }
 
   async getThumbnail() {
@@ -205,8 +282,13 @@ export class PropertyDetailsPage implements OnInit {
   async deleteProperty() {
     if (window.confirm("Are you sure that you want to DELETE this property?")) {
       location.reload();
+      const deleteInit = {
+        body: {
+          propertyid: this.property.propertyId
+        }
+      };
       API
-      .del(this.apiName, '/deleteproperties/'+ this.property.propertyId, {})
+      .del(this.apiName, '/properties', deleteInit)
       .then(response => {
         if (response.error) {
           window.alert("You cannot delete this property because it is referenced by a revenue.")

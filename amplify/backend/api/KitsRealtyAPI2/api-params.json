@@ -1,21 +1,6 @@
 {
     "paths": [
         {
-            "name": "/contractors/{propertyid}",
-            "lambdaFunction": "KitsRealtyLambdaFunction2",
-            "privacy": {
-                "private": true,
-                "auth": [
-                    "/POST",
-                    "/GET",
-                    "/PUT",
-                    "/PATCH",
-                    "/DELETE"
-                ]
-            },
-            "policyResourceName": "/contractors/*"
-        },
-        {
             "name": "/properties",
             "lambdaFunction": "KitsRealtyLambdaFunction2",
             "privacy": {
@@ -31,7 +16,7 @@
             "policyResourceName": "/properties"
         },
         {
-            "name": "/deleteproperties/{propertyid}",
+            "name": "/contractors",
             "lambdaFunction": "KitsRealtyLambdaFunction2",
             "privacy": {
                 "private": true,
@@ -43,22 +28,7 @@
                     "/DELETE"
                 ]
             },
-            "policyResourceName": "/deleteproperties/*"
-        },
-        {
-            "name": "/putproperties/{property}",
-            "lambdaFunction": "KitsRealtyLambdaFunction2",
-            "privacy": {
-                "private": true,
-                "auth": [
-                    "/POST",
-                    "/GET",
-                    "/PUT",
-                    "/PATCH",
-                    "/DELETE"
-                ]
-            },
-            "policyResourceName": "/putproperties/*"
+            "policyResourceName": "/contractors"
         }
     ],
     "resourceName": "KitsRealtyAPI2",
@@ -69,7 +39,7 @@
         }
     ],
     "privacy": {
-        "auth": 4,
+        "auth": 2,
         "unauth": 0,
         "authRoleName": "amplify-kitsrealtyproject2-dev-155513-authRole",
         "unAuthRoleName": "amplify-kitsrealtyproject2-dev-155513-unauthRole"
@@ -84,5 +54,5 @@
             ]
         }
     ],
-    "uuid": "35256caf"
+    "uuid": "5ecd26e7"
 }

@@ -194,7 +194,17 @@
       </h2>
       <div id="collapse-C" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-          <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+          <ion-item>Coordinator: {{property.coordinator.firstName}} {{property.coordinator.lastName}}</ion-item>
+          <ion-list *ngFor="let contractor of contractors">
+            <ion-item>
+              {{contractor.contractorType.contractorTypeDescription}}: {{contractor.contractorUser.firstName}} {{contractor.contractorUser.lastName}}
+              <ion-button class="delete-btn delete-btn-contractor d-none" slot="end" (click)="deleteContractor(contractor[i])">
+                <i class="far fa-trash-alt"></i>
+              </ion-button>
+            </ion-item>
+          </ion-list>
+          <ion-button class="edit-btn-contractors" (click)="editContractors()">Edit</ion-button>
+          <ion-button class="save-btn-contractors d-none" (click)="saveContractors()">Save</ion-button>
         </div>
       </div>
     </div>
