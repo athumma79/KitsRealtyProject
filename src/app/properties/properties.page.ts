@@ -65,7 +65,7 @@ export class PropertiesPage implements OnInit {
           var propertyAuction = new PropertyAuction();
           propertyAuction.auctionId = dbProperties[i]["AUCTION_ID"];
           propertyAuction.auctionLocation = dbProperties[i]["AUCTION_LOCATION"];
-          propertyAuction.dateOfAuction = dbProperties[i]["DATE_OF_AUCTION"];
+          propertyAuction.dateOfAuction = dbProperties[i]['DATE_OF_AUCTION'] ? new Date(dbProperties[i]['DATE_OF_AUCTION'].substring(0, dbProperties[i]['DATE_OF_AUCTION'].lastIndexOf('.'))) : null;
 
           var propertyPrices = new PropertyPrices();
           propertyPrices.pricesId = dbProperties[i]["PRICES_ID"];
@@ -110,8 +110,8 @@ export class PropertiesPage implements OnInit {
           property.address = propertyAddress;
           property.essentials = propertyEssentials;
           property.loan = propertyLoan;
-          property.dateOfPurchase = dbProperties[i]["DATE_OF_PURCHASE"];
-          property.dateOfSale = dbProperties[i]["DATE_OF_SALE"];
+          property.dateOfPurchase = dbProperties[i]['DATE_OF_PURCHASE'] ? new Date(dbProperties[i]['DATE_OF_PURCHASE'].substring(0, dbProperties[i]['DATE_OF_PURCHASE'].lastIndexOf('.'))) : null;
+          property.dateOfSale = dbProperties[i]['DATE_OF_SALE'] ? new Date(dbProperties[i]['DATE_OF_SALE'].substring(0, dbProperties[i]['DATE_OF_SALE'].lastIndexOf('.'))) : null;
           property.trusteeName = dbProperties[i]["TRUSTEE_NAME"];
           property.subdivision = dbProperties[i]["SUBDIVISION"];
           property.countyAssessment = dbProperties[i]["COUNTY_ASSESSMENT"];

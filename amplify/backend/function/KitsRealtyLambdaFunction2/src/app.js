@@ -70,6 +70,10 @@ app.get('/properties/*', function(req, res) {
   res.json({success: 'get call succeed!', url: req.url});
 });
 
+/****************************
+* Example post method *
+****************************/
+
 app.post('/contractors', function(req, res) {
 
   pool.getConnection(function(error, connection) {
@@ -94,9 +98,33 @@ app.post('/contractors', function(req, res) {
   
 });
 
-/****************************
-* Example post method *
-****************************/
+app.post('/revenues', function(req, res) {
+
+  pool.getConnection(function(error, connection) {
+
+    var query = "SELECT * \
+    FROM REVENUE \
+    LEFT OUTER JOIN PROPERTY ON REVENUE.PROPERTY_ID = PROPERTY.PROPERTY_ID \
+    LEFT OUTER JOIN CONTRACTOR ON REVENUE.CONTRACTOR_COGNITO_ID = CONTRACTOR.CONTRACTOR_COGNITO_ID \
+    LEFT OUTER JOIN EXPENSE_STATUS ON REVENUE.EXPENSE_STATUS_ID = EXPENSE_STATUS.EXPENSE_STATUS_ID"
+
+    if (req.body.propertyid) {
+      query += " WHERE REVENUE.PROPERTY_ID = " + req.body.propertyid
+    }
+    
+    query += ";"
+
+    connection.query(query, function(err, rows, fields) {
+      if (err) throw err
+
+      res.json({ revenues: rows })
+
+      connection.release()
+    })
+
+  })
+  
+});
 
 app.post('/properties', function(req, res) {
   // Add your code here
@@ -268,6 +296,26 @@ app.delete('/properties', function(req, res) {
       }
     })
   })
+});
+
+app.delete('/contractors', function(req, res) {
+
+  pool.getConnection(function(error, connection) {
+
+    var query = "DELETE FROM PROPERTY_CONTRACTOR \
+    WHERE PROPERTY_ID = " + req.body.propertyId + "\
+    AND CONTRACTOR_COGNITO_ID = " + req.body.contractorCognitoId + ";"
+
+    connection.query(query, function(err, rows, fields) {
+      if (err) throw err
+
+      res.json()
+
+      connection.release()
+    })
+
+  })
+  
 });
 
 app.listen(3000, function() {

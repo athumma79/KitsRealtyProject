@@ -10,6 +10,8 @@ import { PropertyStatus } from '../models/property-status.class';
 import { UserRole } from '../models/user-role.class';
 import { User } from '../models/user.class';
 import { ContractorType } from '../models/contractor-type.class';
+import { Revenue } from '../models/revenue.class';
+import { ExpenseStatus } from '../models/expense-status.class';
 
 @Component({
   selector: 'app-property-details',
@@ -28,6 +30,7 @@ export class PropertyDetailsPage implements OnInit {
 
   property: Property;
   contractors: Contractor[] = new Array();
+  revenues: Revenue[] = new Array();
   purchaseDocs: string[] = new Array();
   purchaseDocsNames: string[] = new Array();
   salesDocs: string[] = new Array();
@@ -38,6 +41,7 @@ export class PropertyDetailsPage implements OnInit {
   ngOnInit() {
     this.property = this.navParams.data.property;
     this.loadContractors();
+    this.loadRevenues();
     this.getThumbnail();
 
     console.log(this.property.coordinator);
@@ -76,9 +80,10 @@ export class PropertyDetailsPage implements OnInit {
           contractor.contractorCognitoId = dbContractors[i]["CONTRACTOR_COGNITO_ID"];
           contractor.contractorUser = user;
           contractor.contractorType = contractorType;
-          contractor.dateHired = dbContractors[i]["DATE_HIRED"];
-          contractor.startDate = dbContractors[i]["START_DATE"];
-          contractor.endDate = dbContractors[i]["END_DATE"];
+          contractor.dateHired = dbContractors[i]['DATE_HIRED'] ? new Date(dbContractors[i]['DATE_HIRED'].substring(0, dbContractors[i]['DATE_HIRED'].lastIndexOf('.'))) : null;
+          contractor.startDate = dbContractors[i]['START_DATE'] ? new Date(dbContractors[i]['START_DATE'].substring(0, dbContractors[i]['START_DATE'].lastIndexOf('.'))) : null;
+          contractor.endDate = dbContractors[i]['END_DATE'] ? new Date(dbContractors[i]['END_DATE'].substring(0, dbContractors[i]['END_DATE'].lastIndexOf('.'))) : null;
+
           contractor.company = dbContractors[i]["COMPANY"];
             
           this.contractors.push(contractor);
@@ -105,8 +110,20 @@ export class PropertyDetailsPage implements OnInit {
     });
   }
 
+  deleteCoordinator() {
+    if (window.confirm("Remove from property?")) {
+      this.property.coordinator = null;
+      this.saveProperty();
+    }
+  }
+
   deleteContractor(contractor: Contractor) {
-    if (window.confirm("Are you sure that you want to DELETE this file?")) {
+    if (window.confirm("Remove from property?")) {
+      for (let i = 0; i < this.contractors.length; i++) {
+        if (this.contractors[i].contractorCognitoId == contractor.contractorCognitoId) {
+          this.contractors.splice(i, 1);
+        }
+      }
       const deleteInit = {
         body: {
           contractorCognitoId: contractor.contractorCognitoId,
@@ -122,9 +139,61 @@ export class PropertyDetailsPage implements OnInit {
     }
   }
 
-  deleteCoordinator() {
-    if (window.confirm("Are you sure that you want to DELETE this file?")) {
-      
+  async loadRevenues() {
+    const postInit = {
+      body: {
+        propertyid: this.property.propertyId
+      }
+    };
+    API
+      .post(this.apiName, '/revenues', postInit)
+      .then(response => {
+        var dbRevenues = response.revenues;
+        for(var i = 0; i < dbRevenues.length; i++) {
+          let expenseStatus = new ExpenseStatus();
+          expenseStatus.expenseStatusId = dbRevenues[i]['EXPENSE_STATUS_ID'];
+          expenseStatus.expenseStatusDescription = dbRevenues[i]['EXPENSE_STATUS_DESCRIPTION'];
+          
+          let revenue = new Revenue();
+          revenue.revenueId = dbRevenues[i]['REVENUE_ID'];
+          revenue.property = this.property;
+          revenue.contractor = null;
+          revenue.expenseStatus = expenseStatus;
+          revenue.revenueAmount = dbRevenues[i]['REVENUE_AMOUNT'];
+          revenue.revenueType = dbRevenues[i]['REVENUE_TYPE'];
+          revenue.expenseDueDate = dbRevenues[i]['EXPENSE_DUE_DATE'] ? new Date(dbRevenues[i]['EXPENSE_DUE_DATE'].substring(0, dbRevenues[i]['EXPENSE_DUE_DATE'].lastIndexOf('.'))) : null;
+          revenue.amountPaid = dbRevenues[i]['AMOUNT_PAID'];
+          revenue.revenueDescription = dbRevenues[i]['REVENUE_DESCRIPTION'];
+          revenue.dateIncurred = dbRevenues[i]['DATE_INCURRED'] ? new Date(dbRevenues[i]['DATE_INCURRED'].substring(0, dbRevenues[i]['DATE_INCURRED'].lastIndexOf('.'))) : null;
+            
+          this.revenues.push(revenue);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
+  getFormattedRevenueAmount(revenue: Revenue) {
+    let formattedRevenue = (revenue.revenueType.toLowerCase() == "profit") ? "+" : "-";
+    formattedRevenue = " $" + revenue.revenueAmount.toFixed(2);
+    return formattedRevenue;
+  }
+
+  getRevenueStatus(revenue: Revenue) {
+    if (revenue.revenueType.toLowerCase() == "profit") {
+      return "profit";
+    }
+    return (revenue.expenseStatus.expenseStatusDescription == "paid") ? "paid" : "due " + revenue.expenseDueDate.toLocaleDateString("en-US");
+  }
+
+  colorCodeRevenueAmounts() {
+    for (let i = 0; i < this.revenues.length; i++) {
+      if (this.revenues[i].revenueType.toLowerCase() == "profit") {
+        $("#revenue-" + this.revenues[i].revenueId).addClass("profit");
+      } else {
+        $("#revenue-" + this.revenues[i].revenueId).addClass("expense");
+      }
     }
   }
 
@@ -329,6 +398,7 @@ export class PropertyDetailsPage implements OnInit {
           property: this.property
         }
       };
+      console.log(this.property);
       API
         .put(this.apiName, '/properties', putInit)
         .then(response => {

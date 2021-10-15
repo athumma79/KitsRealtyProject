@@ -176,13 +176,21 @@
     </div>
     <div class="accordion-item">
       <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-B">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-B" (click)="colorCodeRevenueAmounts()">
           Revenues
         </button>
       </h2>
       <div id="collapse-B" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-          Body
+          <ion-list *ngFor="let revenue of revenues; index as i">
+            <ion-item (click)="openRevenueDetailsModal(i)">
+              <ion-label>
+                <h3>{{revenue.revenueType}}: <span [attr.id]="'revenue-' + revenue.revenueId">{{getFormattedRevenueAmount(revenue)}}</span></h3>
+                <p>Status: {{getRevenueStatus(revenue)}}</p>
+                <p>Description: {{revenue.revenueDescription}}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
         </div>
       </div>
     </div>
@@ -194,11 +202,16 @@
       </h2>
       <div id="collapse-C" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-          <ion-item>Coordinator: {{property.coordinator.firstName}} {{property.coordinator.lastName}}</ion-item>
+          <ion-item *ngIf="property.coordinator">
+            Coordinator: {{property.coordinator.firstName}} {{property.coordinator.lastName}}
+            <ion-button class="delete-btn delete-btn-contractor d-none" slot="end" (click)="deleteCoordinator()">
+              <i class="far fa-trash-alt"></i>
+            </ion-button>
+          </ion-item>
           <ion-list *ngFor="let contractor of contractors">
             <ion-item>
               {{contractor.contractorType.contractorTypeDescription}}: {{contractor.contractorUser.firstName}} {{contractor.contractorUser.lastName}}
-              <ion-button class="delete-btn delete-btn-contractor d-none" slot="end" (click)="deleteContractor(contractor[i])">
+              <ion-button class="delete-btn delete-btn-contractor d-none" slot="end" (click)="deleteContractor(contractor)">
                 <i class="far fa-trash-alt"></i>
               </ion-button>
             </ion-item>
