@@ -51,7 +51,7 @@ export class PropertyDetailsPage implements OnInit {
   async loadContractors() {
     const postInit = {
       body: {
-        propertyid: this.property.propertyId
+        propertyId: this.property.propertyId
       }
     };
     API
@@ -112,8 +112,8 @@ export class PropertyDetailsPage implements OnInit {
 
   deleteCoordinator() {
     if (window.confirm("Remove from property?")) {
-      this.property.coordinator = null;
-      this.saveProperty();
+      this.property.coordinator = new User();
+      this.saveProperty(false);
     }
   }
 
@@ -142,7 +142,7 @@ export class PropertyDetailsPage implements OnInit {
   async loadRevenues() {
     const postInit = {
       body: {
-        propertyid: this.property.propertyId
+        propertyId: this.property.propertyId
       }
     };
     API
@@ -184,7 +184,7 @@ export class PropertyDetailsPage implements OnInit {
     if (revenue.revenueType.toLowerCase() == "profit") {
       return "profit";
     }
-    return (revenue.expenseStatus.expenseStatusDescription == "paid") ? "paid" : "due " + revenue.expenseDueDate.toLocaleDateString("en-US");
+    return (revenue.expenseStatus.expenseStatusDescription == "paid") ? "paid" : "due " + this.getFormattedDate(revenue.expenseDueDate);
   }
 
   colorCodeRevenueAmounts() {
@@ -195,6 +195,32 @@ export class PropertyDetailsPage implements OnInit {
         $("#revenue-" + this.revenues[i].revenueId).addClass("expense");
       }
     }
+  }
+
+  getFormattedDate(date: Date) {
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    });
+  }
+
+  updateDate(date: string, type: string) {
+    var date_regex = /^(0?[1-9]|1[0-2])\/(0?[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
+
+    if (date_regex.test(date)) {
+      let month = Number(date.substring(0, 2));
+      let day = Number(date.substring(3, 5));
+      let year = Number(date.substring(6, 10));
+      let newDate = new Date(year, month, day);
+      
+      switch (type) {
+        case 'date_of_purchase':
+          this.property.dateOfPurchase = newDate;
+          break;
+      }
+    }
+
   }
 
   async getThumbnail() {
@@ -353,7 +379,7 @@ export class PropertyDetailsPage implements OnInit {
       location.reload();
       const deleteInit = {
         body: {
-          propertyid: this.property.propertyId
+          propertyId: this.property.propertyId
         }
       };
       API
@@ -389,25 +415,32 @@ export class PropertyDetailsPage implements OnInit {
     $("ion-textarea").removeAttr("readonly");
   }
 
-  async saveProperty() {
-    if (window.confirm("Save property information?")) {
-      $("ion-input").attr("readonly", "readonly");
-      $("ion-textarea").attr("readonly", "readonly");
-      const putInit = {
-        body: {
-          property: this.property
-        }
-      };
-      console.log(this.property);
-      API
-        .put(this.apiName, '/properties', putInit)
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+  async saveProperty(popup: boolean) {
+    if (popup && window.confirm("Save property information?")) {
+      this.savePropertyToDB();
     }
+    else {
+      this.savePropertyToDB();
+    }
+  }
+
+  async savePropertyToDB() {
+    $("ion-input").attr("readonly", "readonly");
+    $("ion-textarea").attr("readonly", "readonly");
+    const putInit = {
+      body: {
+        property: this.property
+      }
+    };
+    console.log(this.property);
+    API
+      .put(this.apiName, '/properties', putInit)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   updateStatus(e) {

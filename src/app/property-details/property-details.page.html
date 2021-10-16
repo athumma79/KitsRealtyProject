@@ -9,7 +9,7 @@
   <img src="#" class="thumbnail"/>
   
   <ion-button (click)='editProperty()'>Edit</ion-button>
-  <ion-button (click)='saveProperty()'>Save</ion-button>
+  <ion-button (click)='saveProperty(true)'>Save</ion-button>
 
   <ion-list class="row">
     <ion-item>
@@ -67,7 +67,7 @@
       </ion-item>
       <ion-item>
         <ion-label>Date of purchase: </ion-label>
-        <ion-input [(ngModel)]="property.dateOfPurchase" readonly></ion-input>
+        <ion-input placeholder="MM/DD/YYYY" [ngModel]="getFormattedDate(property.dateOfPurchase)" (ngModelChange)="updateDate($event, 'date_of_purchase')" readonly></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Occupancy status: </ion-label>
@@ -202,7 +202,7 @@
       </h2>
       <div id="collapse-C" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-          <ion-item *ngIf="property.coordinator">
+          <ion-item *ngIf="property.coordinator.userCognitoId">
             Coordinator: {{property.coordinator.firstName}} {{property.coordinator.lastName}}
             <ion-button class="delete-btn delete-btn-contractor d-none" slot="end" (click)="deleteCoordinator()">
               <i class="far fa-trash-alt"></i>

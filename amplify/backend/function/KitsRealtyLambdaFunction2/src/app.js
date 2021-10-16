@@ -84,7 +84,7 @@ app.post('/contractors', function(req, res) {
     LEFT OUTER JOIN CONTRACTOR_TYPE ON CONTRACTOR.CONTRACTOR_TYPE_ID = CONTRACTOR_TYPE.CONTRACTOR_TYPE_ID \
     LEFT OUTER JOIN USERS ON CONTRACTOR.CONTRACTOR_COGNITO_ID = USERS.USER_COGNITO_ID \
     LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID \
-    WHERE PROPERTY_ID = " + req.body.propertyid + ";"
+    WHERE PROPERTY_ID = " + req.body.propertyId + ";"
 
     connection.query(query, function(err, rows, fields) {
       if (err) throw err
@@ -108,8 +108,8 @@ app.post('/revenues', function(req, res) {
     LEFT OUTER JOIN CONTRACTOR ON REVENUE.CONTRACTOR_COGNITO_ID = CONTRACTOR.CONTRACTOR_COGNITO_ID \
     LEFT OUTER JOIN EXPENSE_STATUS ON REVENUE.EXPENSE_STATUS_ID = EXPENSE_STATUS.EXPENSE_STATUS_ID"
 
-    if (req.body.propertyid) {
-      query += " WHERE REVENUE.PROPERTY_ID = " + req.body.propertyid
+    if (req.body.propertyId) {
+      query += " WHERE REVENUE.PROPERTY_ID = " + req.body.propertyId
     }
     
     query += ";"
@@ -141,6 +141,8 @@ app.post('/properties/*', function(req, res) {
 ****************************/
 
 app.put('/properties', function(req, res) {
+
+  // res.json({coordinator: (req.body.property.coordinator == null)});
   
   let newProperty = req.body.property;
 
@@ -155,8 +157,12 @@ app.put('/properties', function(req, res) {
       SUBDIVISION = '" + newProperty.subdivision + "', \
       COUNTY_ASSESSMENT = '" + newProperty.countyAssessment + "', \
       STATUS_ID = " + newProperty.status.statusId + ", \
-      OCCUPANCY_STATUS_ID = " + newProperty.occupancyStatus.occupancyStatusId + " \
-    WHERE PROPERTY_ID = " + newProperty.propertyId + ";"
+      OCCUPANCY_STATUS_ID = " + newProperty.occupancyStatus.occupancyStatusId + ", \
+      COORDINATOR_COGNITO_ID = ";
+
+    propertyQuery += (newProperty.coordinator != null) ? newProperty.coordinator.userCognitoId : null;
+
+    propertyQuery += " WHERE PROPERTY_ID = " + newProperty.propertyId + ";"
 
     let addressQuery = "UPDATE PROPERTY_ADDRESS \
     SET \
@@ -219,7 +225,7 @@ app.delete('/properties', function(req, res) {
   pool.getConnection(function(error, connection) {
 
     var propertyRevenuesQuery = "SELECT * FROM REVENUE \
-    WHERE PROPERTY_ID = " + req.body.propertyid;
+    WHERE PROPERTY_ID = " + req.body.propertyId;
 
     connection.query(propertyRevenuesQuery, function(err, rows, fields) {
       if (err) throw err
@@ -227,25 +233,25 @@ app.delete('/properties', function(req, res) {
       if (rows.length == 0) {
         var propertyDependenciesQuery = "SELECT PRICES_ID, ADDRESS_ID, ESSENTIALS_ID, LOAN_ID \
         FROM PROPERTY \
-        WHERE PROPERTY_ID = " + req.body.propertyid;
+        WHERE PROPERTY_ID = " + req.body.propertyId;
 
         connection.query(propertyDependenciesQuery, function(err, dependenciesRows, fields) {
           if (err) throw err
 
           var propertyContractorQuery = "DELETE FROM PROPERTY_CONTRACTOR \
-          WHERE PROPERTY_ID = " + req.body.propertyid;
+          WHERE PROPERTY_ID = " + req.body.propertyId;
 
           connection.query(propertyContractorQuery, function(err, rows, fields) {
             if (err) throw err     
             
             var nearbyPropertiesQuery = "DELETE FROM NEARBY_PROPERTY \
-            WHERE PROPERTY_ID = " + req.body.propertyid;
+            WHERE PROPERTY_ID = " + req.body.propertyId;
 
             connection.query(nearbyPropertiesQuery, function(err, rows, fields) {
               if (err) throw err    
               
               var propertyQuery = "DELETE FROM PROPERTY \
-              WHERE PROPERTY_ID = " + req.body.propertyid;
+              WHERE PROPERTY_ID = " + req.body.propertyId;
     
               connection.query(propertyQuery, function(err, rows, fields) {
                 if (err) throw err    
