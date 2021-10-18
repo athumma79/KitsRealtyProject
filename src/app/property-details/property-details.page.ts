@@ -26,7 +26,9 @@ export class PropertyDetailsPage implements OnInit {
     public modalController: ModalController, 
     public pickerController: PickerController,
     public navParams: NavParams
-  ) { }
+  ) { 
+    this.property = this.navParams.data.property;
+  }
 
   property: Property;
   contractors: Contractor[] = new Array();
@@ -39,7 +41,6 @@ export class PropertyDetailsPage implements OnInit {
   utilitiesDocsNames: string[] = new Array();
 
   ngOnInit() {
-    this.property = this.navParams.data.property;
     this.loadContractors();
     this.loadRevenues();
     this.getThumbnail();
@@ -83,7 +84,6 @@ export class PropertyDetailsPage implements OnInit {
           contractor.dateHired = dbContractors[i]['DATE_HIRED'] ? new Date(dbContractors[i]['DATE_HIRED'].substring(0, dbContractors[i]['DATE_HIRED'].lastIndexOf('.'))) : null;
           contractor.startDate = dbContractors[i]['START_DATE'] ? new Date(dbContractors[i]['START_DATE'].substring(0, dbContractors[i]['START_DATE'].lastIndexOf('.'))) : null;
           contractor.endDate = dbContractors[i]['END_DATE'] ? new Date(dbContractors[i]['END_DATE'].substring(0, dbContractors[i]['END_DATE'].lastIndexOf('.'))) : null;
-
           contractor.company = dbContractors[i]["COMPANY"];
             
           this.contractors.push(contractor);
@@ -185,16 +185,6 @@ export class PropertyDetailsPage implements OnInit {
       return "profit";
     }
     return (revenue.expenseStatus.expenseStatusDescription == "paid") ? "paid" : "due " + this.getFormattedDate(revenue.expenseDueDate);
-  }
-
-  colorCodeRevenueAmounts() {
-    for (let i = 0; i < this.revenues.length; i++) {
-      if (this.revenues[i].revenueType.toLowerCase() == "profit") {
-        $("#revenue-" + this.revenues[i].revenueId).addClass("profit");
-      } else {
-        $("#revenue-" + this.revenues[i].revenueId).addClass("expense");
-      }
-    }
   }
 
   getFormattedDate(date: Date) {
@@ -488,8 +478,6 @@ export class PropertyDetailsPage implements OnInit {
   }
 
   dismiss() {
-    // using the injected ModalController this page
-    // can "dismiss" itself and optionally pass back data
     this.modalController.dismiss({
       'dismissed': true
     });

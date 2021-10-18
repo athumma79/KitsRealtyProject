@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Revenue Details</ion-title>
+    <i class="fal fa-times-circle" (click)='dismiss()' slot="end"></i>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <h3>{{revenue.revenueType}}: <span [ngStyle]="{'color': this.revenue.revenueType.toLowerCase() == 'profit' ? 'green' : 'red'}">{{getFormattedRevenueAmount(revenue)}}</span></h3>
+  <p>Status: {{getRevenueStatus(revenue)}}</p>
+  <p>Description: {{revenue.revenueDescription}}</p>
+  <ion-list-header>
+    <ion-label>Check Images</ion-label>
+  </ion-list-header>
+  <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
+  <ion-button (click)="uploadFile('checks')">Upload</ion-button>
+  <ion-button id="button" class="edit-btn-checks" (click)="editFiles('checks')">Edit</ion-button>
+  <ion-button id="button" class="save-btn-checks d-none" (click)="saveFiles('checks')">Save</ion-button>
+  <ion-list *ngFor="let check of checks; index as i">
+      <ion-item>            
+        <a href={{check}} target="_blank">{{checkNames[i]}}</a>
+        <ion-button class="delete-btn delete-btn-checks d-none" slot="end" (click)="deleteFile('checks', checkNames[i])">
+          <i class="far fa-trash-alt"></i>
+        </ion-button>
+      </ion-item>
+  </ion-list>
+  <ion-list-header>
+    <ion-label>Receipt Images</ion-label>
+  </ion-list-header>
+  <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
+  <ion-button (click)="uploadFile('receipts')">Upload</ion-button>
+  <ion-button id="button" class="edit-btn-receipts" (click)="editFiles('receipts')">Edit</ion-button>
+  <ion-button id="button" class="save-btn-receipts d-none" (click)="saveFiles('receipts')">Save</ion-button>
+  <ion-list *ngFor="let receipt of receipts; index as i">
+      <ion-item>            
+        <a href={{receipt}} target="_blank">{{receiptNames[i]}}</a>
+        <ion-button class="delete-btn delete-btn-receipts d-none" slot="end" (click)="deleteFile('receipts', receiptNames[i])">
+          <i class="far fa-trash-alt"></i>
+        </ion-button>
+      </ion-item>
+  </ion-list>
+</ion-content>

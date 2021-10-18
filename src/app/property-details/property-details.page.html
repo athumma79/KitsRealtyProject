@@ -240,9 +240,9 @@
       <div id="collapse-B" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
           <ion-list *ngFor="let revenue of revenues; index as i">
-            <ion-item (click)="openRevenueDetailsModal(i)">
+            <ion-item (click)="openRevenueDetails(i)">
               <ion-label>
-                <h3>{{revenue.revenueType}}: <span [attr.id]="'revenue-' + revenue.revenueId">{{getFormattedRevenueAmount(revenue)}}</span></h3>
+                <h3>{{revenue.revenueType}}: <span [ngStyle]="{'color': this.revenues[i].revenueType.toLowerCase() == 'profit' ? 'green' : 'red'}">{{getFormattedRevenueAmount(revenue)}}</span></h3>
                 <p>Status: {{getRevenueStatus(revenue)}}</p>
                 <p>Description: {{revenue.revenueDescription}}</p>
               </ion-label>

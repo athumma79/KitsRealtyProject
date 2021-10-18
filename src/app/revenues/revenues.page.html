@@ -6,5 +6,13 @@
 </ion-header>
 
 <ion-content>
-
+  <ion-list *ngFor="let revenue of revenues; index as i">
+    <ion-item (click)="openRevenueDetails(i)">
+      <ion-label>
+        <h3>{{revenue.revenueType}}: <span [ngStyle]="{'color': this.revenues[i].revenueType.toLowerCase() == 'profit' ? 'green' : 'red'}">{{getFormattedRevenueAmount(revenue)}}</span></h3>
+        <p>Status: {{getRevenueStatus(revenue)}}</p>
+        <p>Description: {{revenue.revenueDescription}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
