@@ -24,3 +24,25 @@ ion-select {
 .profit {
     color: green;
 }
+
+ion-item img{
+    display: block;
+    margin: auto;
+}
+
+.button-bar{
+    margin-left: 10px;
+}
+
+ion-item-divider{
+    --background: #3880ff;
+    --color: white;
+    --text-align: center;
+}
+
+ion-list-header{
+    --background: #3880ff;
+    --color: white;
+    --text-align: center;
+    margin-top: 0.3em;
+}

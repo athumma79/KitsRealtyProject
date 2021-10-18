@@ -6,10 +6,15 @@
 </ion-header>
 
 <ion-content>
-  <img src="#" class="thumbnail"/>
-  
-  <ion-button (click)='editProperty()'>Edit</ion-button>
-  <ion-button (click)='saveProperty(true)'>Save</ion-button>
+  <ion-item>  
+    <img height="fit-content" width="80%" src="#" class="thumbnail" />
+  </ion-item>
+
+  <div class='button-bar'>
+    <ion-button (click)='editProperty()'>Edit</ion-button>
+    <ion-button (click)='saveProperty(true)'>Save</ion-button>
+  </div>
+
 
   <ion-list class="row">
     <ion-item>
@@ -30,8 +35,60 @@
 
     <div class="col-6">
       <ion-item>
-        <ion-label>State: </ion-label>
-        <ion-input [(ngModel)]="property.address.state" readonly></ion-input>
+        <ion-label class='state-select'>State:</ion-label>
+        <ion-select disabled placeholder={{property.address.state}} (ionChange)="updateState($event)">
+          <ion-select-option value="AL">Alabama</ion-select-option>
+          <ion-select-option value="AK">Alaska</ion-select-option>
+          <ion-select-option value="AZ">Arizona</ion-select-option>
+          <ion-select-option value="AR">Arkansas</ion-select-option>
+          <ion-select-option value="CA">California</ion-select-option>
+          <ion-select-option value="CO">Colorado</ion-select-option>
+          <ion-select-option value="CT">Connecticut</ion-select-option>
+          <ion-select-option value="DE">Delaware</ion-select-option>
+          <ion-select-option value="DC">District Of Columbia</ion-select-option>
+          <ion-select-option value="FL">Florida</ion-select-option>
+          <ion-select-option value="GA">Georgia</ion-select-option>
+          <ion-select-option value="HI">Hawaii</ion-select-option>
+          <ion-select-option value="ID">Idaho</ion-select-option>
+          <ion-select-option value="IL">Illinois</ion-select-option>
+          <ion-select-option value="IN">Indiana</ion-select-option>
+          <ion-select-option value="IA">Iowa</ion-select-option>
+          <ion-select-option value="KS">Kansas</ion-select-option>
+          <ion-select-option value="KY">Kentucky</ion-select-option>
+          <ion-select-option value="LA">Louisiana</ion-select-option>
+          <ion-select-option value="ME">Maine</ion-select-option>
+          <ion-select-option value="MD">Maryland</ion-select-option>
+          <ion-select-option value="MA">Massachusetts</ion-select-option>
+          <ion-select-option value="MI">Michigan</ion-select-option>
+          <ion-select-option value="MN">Minnesota</ion-select-option>
+          <ion-select-option value="MS">Mississippi</ion-select-option>
+          <ion-select-option value="MO">Missouri</ion-select-option>
+          <ion-select-option value="MT">Montana</ion-select-option>
+          <ion-select-option value="NE">Nebraska</ion-select-option>
+          <ion-select-option value="NV">Nevada</ion-select-option>
+          <ion-select-option value="NH">New Hampshire</ion-select-option>
+          <ion-select-option value="NJ">New Jersey</ion-select-option>
+          <ion-select-option value="NM">New Mexico</ion-select-option>
+          <ion-select-option value="NY">New York</ion-select-option>
+          <ion-select-option value="NC">North Carolina</ion-select-option>
+          <ion-select-option value="ND">North Dakota</ion-select-option>
+          <ion-select-option value="OH">Ohio</ion-select-option>
+          <ion-select-option value="OK">Oklahoma</ion-select-option>
+          <ion-select-option value="OR">Oregon</ion-select-option>
+          <ion-select-option value="PA">Pennsylvania</ion-select-option>
+          <ion-select-option value="RI">Rhode Island</ion-select-option>
+          <ion-select-option value="SC">South Carolina</ion-select-option>
+          <ion-select-option value="SD">South Dakota</ion-select-option>
+          <ion-select-option value="TN">Tennessee</ion-select-option>
+          <ion-select-option value="TX">Texas</ion-select-option>
+          <ion-select-option value="UT">Utah</ion-select-option>
+          <ion-select-option value="VT">Vermont</ion-select-option>
+          <ion-select-option value="VA">Virginia</ion-select-option>
+          <ion-select-option value="WA">Washington</ion-select-option>
+          <ion-select-option value="WV">West Virginia</ion-select-option>
+          <ion-select-option value="WI">Wisconsin</ion-select-option>
+          <ion-select-option value="WY">Wyoming</ion-select-option>
+        </ion-select>
       </ion-item>
       <ion-item>
         <ion-label>Zipcode: </ion-label>
@@ -41,7 +98,7 @@
 
     <ion-item>
       <ion-label position='fixed' class='status-select'>Status:</ion-label>
-      <ion-select placeholder={{property.status.propertyStatusDescription}} (ionChange)="updateStatus($event)">
+      <ion-select disabled placeholder={{property.status.propertyStatusDescription}} (ionChange)="updateStatus($event)">
         <ion-select-option value="researched">Researched</ion-select-option>
         <ion-select-option value="pending-purchase">Pending Purchase</ion-select-option>
         <ion-select-option value="purchased">Purchased</ion-select-option>
@@ -58,7 +115,7 @@
         <ion-input [(ngModel)]="property.propertyType" readonly></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label># Beds: </ion-label>
+        <ion-label>Num. Beds: </ion-label>
         <ion-input [(ngModel)]="property.essentials.numBeds" readonly></ion-input>
       </ion-item>
       <ion-item>
@@ -66,7 +123,7 @@
         <ion-input [(ngModel)]="property.essentials.landFootage" readonly></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Date of purchase: </ion-label>
+        <ion-label>Buy Date: </ion-label>
         <ion-input placeholder="MM/DD/YYYY" [ngModel]="getFormattedDate(property.dateOfPurchase)" (ngModelChange)="updateDate($event, 'date_of_purchase')" readonly></ion-input>
       </ion-item>
       <ion-item>
@@ -85,7 +142,7 @@
         <ion-input [(ngModel)]="property.essentials.yearBuilt" readonly></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label># Baths: </ion-label>
+        <ion-label>Num. Baths: </ion-label>
         <ion-input [(ngModel)]="property.essentials.numBaths" readonly></ion-input>
       </ion-item>
       <ion-item>
@@ -93,8 +150,8 @@
         <ion-input [(ngModel)]="property.essentials.propertyFootage" readonly></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Date of sale: </ion-label>
-        <ion-input [(ngModel)]="property.dateOfSale" readonly></ion-input>
+        <ion-label>Sell Date: </ion-label>
+        <ion-input placeholder="MM/DD/YYYY" [ngModel]="getFormattedDate(property.dateOfSale)" (ngModelChange)="updateDate($event, 'date_of_sale')" readonly></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Subdivision: </ion-label>
@@ -128,7 +185,7 @@
       </h2>
       <div id="collapse-A" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-          <h3>Price Info</h3>
+          <ion-item-divider><h3>Price Info</h3></ion-item-divider>
           <ion-item>
             <ion-label>Buy Value: $</ion-label>
             <ion-input [(ngModel)]="property.prices.buyValue" readonly></ion-input>
@@ -149,7 +206,7 @@
             <ion-label>Market Price: $</ion-label>
             <ion-input [(ngModel)]="property.prices.marketPrice" readonly></ion-input>
           </ion-item>
-          <h3>Auction Info</h3>
+          <ion-item-divider><h3>Auction Info</h3></ion-item-divider>
           <ion-item>
             <ion-label>Auction Location: </ion-label>
             <ion-input [(ngModel)]="property.auction.auctionLocation" readonly></ion-input>
@@ -157,8 +214,8 @@
           <ion-item>
             <ion-label>Date of Auction: </ion-label>
             <ion-input [(ngModel)]="property.auction.dateOfAuction" readonly></ion-input>
-          </ion-item>       
-          <h3>Loan Info</h3>
+          </ion-item>  
+            <ion-item-divider><h3>Loan Info</h3></ion-item-divider>
           <ion-item>
             <ion-label>Loan Amount: </ion-label>
             <ion-input [(ngModel)]="property.loan.amount" readonly></ion-input>
@@ -204,14 +261,14 @@
         <div class="accordion-body">
           <ion-item *ngIf="property.coordinator.userCognitoId">
             Coordinator: {{property.coordinator.firstName}} {{property.coordinator.lastName}}
-            <ion-button class="delete-btn delete-btn-contractor d-none" slot="end" (click)="deleteCoordinator()">
+            <ion-button class="delete-btn delete-btn-contractor d-none" id="button" slot="end" (click)="deleteCoordinator()">
               <i class="far fa-trash-alt"></i>
             </ion-button>
           </ion-item>
           <ion-list *ngFor="let contractor of contractors">
             <ion-item>
               {{contractor.contractorType.contractorTypeDescription}}: {{contractor.contractorUser.firstName}} {{contractor.contractorUser.lastName}}
-              <ion-button class="delete-btn delete-btn-contractor d-none" slot="end" (click)="deleteContractor(contractor)">
+              <ion-button class="delete-btn delete-btn-contractor d-none" id="button" slot="end" (click)="deleteContractor(contractor)">
                 <i class="far fa-trash-alt"></i>
               </ion-button>
             </ion-item>
@@ -231,8 +288,7 @@
         <div class="accordion-body">
           <amplify-s3-album 
             framework="ionic"
-            path="properties/{{property.propertyId}}/progress_images/" 
-            (click)="onAlbumImageSelected($event)">
+            path="properties/{{property.propertyId}}/progress_images/">
           </amplify-s3-album>
         </div>
       </div>
@@ -247,17 +303,18 @@
         <div class="accordion-body">
           <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
           <ion-button (click)="uploadFile('purchase_docs')">Upload</ion-button>
-          <ion-button class="edit-btn-purchase" (click)="editFiles('purchase')">Edit</ion-button>
-          <ion-button class="save-btn-purchase d-none" (click)="saveFiles('purchase')">Save</ion-button>
-          <ion-list>
-            <div *ngFor="let purchaseDoc of purchaseDocs; index as i">
+          <ion-button id="button" class="edit-btn-purchase" (click)="editFiles('purchase')">Edit</ion-button>
+          <ion-button id="button" class="save-btn-purchase d-none" (click)="saveFiles('purchase')">Save</ion-button>
+          <ion-list-header>
+            <ion-label>Uploaded Files</ion-label>
+          </ion-list-header>
+          <ion-list *ngFor="let purchaseDoc of purchaseDocs; index as i">
               <ion-item>            
                 <a href={{purchaseDoc}} target="_blank">{{purchaseDocsNames[i]}}</a>
                 <ion-button class="delete-btn delete-btn-purchase d-none" slot="end" (click)="deleteFile('purchase_docs', purchaseDocsNames[i])">
                   <i class="far fa-trash-alt"></i>
                 </ion-button>
               </ion-item>
-            </div>
           </ion-list>
         </div>
       </div>
@@ -272,17 +329,18 @@
         <div class="accordion-body">
           <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
           <ion-button (click)="uploadFile('utilities_docs')">Upload</ion-button>
-          <ion-button class="edit-btn-utilities" (click)="editFiles('utilities')">Edit</ion-button>
-          <ion-button class="save-btn-utilities d-none" (click)="saveFiles('utilities')">Save</ion-button>
-          <ion-list>
-            <div *ngFor="let utilitiesDoc of utilitiesDocs; index as i">
+          <ion-button id="button" class="edit-btn-utilities" (click)="editFiles('utilities')">Edit</ion-button>
+          <ion-button id="button" class="save-btn-utilities d-none" (click)="saveFiles('utilities')">Save</ion-button>
+          <ion-list-header>
+            <ion-label>Uploaded Files</ion-label>
+          </ion-list-header>
+          <ion-list *ngFor="let utilitiesDoc of utilitiesDocs; index as i">
               <ion-item>            
                 <a href={{utilitiesDoc}} target="_blank">{{utilitiesDocsNames[i]}}</a>
                 <ion-button class="delete-btn delete-btn-utilities d-none" slot="end" (click)="deleteFile('utilities_docs', utilitiesDocsNames[i])">
                   <i class="far fa-trash-alt"></i>
                 </ion-button>
               </ion-item>
-            </div>
           </ion-list>
         </div>
       </div>
@@ -297,23 +355,24 @@
         <div class="accordion-body">
           <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
           <ion-button (click)="uploadFile('sales_docs')">Upload</ion-button>
-          <ion-button class="edit-btn-sales" (click)="editFiles('sales')">Edit</ion-button>
-          <ion-button class="save-btn-sales d-none" (click)="saveFiles('sales')">Save</ion-button>
-          <ion-list>
-            <div *ngFor="let salesDoc of salesDocs; index as i">
+          <ion-button id="button" class="edit-btn-sales" (click)="editFiles('sales')">Edit</ion-button>
+          <ion-button id="button" class="save-btn-sales d-none" (click)="saveFiles('sales')">Save</ion-button>
+          <ion-list-header>
+            <ion-label>Uploaded Files</ion-label>
+          </ion-list-header>
+          <ion-list *ngFor="let salesDoc of salesDocs; index as i">
               <ion-item>            
                 <a href={{salesDoc}} target="_blank">{{salesDocsNames[i]}}</a>
                 <ion-button class="delete-btn delete-btn-sales d-none" slot="end" (click)="deleteFile('sales_docs', salesDocsNames[i])">
                   <i class="far fa-trash-alt"></i>
                 </ion-button>
               </ion-item>
-            </div>
           </ion-list>
         </div>
       </div>
     </div>
   </div>
 
-  <ion-button (click)='getStatus()'>Change Property Status</ion-button>
-  <ion-button (click)='deleteProperty()'>Delete</ion-button>
+  <ion-button id="button" (click)='getStatus()'>Change Property Status</ion-button>
+  <ion-button id="button" (click)='deleteProperty()'>Delete</ion-button>
 </ion-content>

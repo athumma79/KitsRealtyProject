@@ -218,6 +218,9 @@ export class PropertyDetailsPage implements OnInit {
         case 'date_of_purchase':
           this.property.dateOfPurchase = newDate;
           break;
+        case 'date_of_sale':
+          this.property.dateOfSale = newDate;
+          break;
       }
     }
 
@@ -412,7 +415,8 @@ export class PropertyDetailsPage implements OnInit {
 
   editProperty() {
     $("ion-input").removeAttr("readonly");
-    $("ion-textarea").removeAttr("readonly");
+    $("ion-textarea").removeAttr("readonly")
+    $("ion-select").removeAttr("disabled");
   }
 
   async saveProperty(popup: boolean) {
@@ -427,6 +431,7 @@ export class PropertyDetailsPage implements OnInit {
   async savePropertyToDB() {
     $("ion-input").attr("readonly", "readonly");
     $("ion-textarea").attr("readonly", "readonly");
+    $("ion-select").attr("disabled", "disabled");
     const putInit = {
       body: {
         property: this.property
@@ -477,6 +482,9 @@ export class PropertyDetailsPage implements OnInit {
     }
     this.property.status = updatedStatus;
     console.log(this.property.status);
+  }
+  updateState(e) {
+    this.property.address.state = e.detail.value;
   }
 
   dismiss() {

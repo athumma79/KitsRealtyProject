@@ -162,7 +162,7 @@ export class PropertiesPage implements OnInit {
     for (var i = 0; i < this.properties.length; i++) {
       var property = this.properties[i];
       await this.getThumbnail(this.properties[i], (response) => { 
-        $(".thumbnail-" + property.propertyId).append("<img src=\"" + response + "\"/>");
+        $(".thumbnail-" + property.propertyId).append("<ion-img src=\"" + response + "\"/>");
       })
     }
   }
