@@ -2,6 +2,10 @@
     padding-left: 5%;
 }
 
+.description{
+    width: 100%;
+}
+
 ion-toolbar{
     display: block;
     flex-direction: row;
@@ -14,11 +18,12 @@ amplify-sign-out{
     display: flex;
     width: fit-content;
     align-items: center;
-    padding-left: 0.3em;
+    padding-left: 0.5em;
     margin-left: 3%;
     margin-bottom: 2%;
     background-color: #3880ff;
     color: white;
+    border-radius: 15px;
     }
 
 ion-thumbnail{
@@ -47,6 +52,7 @@ ion-label{
 }
 
 .hover:hover{
-    background-color: #0e4bb4;
+    border-radius: 0px 15px 15px 0px;
+    background-color: #0f439b;
 }
 
