@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { PropertyDetailsPage } from '../property-details/property-details.page';
 
@@ -24,7 +24,8 @@ import { PropertyLoan } from '../models/property-loan.class';
 export class PropertiesPage implements OnInit {
 
   apiName = 'KitsRealtyAPI2';
-  
+  filterTerm: string;
+
   constructor(public modalController: ModalController) {}
   
   ngOnInit() {
@@ -34,6 +35,7 @@ export class PropertiesPage implements OnInit {
   }
 
   properties: Property[] = new Array();
+  backupProperties: Property[] = new Array();
 
   async loadProperties(callback) {
     API
@@ -118,6 +120,7 @@ export class PropertiesPage implements OnInit {
           property.notes = dbProperties[i]["NOTES"];
             
           this.properties.push(property);
+          this.backupProperties.push(property);
         }
         $(document).ready(function() {
           callback();
@@ -127,6 +130,18 @@ export class PropertiesPage implements OnInit {
         console.log(error);
       });
   }
+
+  sortProperties(e){
+    console.log(e.detail.value);
+    switch(e.detail.value){
+      case "status": this.properties.sort((a, b) => a.status.statusId.localeCompare(b.status.statusId));break
+      case "state": this.properties.sort((a, b) => a.address.state.localeCompare(b.address.state));break
+      case "type": this.properties.sort((a, b) => a.essentials.propertyType.localeCompare(b.essentials.propertyType));break
+      case "city": this.properties.sort((a, b) => a.address.city.localeCompare(b.address.city));break
+    }
+    console.log(this.properties)
+  }
+
 
   getPriceByStatus(property: Property) {
     switch (property.status.propertyStatusDescription) {
@@ -157,16 +172,18 @@ export class PropertiesPage implements OnInit {
         return "";
     }
   }
-
   async loadThumbnails() {
     for (var i = 0; i < this.properties.length; i++) {
       var property = this.properties[i];
       await this.getThumbnail(this.properties[i], (response) => { 
-        $(".thumbnail-" + property.propertyId).append("<ion-img src=\"" + response + "\"/>");
+        $(".thumbnail-" + property.propertyId).append("<img src=\"" + response + "\">");
       })
     }
+
   }
 
+
+  
   async getThumbnail(property: Property, callback) {
     await Storage.list("properties/" + property.propertyId + "/thumbnail/")
       .then(async response => {
@@ -184,6 +201,19 @@ export class PropertiesPage implements OnInit {
       .catch(err => {
         console.log(err);
       });
+  }
+
+  async filterList(evt) {
+    this.properties = this.backupProperties;
+    const searchTerm = evt.srcElement.value;
+    if (!searchTerm) {
+      return;
+    }
+    this.properties = this.properties.filter(property => {
+      if (property.address.address && searchTerm) {
+        return (property.address.address.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
+      }
+    });
   }
 
   async openPropertyDetails(index: number) {

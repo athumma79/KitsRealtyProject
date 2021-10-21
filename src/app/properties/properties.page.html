@@ -1,11 +1,27 @@
 <ion-header>
   <ion-toolbar>
     <h2 id='title'><strong>Properties</strong></h2>
-    <ion-item id='signout' slot='end'><amplify-sign-out></amplify-sign-out></ion-item>
-  </ion-toolbar>
+    <amplify-sign-out id='signout' slot='end'></amplify-sign-out>
+</ion-toolbar>
 </ion-header>
-
 <ion-content [fullscreen]="true">
+  <div id='tools'>
+    <div>      
+      <ion-searchbar showcancelbutton="" (ionInput)="filterList($event)"></ion-searchbar>
+    </div> 
+  <div class='buttonbox'>    
+    <ion-label >Sort By:</ion-label>
+    <div class="hover">
+      <ion-select placeholder="..." (ionChange)="sortProperties($event)">
+        <ion-label>Sort By:</ion-label>
+        <ion-select-option value="status">Status</ion-select-option>
+        <ion-select-option value="state">State</ion-select-option>
+        <ion-select-option value="type">Type</ion-select-option>
+        <ion-select-option value="city">City</ion-select-option>
+       </ion-select>
+      </div>
+    </div>
+</div>
   <div class="accordion" id="accordion">
     <div class="accordion-item" *ngFor="let property of properties; index as i">
       <h2 class="accordion-header">
@@ -13,11 +29,12 @@
           <ion-item class='description'>
           <ion-thumbnail size="large" [attr.class]="'thumbnail-' + property.propertyId" slot="start"></ion-thumbnail>
           <ion-label>
-            <h3>{{property.address.address}} {{property.address.city}}, {{property.address.state}} {{property.address.zipcode}}</h3>
+            <h3>{{property.address.address}}, {{property.address.zipcode}}</h3>
+            <h4>{{property.address.city}}, {{property.address.state}}</h4>
             <p>{{property.address.county}}</p>
             <p>{{property.status.propertyStatusDescription}} | {{property.essentials.propertyType}}</p>
           </ion-label>
-          <ion-label slot="end">
+          <ion-label slot="end" class='right-side'>
             <h3>${{getPriceByStatus(property)}}</h3>
             <p>{{getPriceTypeByStatus(property)}}</p>
           </ion-label>
