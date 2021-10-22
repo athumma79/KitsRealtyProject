@@ -193,6 +193,7 @@ export class PropertiesPage implements OnInit {
         await Storage.get(response[1].key)
           .then(response => {
             callback(response);
+            console.log(response);
           })
           .catch(err => {
             console.log(err);

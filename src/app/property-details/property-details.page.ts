@@ -237,6 +237,7 @@ export class PropertyDetailsPage implements OnInit {
       });
   }
 
+
   async getFiles(path: string) {
     this.resetFiles(path);
     await Storage.list("properties/" + this.property.propertyId + "/" + path)
@@ -387,7 +388,6 @@ export class PropertyDetailsPage implements OnInit {
       .catch(error => {
         console.log(error);
         });
-      }
       Storage.list("properties/" + this.property.propertyId + "/")
         .then(response => {
           for (let i = 0; i < response.length; i++) {
@@ -403,6 +403,7 @@ export class PropertyDetailsPage implements OnInit {
         .catch(err => {
           console.log(err);
         });
+      }
   }
 
   editProperty() {

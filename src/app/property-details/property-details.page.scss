@@ -19,15 +19,19 @@ ion-item img{
     margin: auto;
 }
 
+
 ion-item-divider{
     --background: #3880ff;
     --color: white;
-    --text-align: center;
+    text-align: center;
 }
 
-ion-list-header{
-    --background: #3880ff;
-    --color: white;
-    --text-align: center;
-    margin-top: 0.3em;
+amplify-s3-album{
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
+ion-label{
+    width: max-content;
 }

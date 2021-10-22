@@ -109,13 +109,12 @@
       </ion-select>
     </ion-item>
 
-    <div class="col-6">
       <ion-item>
-        <ion-label>Property type: </ion-label>
+        <ion-label>Type: </ion-label>
         <ion-input [(ngModel)]="property.propertyType" readonly></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Num. Beds: </ion-label>
+        <ion-label>Bedrooms: </ion-label>
         <ion-input [(ngModel)]="property.essentials.numBeds" readonly></ion-input>
       </ion-item>
       <ion-item>
@@ -127,22 +126,20 @@
         <ion-input placeholder="MM/DD/YYYY" [ngModel]="getFormattedDate(property.dateOfPurchase)" (ngModelChange)="updateDate($event, 'date_of_purchase')" readonly></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Occupancy status: </ion-label>
+        <ion-label>Occupancy: </ion-label>
         <ion-input [(ngModel)]="property.occupancyStatus.description" readonly></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Trustee name: </ion-label>
+        <ion-label>Trustee: </ion-label>
         <ion-input [(ngModel)]="property.trusteeName" readonly></ion-input>
       </ion-item>
-    </div>
 
-    <div class="col-6">
       <ion-item>
-        <ion-label>Year built: </ion-label>
+        <ion-label>Built: </ion-label>
         <ion-input [(ngModel)]="property.essentials.yearBuilt" readonly></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Num. Baths: </ion-label>
+        <ion-label>Bathrooms: </ion-label>
         <ion-input [(ngModel)]="property.essentials.numBaths" readonly></ion-input>
       </ion-item>
       <ion-item>
@@ -161,7 +158,6 @@
         <ion-label>County assessment: </ion-label>
         <ion-input [(ngModel)]="property.countyAssessment" readonly></ion-input>
       </ion-item>
-    </div>
 
     <ion-item>
       <ion-label>Zillow link: </ion-label>
@@ -288,7 +284,8 @@
         <div class="accordion-body">
           <amplify-s3-album 
             framework="ionic"
-            path="properties/{{property.propertyId}}/progress_images/">
+            path="properties/{{property.propertyId}}/progress_images/"
+            (select)="onAlbumImageSelected($event)">
           </amplify-s3-album>
         </div>
       </div>
@@ -305,9 +302,9 @@
           <ion-button (click)="uploadFile('purchase_docs')">Upload</ion-button>
           <ion-button id="button" class="edit-btn-purchase" (click)="editFiles('purchase')">Edit</ion-button>
           <ion-button id="button" class="save-btn-purchase d-none" (click)="saveFiles('purchase')">Save</ion-button>
-          <ion-list-header>
+          <ion-item-divider>
             <ion-label>Uploaded Files</ion-label>
-          </ion-list-header>
+          </ion-item-divider>
           <ion-list *ngFor="let purchaseDoc of purchaseDocs; index as i">
               <ion-item>            
                 <a href={{purchaseDoc}} target="_blank">{{purchaseDocsNames[i]}}</a>
@@ -331,9 +328,9 @@
           <ion-button (click)="uploadFile('utilities_docs')">Upload</ion-button>
           <ion-button id="button" class="edit-btn-utilities" (click)="editFiles('utilities')">Edit</ion-button>
           <ion-button id="button" class="save-btn-utilities d-none" (click)="saveFiles('utilities')">Save</ion-button>
-          <ion-list-header>
+          <ion-item-divider>
             <ion-label>Uploaded Files</ion-label>
-          </ion-list-header>
+          </ion-item-divider>
           <ion-list *ngFor="let utilitiesDoc of utilitiesDocs; index as i">
               <ion-item>            
                 <a href={{utilitiesDoc}} target="_blank">{{utilitiesDocsNames[i]}}</a>
@@ -357,9 +354,9 @@
           <ion-button (click)="uploadFile('sales_docs')">Upload</ion-button>
           <ion-button id="button" class="edit-btn-sales" (click)="editFiles('sales')">Edit</ion-button>
           <ion-button id="button" class="save-btn-sales d-none" (click)="saveFiles('sales')">Save</ion-button>
-          <ion-list-header>
+          <ion-item-divider>
             <ion-label>Uploaded Files</ion-label>
-          </ion-list-header>
+          </ion-item-divider>
           <ion-list *ngFor="let salesDoc of salesDocs; index as i">
               <ion-item>            
                 <a href={{salesDoc}} target="_blank">{{salesDocsNames[i]}}</a>
