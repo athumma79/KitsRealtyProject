@@ -132,7 +132,6 @@ export class RevenuesPage implements OnInit {
 
           var property = new Property();
           property.propertyId = dbRevenues[i]["PROPERTY_ID"];
-          property.name = dbRevenues[i]["NAME"];
           property.status = propertyStatus;
           property.occupancyStatus = occupancyStatus;
           property.coordinator = coordinator;

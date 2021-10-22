@@ -15,6 +15,7 @@ import { PropertyPrices } from '../models/property-prices.class';
 import { PropertyAddress } from '../models/property-address.class';
 import { PropertyEssentials } from '../models/property-essentials.class';
 import { PropertyLoan } from '../models/property-loan.class';
+import { AddPropertyFormPage } from '../add-property-form/add-property-form.page';
 
 @Component({
   selector: 'app-properties',
@@ -103,7 +104,6 @@ export class PropertiesPage implements OnInit {
 
           var property = new Property();
           property.propertyId = dbProperties[i]["PROPERTY_ID"];
-          property.name = dbProperties[i]["NAME"];
           property.status = propertyStatus;
           property.occupancyStatus = occupancyStatus;
           property.coordinator = coordinator;
@@ -179,10 +179,7 @@ export class PropertiesPage implements OnInit {
         $(".thumbnail-" + property.propertyId).append("<img src=\"" + response + "\">");
       })
     }
-
   }
-
-
   
   async getThumbnail(property: Property, callback) {
     await Storage.list("properties/" + property.propertyId + "/thumbnail/")
@@ -227,10 +224,10 @@ export class PropertiesPage implements OnInit {
     return await propertyDetailsModal.present();
   }
   async openAddPropertyForm() {
-    const propertyDetailsModal = await this.modalController.create({
-      component: PropertyDetailsPage
+    const AddPropertyFormModal = await this.modalController.create({
+      component: AddPropertyFormPage
     });
-    return await propertyDetailsModal.present();
+    return await AddPropertyFormModal.present();
   }
   async openRequestResarchForm() {
     const propertyDetailsModal = await this.modalController.create({

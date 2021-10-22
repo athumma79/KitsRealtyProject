@@ -1,9 +1,210 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>add-property-form</ion-title>
+    <ion-title>Add Property Form</ion-title>
+    <i class="fal fa-times-circle" (click)='dismiss()' slot="end"></i>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label>Select thumbnail: </ion-label>
+      <input type="file" onchange="document.getElementById('thumbnail-output').src = window.URL.createObjectURL(this.files[0])">
+      <ion-thumbnail><img id="thumbnail-output" width="20%" height="20%"/></ion-thumbnail>
+    </ion-item>
 
+    <ion-item>
+      <ion-label>Address: </ion-label>
+      <ion-input required (ngModel)="newProperty.address.address"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>City: </ion-label>
+      <ion-input (ngModel)="newProperty.address.city"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>County: </ion-label>
+      <ion-input (ngModel)="newProperty.address.county"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label class='state-select'>State:</ion-label>
+      <ion-select (ionChange)="updateState($event)">
+        <ion-select-option value="AL">Alabama</ion-select-option>
+        <ion-select-option value="AK">Alaska</ion-select-option>
+        <ion-select-option value="AZ">Arizona</ion-select-option>
+        <ion-select-option value="AR">Arkansas</ion-select-option>
+        <ion-select-option value="CA">California</ion-select-option>
+        <ion-select-option value="CO">Colorado</ion-select-option>
+        <ion-select-option value="CT">Connecticut</ion-select-option>
+        <ion-select-option value="DE">Delaware</ion-select-option>
+        <ion-select-option value="DC">District Of Columbia</ion-select-option>
+        <ion-select-option value="FL">Florida</ion-select-option>
+        <ion-select-option value="GA">Georgia</ion-select-option>
+        <ion-select-option value="HI">Hawaii</ion-select-option>
+        <ion-select-option value="ID">Idaho</ion-select-option>
+        <ion-select-option value="IL">Illinois</ion-select-option>
+        <ion-select-option value="IN">Indiana</ion-select-option>
+        <ion-select-option value="IA">Iowa</ion-select-option>
+        <ion-select-option value="KS">Kansas</ion-select-option>
+        <ion-select-option value="KY">Kentucky</ion-select-option>
+        <ion-select-option value="LA">Louisiana</ion-select-option>
+        <ion-select-option value="ME">Maine</ion-select-option>
+        <ion-select-option value="MD">Maryland</ion-select-option>
+        <ion-select-option value="MA">Massachusetts</ion-select-option>
+        <ion-select-option value="MI">Michigan</ion-select-option>
+        <ion-select-option value="MN">Minnesota</ion-select-option>
+        <ion-select-option value="MS">Mississippi</ion-select-option>
+        <ion-select-option value="MO">Missouri</ion-select-option>
+        <ion-select-option value="MT">Montana</ion-select-option>
+        <ion-select-option value="NE">Nebraska</ion-select-option>
+        <ion-select-option value="NV">Nevada</ion-select-option>
+        <ion-select-option value="NH">New Hampshire</ion-select-option>
+        <ion-select-option value="NJ">New Jersey</ion-select-option>
+        <ion-select-option value="NM">New Mexico</ion-select-option>
+        <ion-select-option value="NY">New York</ion-select-option>
+        <ion-select-option value="NC">North Carolina</ion-select-option>
+        <ion-select-option value="ND">North Dakota</ion-select-option>
+        <ion-select-option value="OH">Ohio</ion-select-option>
+        <ion-select-option value="OK">Oklahoma</ion-select-option>
+        <ion-select-option value="OR">Oregon</ion-select-option>
+        <ion-select-option value="PA">Pennsylvania</ion-select-option>
+        <ion-select-option value="RI">Rhode Island</ion-select-option>
+        <ion-select-option value="SC">South Carolina</ion-select-option>
+        <ion-select-option value="SD">South Dakota</ion-select-option>
+        <ion-select-option value="TN">Tennessee</ion-select-option>
+        <ion-select-option value="TX">Texas</ion-select-option>
+        <ion-select-option value="UT">Utah</ion-select-option>
+        <ion-select-option value="VT">Vermont</ion-select-option>
+        <ion-select-option value="VA">Virginia</ion-select-option>
+        <ion-select-option value="WA">Washington</ion-select-option>
+        <ion-select-option value="WV">West Virginia</ion-select-option>
+        <ion-select-option value="WI">Wisconsin</ion-select-option>
+        <ion-select-option value="WY">Wyoming</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Zipcode: </ion-label>
+      <ion-input (ngModel)="newProperty.address.zipcode"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Status:</ion-label>
+      <ion-select required value="researched" placeholder="Researched" (ionChange)="updateStatus($event)">
+        <ion-select-option value="researched">Researched</ion-select-option>
+        <ion-select-option value="pending-purchase">Pending Purchase</ion-select-option>
+        <ion-select-option value="purchased">Purchased</ion-select-option>
+        <ion-select-option value="undergoing-remodeling">Undergoing Remodeling</ion-select-option>
+        <ion-select-option value="finished-remodeling">Finished Remodeling</ion-select-option>
+        <ion-select-option value="for-sale">For Sale</ion-select-option>
+        <ion-select-option value="sold">Sold</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Type: </ion-label>
+      <ion-input (ngModel)="newProperty.propertyType"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Built: </ion-label>
+      <ion-input (ngModel)="newProperty.essentials.yearBuilt"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Bedrooms: </ion-label>
+      <ion-input (ngModel)="newProperty.essentials.numBeds"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Bathrooms: </ion-label>
+      <ion-input (ngModel)="newProperty.essentials.numBaths"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Land area: </ion-label>
+      <ion-input (ngModel)="newProperty.essentials.landFootage"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Living area: </ion-label>
+      <ion-input (ngModel)="newProperty.essentials.propertyFootage"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Buy Date: </ion-label>
+      <ion-input placeholder="MM/DD/YYYY" ngModel="getFormattedDate(newProperty.dateOfPurchase)" (ngModelChange)="updateDate($event, 'date_of_purchase')"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Sell Date: </ion-label>
+      <ion-input placeholder="MM/DD/YYYY" ngModel="getFormattedDate(newProperty.dateOfSale)" (ngModelChange)="updateDate($event, 'date_of_sale')"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Occupancy Status:</ion-label>
+      <ion-select (ionChange)="updateOccupancyStatus($event)">
+        <ion-select-option value="unoccupanied">Unoccupanied</ion-select-option>
+        <ion-select-option value="occupied">Occupied</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Subdivision: </ion-label>
+      <ion-input (ngModel)="newProperty.subdivision"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Trustee: </ion-label>
+      <ion-input (ngModel)="newProperty.trusteeName"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>County assessment: </ion-label>
+      <ion-input (ngModel)="newProperty.countyAssessment"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Zillow link: </ion-label>
+        <ion-input (ngModel)="newProperty.essentials.zillowLink"></ion-input>
+      </ion-item>
+    <ion-item>
+      <ion-label>Buy Value: $</ion-label>
+      <ion-input (ngModel)="newProperty.prices.buyValue"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Expected Value: $</ion-label>
+      <ion-input (ngModel)="newProperty.prices.expectedValue"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Sell Value: $</ion-label>
+      <ion-input (ngModel)="newProperty.prices.sellValue"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Bidding Price: $</ion-label>
+      <ion-input (ngModel)="newProperty.prices.biddingPrice"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Market Price: $</ion-label>
+      <ion-input (ngModel)="newProperty.prices.marketPrice"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Auction Location: </ion-label>
+      <ion-input (ngModel)="newProperty.auction.auctionLocation"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Date of Auction: </ion-label>
+      <ion-input (ngModel)="newProperty.auction.dateOfAuction"></ion-input>
+    </ion-item>  
+    <ion-item>
+      <ion-label>Loan Amount: </ion-label>
+      <ion-input (ngModel)="newProperty.loan.amount"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Month Due: </ion-label>
+      <ion-input (ngModel)="newProperty.loan.month"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Year Due: </ion-label>
+      <ion-input (ngModel)="newProperty.loan.year"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Notes: </ion-label>
+      <ion-textarea
+      (ngModel)="newProperty.notes"
+    >
+      </ion-textarea>
+    </ion-item>
+  </ion-list>
+
+  <ion-button (click)="submit()">Submit</ion-button>
+  
 </ion-content>

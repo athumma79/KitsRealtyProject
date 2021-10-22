@@ -16,6 +16,9 @@
          </ion-select>
       </div>   
       <ion-searchbar showcancelbutton="" (ionInput)="filterList($event)"></ion-searchbar>
+      <div>
+        <ion-button (click)="openAddPropertyForm()">Add Property</ion-button>
+      </div>
     </div>
     <div class="accordion" id="accordion">
       <div class="accordion-item" *ngFor="let property of properties; index as i">
@@ -24,8 +27,9 @@
             <ion-item lines='none' class='description'>
             <ion-thumbnail size="large" [attr.class]="'thumbnail-' + property.propertyId" slot="start"></ion-thumbnail>
             <ion-label>
-              <h3>{{property.address.address}} {{property.address.city}}, {{property.address.state}} {{property.address.zipcode}}</h3>
-              <p>{{property.address.county}}</p>
+              <h3>{{property.address.address}}</h3>
+              <h3>{{property.address.city}}, {{property.address.state}}</h3>
+              <p>{{property.address.county}} | {{property.address.zipcode}}</p>
               <p>{{property.status.propertyStatusDescription}} | {{property.essentials.propertyType}}</p>
             </ion-label>
             <ion-label slot="end">

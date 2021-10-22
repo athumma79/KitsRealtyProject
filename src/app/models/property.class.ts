@@ -10,7 +10,6 @@ import { User } from "./user.class";
 
 export class Property {
     propertyId: number
-    name: string
     status: PropertyStatus
     occupancyStatus: OccupancyStatus
     coordinator: User

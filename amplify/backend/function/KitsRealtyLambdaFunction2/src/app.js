@@ -127,8 +127,68 @@ app.post('/revenues', function(req, res) {
 });
 
 app.post('/properties', function(req, res) {
-  // Add your code here
-  res.json({success: 'post call succeed!', url: req.url, body: req.body})
+  
+  let newProperty = req.body.property;
+
+  pool.getConnection(function(error, connection) {
+
+    let propertyQuery = "INSERT INTO PROPERTY (DATE_OF_PURCHASE, DATE_OF_SALE, TRUSTEE_NAME, SUBDIVISION, COUNTY_ASSESSMENT, NOTES, PROPERTY_STATUS_ID, OCCUPANCY_STATUS_ID) \
+    VALUES (" + newProperty.dateOfPurchase + ", " + newProperty.dateOfSale + ", " + newProperty.trusteeName + ", " + newProperty.subdivision + ", " + newProperty.countyAssessment + ", " + newProperty.notes + newProperty.status.statusId + ", "
+    propertyQuery += (newProperty.occupancyStatus) ? newProperty.occupancyStatus.occupancyStatusId : null;
+    propertyQuery += ");"
+
+    let addressQuery = "INSERT INTO PROPERTY_ADDRESS (ADDRESS, CITY, COUNTY, ZIPCODE, STATE) \
+    VALUES (" + newProperty.address.address + ", " + newProperty.address.city + ", " + newProperty.address.county + ", " + newProperty.address.zipcode + ", " + newProperty.address.state + ");"
+
+    let essentialsQuery = "INSERT INTO PROPERTY_ESSENTIALS (PROPERTY_TYPE, NUM_BEDS, NUM_BATHS, LAND_FOOTAGE, PROPERTY_FOOTAGE, YEAR_BUILT, ZILLOW_LINK) \
+    VALUES (" 
+    essentialsQuery += (newProperty.essentials) ? (newProperty.essentials.propertyType + ", " + newProperty.essentials.numBeds + ", " + newProperty.essentials.numBaths + ", " + newProperty.essentials.landFootage + ", " + newProperty.essentials.propertyFootage + ", " + newProperty.essentials.yearBuilt + ", " + newProperty.essentials.zillowLink) : (null + ", " + null + ", " + null + ", " + null + ", " + null + ", " + null + ", " + null) 
+    essentialsQuery += ");"
+
+    let pricesQuery = "INSERT INTO PROPERTY_PRICES (BUY_VALUE, EXPECTED_VALUE, SELL_VALUE, BIDDING_PRICE, MARKET_PRICE) \
+    VALUES ("
+    pricesQuery += (newProperty.prices) ? (newProperty.prices.buyValue + ", " + newProperty.prices.expectedValue + ", " + newProperty.prices.sellValue + ", " + newProperty.prices.biddingPrice + ", " + newProperty.prices.marketPrice) : (null + ", " + null + ", " + null + ", " + null + ", " + null)
+    pricesQuery += ");"
+
+    let auctionQuery = "INSERT INTO PROPERTY_AUCTION (AUCTION_LOCATION, DATE_OF_AUCTION) \
+    VALUES ("
+    auctionQuery += (newProperty.auction) ? (newProperty.auction.auctionLocation + ", " + newProperty.auction.dateOfAuction) : (null + ", " + null)
+    auctionQuery += ");"
+
+    let loanQuery = "INSERT INTO PROPERTY_LOAN (AMOUNT, MONTH, YEAR) \
+    VALUES (" +  + ");"
+    loanQuery += (newProperty.loan) ? (newProperty.loan.amount + ", " + newProperty.loan.month + ", " + newProperty.loan.year) : (null + ", " + null + ", " + null)
+    loanQuery += ");"
+
+    connection.query(addressQuery, function(err, rows, fields) {
+      res.json(rows);
+      if (err) throw err   
+    })
+
+    connection.query(essentialsQuery, function(err, rows, fields) {
+      if (err) throw err   
+    })
+
+    connection.query(pricesQuery, function(err, rows, fields) {
+      if (err) throw err   
+    })
+
+    connection.query(auctionQuery, function(err, rows, fields) {
+      if (err) throw err   
+    })
+
+    connection.query(loanQuery, function(err, rows, fields) {
+      if (err) throw err   
+    })
+
+    connection.query(propertyQuery, function(err, rows, fields) {
+      if (err) throw err   
+    })
+
+    res.json()
+    connection.release()
+  })
+
 });
 
 app.post('/properties/*', function(req, res) {

@@ -476,6 +476,7 @@ export class PropertyDetailsPage implements OnInit {
     this.property.status = updatedStatus;
     console.log(this.property.status);
   }
+  
   updateState(e) {
     this.property.address.state = e.detail.value;
   }
