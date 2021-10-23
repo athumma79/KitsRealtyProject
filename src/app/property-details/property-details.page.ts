@@ -221,10 +221,10 @@ export class PropertyDetailsPage implements OnInit {
   async getThumbnail() {
     await Storage.list("properties/" + this.property.propertyId + "/thumbnail/")
       .then(async response => {
-        if (!response || response.length < 2) {
+        if (!response || response.length < 1) {
           return;
         }
-        await Storage.get(response[1].key)
+        await Storage.get(response[0].key)
           .then(response => {
             $(".thumbnail").attr("src", response as string);
           })
@@ -372,7 +372,6 @@ export class PropertyDetailsPage implements OnInit {
 
   async deleteProperty() {
     if (window.confirm("Are you sure that you want to DELETE this property?")) {
-      location.reload();
       const deleteInit = {
         body: {
           propertyId: this.property.propertyId
@@ -384,11 +383,7 @@ export class PropertyDetailsPage implements OnInit {
         if (response.error) {
           window.alert("You cannot delete this property because it is referenced by a revenue.")
         }
-      })
-      .catch(error => {
-        console.log(error);
-        });
-      Storage.list("properties/" + this.property.propertyId + "/")
+        Storage.list("properties/" + this.property.propertyId + "/")
         .then(response => {
           for (let i = 0; i < response.length; i++) {
             Storage.remove(response[i].key)
@@ -399,11 +394,16 @@ export class PropertyDetailsPage implements OnInit {
                 console.log(err);
               })
           }
+          location.reload();
         })
         .catch(err => {
           console.log(err);
         });
-      }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    }
   }
 
   editProperty() {

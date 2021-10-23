@@ -9,4 +9,14 @@ export class Contractor {
     startDate: Date
     endDate: Date
     company: string
+
+    constructor() {
+        this.contractorCognitoId = null;
+        this.contractorUser = new User();
+        this.contractorType = new ContractorType();
+        this.dateHired = null;
+        this.startDate = null;
+        this.endDate = null;
+        this.company = null;
+    }
 }

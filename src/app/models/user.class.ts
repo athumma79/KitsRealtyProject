@@ -8,4 +8,14 @@ export class User {
     email: string
     username: string
     ssn: string
+
+    constructor() {
+        this.userCognitoId = null;
+        this.role = new UserRole();
+        this.firstName = null;
+        this.lastName = null;
+        this.email = null;
+        this.username = null;
+        this.ssn = null;
+    }
 }

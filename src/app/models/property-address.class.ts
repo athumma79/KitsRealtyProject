@@ -5,4 +5,13 @@ export class PropertyAddress {
     county: string
     zipcode: string
     state: string
+
+    constructor() {
+        this.addressId = null;
+        this.address = null;
+        this.city = null;
+        this.county = null;
+        this.zipcode = null;
+        this.state = null;
+    }
 }

@@ -13,4 +13,17 @@ export class Revenue {
     amountPaid: number
     revenueDescription: string
     dateIncurred: Date
+
+    constructor() {
+        this.revenueId = null;
+        this.property = new Property();
+        this.contractor = new Contractor();
+        this.expenseStatus = new ExpenseStatus();
+        this.revenueAmount = null;
+        this.revenueType = null;
+        this.expenseDueDate = null;
+        this.amountPaid = null;
+        this.revenueDescription = null;
+        this.dateIncurred = null;
+    }
 }

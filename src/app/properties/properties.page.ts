@@ -184,10 +184,11 @@ export class PropertiesPage implements OnInit {
   async getThumbnail(property: Property, callback) {
     await Storage.list("properties/" + property.propertyId + "/thumbnail/")
       .then(async response => {
-        if (!response || response.length < 1 || (response.length < 2 && response[0].size == 0)) {
+        console.log(response);
+        if (!response || response.length < 1) {
           return;
         }
-        await Storage.get(response[1].key)
+        await Storage.get(response[0].key)
           .then(response => {
             callback(response);
             console.log(response);

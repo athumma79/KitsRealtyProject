@@ -10,4 +10,12 @@ export class NearbyProperty {
     prices: PropertyPrices
     address: PropertyAddress
     essentials: PropertyEssentials
+
+    constructor() {
+        this.nearbyPropertyId = null;
+        this.property = new Property();
+        this.prices = new PropertyPrices();
+        this.address = new PropertyAddress();
+        this.essentials = new PropertyEssentials();
+    }
 }

@@ -132,61 +132,62 @@ app.post('/properties', function(req, res) {
 
   pool.getConnection(function(error, connection) {
 
-    let propertyQuery = "INSERT INTO PROPERTY (DATE_OF_PURCHASE, DATE_OF_SALE, TRUSTEE_NAME, SUBDIVISION, COUNTY_ASSESSMENT, NOTES, PROPERTY_STATUS_ID, OCCUPANCY_STATUS_ID) \
-    VALUES (" + newProperty.dateOfPurchase + ", " + newProperty.dateOfSale + ", " + newProperty.trusteeName + ", " + newProperty.subdivision + ", " + newProperty.countyAssessment + ", " + newProperty.notes + newProperty.status.statusId + ", "
-    propertyQuery += (newProperty.occupancyStatus) ? newProperty.occupancyStatus.occupancyStatusId : null;
-    propertyQuery += ");"
-
     let addressQuery = "INSERT INTO PROPERTY_ADDRESS (ADDRESS, CITY, COUNTY, ZIPCODE, STATE) \
-    VALUES (" + newProperty.address.address + ", " + newProperty.address.city + ", " + newProperty.address.county + ", " + newProperty.address.zipcode + ", " + newProperty.address.state + ");"
+    VALUES (" + addQuotes(newProperty.address.address) + ", " + addQuotes(newProperty.address.city) + ", " + addQuotes(newProperty.address.county) + ", " + addQuotes(newProperty.address.zipcode) + ", " + addQuotes(newProperty.address.state) + ");"
 
     let essentialsQuery = "INSERT INTO PROPERTY_ESSENTIALS (PROPERTY_TYPE, NUM_BEDS, NUM_BATHS, LAND_FOOTAGE, PROPERTY_FOOTAGE, YEAR_BUILT, ZILLOW_LINK) \
-    VALUES (" 
-    essentialsQuery += (newProperty.essentials) ? (newProperty.essentials.propertyType + ", " + newProperty.essentials.numBeds + ", " + newProperty.essentials.numBaths + ", " + newProperty.essentials.landFootage + ", " + newProperty.essentials.propertyFootage + ", " + newProperty.essentials.yearBuilt + ", " + newProperty.essentials.zillowLink) : (null + ", " + null + ", " + null + ", " + null + ", " + null + ", " + null + ", " + null) 
-    essentialsQuery += ");"
+    VALUES (" + addQuotes(newProperty.essentials.propertyType) + ", " + newProperty.essentials.numBeds + ", " + newProperty.essentials.numBaths + ", " + newProperty.essentials.landFootage + ", " + newProperty.essentials.propertyFootage + ", " + newProperty.essentials.yearBuilt + ", " + addQuotes(newProperty.essentials.zillowLink) + ");"
 
     let pricesQuery = "INSERT INTO PROPERTY_PRICES (BUY_VALUE, EXPECTED_VALUE, SELL_VALUE, BIDDING_PRICE, MARKET_PRICE) \
-    VALUES ("
-    pricesQuery += (newProperty.prices) ? (newProperty.prices.buyValue + ", " + newProperty.prices.expectedValue + ", " + newProperty.prices.sellValue + ", " + newProperty.prices.biddingPrice + ", " + newProperty.prices.marketPrice) : (null + ", " + null + ", " + null + ", " + null + ", " + null)
-    pricesQuery += ");"
+    VALUES (" + newProperty.prices.buyValue + ", " + newProperty.prices.expectedValue + ", " + newProperty.prices.sellValue + ", " + newProperty.prices.biddingPrice + ", " + newProperty.prices.marketPrice + ");"
 
     let auctionQuery = "INSERT INTO PROPERTY_AUCTION (AUCTION_LOCATION, DATE_OF_AUCTION) \
-    VALUES ("
-    auctionQuery += (newProperty.auction) ? (newProperty.auction.auctionLocation + ", " + newProperty.auction.dateOfAuction) : (null + ", " + null)
-    auctionQuery += ");"
+    VALUES (" + addQuotes(newProperty.auction.auctionLocation) + ", " + addQuotes(newProperty.auction.dateOfAuction) + ");"
 
     let loanQuery = "INSERT INTO PROPERTY_LOAN (AMOUNT, MONTH, YEAR) \
-    VALUES (" +  + ");"
-    loanQuery += (newProperty.loan) ? (newProperty.loan.amount + ", " + newProperty.loan.month + ", " + newProperty.loan.year) : (null + ", " + null + ", " + null)
-    loanQuery += ");"
+    VALUES (" + newProperty.loan.amount + ", " + newProperty.loan.month + ", " + newProperty.loan.year + ");"
 
-    connection.query(addressQuery, function(err, rows, fields) {
-      res.json(rows);
+    connection.query(addressQuery, function(err, addressRows, fields) {
+
       if (err) throw err   
+
+      connection.query(essentialsQuery, function(err, essentialsRows, fields) {
+
+        if (err) throw err   
+
+        connection.query(pricesQuery, function(err, pricesRows, fields) {
+
+          if (err) throw err   
+
+          connection.query(auctionQuery, function(err, auctionRows, fields) {
+
+            if (err) throw err   
+
+            connection.query(loanQuery, function(err, loanRows, fields) {
+
+              if (err) throw err   
+
+              let propertyQuery = "INSERT INTO PROPERTY (DATE_OF_PURCHASE, DATE_OF_SALE, TRUSTEE_NAME, SUBDIVISION, COUNTY_ASSESSMENT, NOTES, STATUS_ID, OCCUPANCY_STATUS_ID, ADDRESS_ID, ESSENTIALS_ID, PRICES_ID, AUCTION_ID, LOAN_ID) \
+              VALUES (" + addQuotes(newProperty.dateOfPurchase) + ", " + addQuotes(newProperty.dateOfSale) + ", " + addQuotes(newProperty.trusteeName) + ", " + addQuotes(newProperty.subdivision) + ", " + addQuotes(newProperty.countyAssessment) + ", " + addQuotes(newProperty.notes) + ", " + newProperty.status.statusId + ", " + newProperty.occupancyStatus.occupancyStatusId + ", " + addressRows.insertId + ", " + essentialsRows.insertId + ", " + pricesRows.insertId + ", " + auctionRows.insertId + ", " + loanRows.insertId + ");"
+
+              connection.query(propertyQuery, function(err, rows, fields) {
+                if (err) throw err   
+
+                res.json(rows.insertId)
+                connection.release()
+
+              })
+
+            })
+
+          })
+
+        })
+
+      })
+
     })
 
-    connection.query(essentialsQuery, function(err, rows, fields) {
-      if (err) throw err   
-    })
-
-    connection.query(pricesQuery, function(err, rows, fields) {
-      if (err) throw err   
-    })
-
-    connection.query(auctionQuery, function(err, rows, fields) {
-      if (err) throw err   
-    })
-
-    connection.query(loanQuery, function(err, rows, fields) {
-      if (err) throw err   
-    })
-
-    connection.query(propertyQuery, function(err, rows, fields) {
-      if (err) throw err   
-    })
-
-    res.json()
-    connection.release()
   })
 
 });
@@ -271,11 +272,6 @@ app.put('/properties/*', function(req, res) {
 * Example delete method *
 ****************************/
 
-app.delete('/properties', function(req, res) {
-  // Add your code here
-  res.json({success: 'delete call succeed!', url: req.url});
-});
-
 app.delete('/properties/*', function(req, res) {
   // Add your code here
   res.json({success: 'delete call succeed!', url: req.url});
@@ -303,55 +299,48 @@ app.delete('/properties', function(req, res) {
 
           connection.query(propertyContractorQuery, function(err, rows, fields) {
             if (err) throw err     
-            
-            var nearbyPropertiesQuery = "DELETE FROM NEARBY_PROPERTY \
-            WHERE PROPERTY_ID = " + req.body.propertyId;
-
-            connection.query(nearbyPropertiesQuery, function(err, rows, fields) {
-              if (err) throw err    
               
-              var propertyQuery = "DELETE FROM PROPERTY \
-              WHERE PROPERTY_ID = " + req.body.propertyId;
-    
-              connection.query(propertyQuery, function(err, rows, fields) {
-                if (err) throw err    
+            var propertyQuery = "DELETE FROM PROPERTY \
+            WHERE PROPERTY_ID = " + req.body.propertyId;
+  
+            connection.query(propertyQuery, function(err, rows, fields) {
+              if (err) throw err    
 
-                if (dependenciesRows[0].PRICES_ID) {
-                  var pricesQuery = "DELETE FROM PROPERTY_PRICES \
-                  WHERE PRICES_ID = " + dependenciesRows[0].PRICES_ID;
-      
-                  connection.query(pricesQuery, function(err, rows, fields) {
-                    if (err) throw err        
-                  })
-                }
-                if (dependenciesRows[0].ADDRESS_ID) {
-                  var addressQuery = "DELETE FROM PROPERTY_ADDRESS \
-                  WHERE ADDRESS_ID = " + dependenciesRows[0].ADDRESS_ID;
-      
-                  connection.query(addressQuery, function(err, rows, fields) {
-                    if (err) throw err        
-                  })
-                }
-                if (dependenciesRows[0].ESSENTIALS_ID) {
-                  var essentialsQuery = "DELETE FROM PROPERTY_ESSENTIALS \
-                  WHERE ESSENTIALS_ID = " + dependenciesRows[0].ESSENTIALS_ID;
-      
-                  connection.query(essentialsQuery, function(err, rows, fields) {
-                    if (err) throw err        
-                  })
-                }
-                if (dependenciesRows[0].LOAN_ID) {
-                  var loanQuery = "DELETE FROM PROPERTY_LOAN \
-                  WHERE LOAN_ID = " + dependenciesRows[0].LOAN_ID;
-      
-                  connection.query(loanQuery, function(err, rows, fields) {
-                    if (err) throw err        
-                  })
-                }
-                
-                res.json();
-                connection.release()
-              })
+              if (dependenciesRows[0].PRICES_ID) {
+                var pricesQuery = "DELETE FROM PROPERTY_PRICES \
+                WHERE PRICES_ID = " + dependenciesRows[0].PRICES_ID;
+    
+                connection.query(pricesQuery, function(err, rows, fields) {
+                  if (err) throw err        
+                })
+              }
+              if (dependenciesRows[0].ADDRESS_ID) {
+                var addressQuery = "DELETE FROM PROPERTY_ADDRESS \
+                WHERE ADDRESS_ID = " + dependenciesRows[0].ADDRESS_ID;
+    
+                connection.query(addressQuery, function(err, rows, fields) {
+                  if (err) throw err        
+                })
+              }
+              if (dependenciesRows[0].ESSENTIALS_ID) {
+                var essentialsQuery = "DELETE FROM PROPERTY_ESSENTIALS \
+                WHERE ESSENTIALS_ID = " + dependenciesRows[0].ESSENTIALS_ID;
+    
+                connection.query(essentialsQuery, function(err, rows, fields) {
+                  if (err) throw err        
+                })
+              }
+              if (dependenciesRows[0].LOAN_ID) {
+                var loanQuery = "DELETE FROM PROPERTY_LOAN \
+                WHERE LOAN_ID = " + dependenciesRows[0].LOAN_ID;
+    
+                connection.query(loanQuery, function(err, rows, fields) {
+                  if (err) throw err        
+                })
+              }
+              
+              res.json();
+              connection.release()
             })
           })
         })
@@ -385,8 +374,12 @@ app.delete('/contractors', function(req, res) {
 });
 
 app.listen(3000, function() {
-    console.log("App started")
+  console.log("App started")
 });
+
+function addQuotes(value) {
+  return value ? '"' + value + '"' : value;
+}
 
 // Export the app object. When executing the application local this does nothing. However,
 // to port it to AWS Lambda we will create a wrapper around that will load the app from

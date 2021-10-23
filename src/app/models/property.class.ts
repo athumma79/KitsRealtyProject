@@ -24,4 +24,22 @@ export class Property {
     subdivision: string
     countyAssessment: number
     notes: string
+
+    constructor() {
+        this.propertyId = null;
+        this.status = new PropertyStatus();
+        this.occupancyStatus = new OccupancyStatus();
+        this.coordinator = new User();
+        this.auction = new PropertyAuction();
+        this.prices = new PropertyPrices();
+        this.address = new PropertyAddress();
+        this.essentials = new PropertyEssentials();
+        this.loan = new PropertyLoan();
+        this.dateOfPurchase = null;
+        this.dateOfSale = null;
+        this.trusteeName = null;
+        this.subdivision = null;
+        this.countyAssessment = null;
+        this.notes = null;
+    }
 }
