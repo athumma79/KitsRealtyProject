@@ -65,6 +65,28 @@ app.get('/properties', function(req, res) {
   
 });
 
+app.get('/contractors', function(req, res) {
+
+  pool.getConnection(function(error, connection) {
+
+    var query = "SELECT * \
+    FROM CONTRACTOR \
+    LEFT OUTER JOIN CONTRACTOR_TYPE ON CONTRACTOR.CONTRACTOR_TYPE_ID = CONTRACTOR_TYPE.CONTRACTOR_TYPE_ID \
+    LEFT OUTER JOIN USERS ON CONTRACTOR.CONTRACTOR_COGNITO_ID = USERS.USER_COGNITO_ID \
+    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID;"
+
+    connection.query(query, function(err, rows, fields) {
+      if (err) throw err
+
+      res.json({ contractors: rows })
+
+      connection.release()
+    })
+
+  })
+
+});
+
 app.get('/properties/*', function(req, res) {
   // Add your code here
   res.json({success: 'get call succeed!', url: req.url});
@@ -202,8 +224,6 @@ app.post('/properties/*', function(req, res) {
 ****************************/
 
 app.put('/properties', function(req, res) {
-
-  // res.json({coordinator: (req.body.property.coordinator == null)});
   
   let newProperty = req.body.property;
 
@@ -261,6 +281,29 @@ app.put('/properties', function(req, res) {
     connection.release()
   })
 
+});
+
+app.put('/contractors', function(req, res) {
+  let newContractor = req.body.contractor;
+
+  pool.getConnection(function(error, connection) {
+
+    let query = "UPDATE CONTRACTOR \
+    SET \
+      CONTRACTOR_TYPE_ID = " + newContractor.contractorType.contractorTypeId + ", \
+      DATE_HIRED = " + addQuotes(newContractor.dateHired) + ", \
+      START_DATE = " + addQuotes(newContractor.startDate) + ", \
+      END_DATE = " + addQuotes(newContractor.endDate) + ", \
+      COMPANY = " + addQuotes(newContractor.company) + ", \
+    WHERE CONTRACTOR_COGNITO_ID = " + newContractor.contractorCognitoId + ";"
+
+    connection.query(query, function(err, rows, fields) {
+      if (err) throw err   
+    })
+    
+    res.json()
+    connection.release()
+  })
 });
 
 app.put('/properties/*', function(req, res) {

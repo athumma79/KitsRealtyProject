@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Contractor Details</ion-title>
+    <i class="fal fa-times-circle" (click)='dismiss()' slot="end"></i>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <ion-button (click)='editContractor()'>Edit</ion-button>
+    <ion-button (click)='saveContractor()'>Save</ion-button>
+  </div>
+  <div class="content-container">
+    <h3 class="center">{{contractor.contractorUser.firstName}} {{contractor.contractorUser.lastName}}</h3>
+    <ion-list>
+      <ion-item>
+        <ion-label>Email:</ion-label>
+        <ion-input [(ngModel)]="contractor.contractorUser.email" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Type:</ion-label>
+        <ion-input [(ngModel)]="contractor.contractorType.contractorTypeDescription" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Company:</ion-label>
+        <ion-input [(ngModel)]="contractor.company" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Date hired:</ion-label>
+        <ion-input [ngModel]="getFormattedDate(contractor.dateHired)" (ngModelChange)="updateDate($event, 'date_hired')" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Start date:</ion-label>
+        <ion-input [ngModel]="getFormattedDate(contractor.startDate)" (ngModelChange)="updateDate($event, 'start_date')" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>End date:</ion-label>
+        <ion-input [ngModel]="getFormattedDate(contractor.endDate)" (ngModelChange)="updateDate($event, 'end_date')" readonly></ion-input>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>
