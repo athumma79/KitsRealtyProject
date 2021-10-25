@@ -39,12 +39,12 @@ export class PropertyDetailsPage implements OnInit {
   salesDocsNames: string[] = new Array();
   utilitiesDocs: string[] = new Array();
   utilitiesDocsNames: string[] = new Array();
+  noThumbnail = false;
 
   ngOnInit() {
     this.loadContractors();
     this.loadRevenues();
     this.getThumbnail();
-
     console.log(this.property.coordinator);
     console.log(this.contractors);
   }
@@ -222,6 +222,7 @@ export class PropertyDetailsPage implements OnInit {
     await Storage.list("properties/" + this.property.propertyId + "/thumbnail/")
       .then(async response => {
         if (!response || response.length < 1) {
+          this.noThumbnail=true;
           return;
         }
         await Storage.get(response[0].key)

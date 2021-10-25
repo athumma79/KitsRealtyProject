@@ -7,14 +7,15 @@
 
 <ion-content>
   <ion-item>  
-    <img height="fit-content" width="80%" src="#" class="thumbnail" />
+    <img *ngIf="!noThumbnail" height="fit-content" width="80%" src="#" class="thumbnail" />
+    <ion-icon *ngIf="noThumbnail" name="image-outline"></ion-icon>
   </ion-item>
+
 
   <div class='button-bar'>
     <ion-button (click)='editProperty()'>Edit</ion-button>
     <ion-button (click)='saveProperty(true)'>Save</ion-button>
   </div>
-
 
   <ion-list class="row">
     <ion-item>

@@ -4,7 +4,10 @@
 .description{
     width: 100%;
 }
-
+ion-thumbnail{
+   margin-bottom: 0.9em;
+   margin-top: 0.5em;
+}
 
 ion-toolbar{
     display: block;
@@ -13,8 +16,11 @@ amplify-sign-out{
     padding-right: 3%;
     }
 
-ion-button{
-    height: fit-content;
+#addProperty{
+    background-color:forestgreen;
+    height: 100%;
+    margin-bottom:0.7em;
+    margin-left: 1.4em;
 }
 
 ion-label{
@@ -33,16 +39,16 @@ ion-label{
     background-color: #3880ff;
     color: white;
     border-radius: 15px;
-    flex: 0.2;
     }
 
 #detailsButton{
     color: #3880ff;
     text-align: center;
-    display: flex;
-    justify-content: center;
 }
-
+ion-fab-button{
+    margin-right: 1em;
+    margin-bottom: 1em;
+}
 .right-side{
     text-align: right;
 }

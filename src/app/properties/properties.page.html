@@ -1,10 +1,15 @@
 <ion-header>
-  <ion-toolbar color='light'>
+  <ion-toolbar>
     <h2 class='title'><strong>Properties</strong></h2>
     <amplify-sign-out slot='end'></amplify-sign-out>
 </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openAddPropertyForm()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
   <div id='tools'>  
     <div class='buttonbox'>    
       <ion-label >Sort By:</ion-label>
@@ -16,9 +21,6 @@
          </ion-select>
       </div>   
       <ion-searchbar showcancelbutton="" (ionInput)="filterList($event)"></ion-searchbar>
-      <div>
-        <ion-button (click)="openAddPropertyForm()">Add Property</ion-button>
-      </div>
     </div>
     <div class="accordion" id="accordion">
       <div class="accordion-item" *ngFor="let property of properties; index as i">
@@ -32,7 +34,7 @@
               <p *ngIf="property.address.county || property.address.zipcode">{{property.address.county}} <span *ngIf="property.address.county && property.address.zipcode">|</span> {{property.address.zipcode}}</p>
               <p *ngIf="property.status.propertyStatusDescription || property.essentials.propertyType">{{property.status.propertyStatusDescription}} <span *ngIf="property.status.propertyStatusDescription && property.essentials.propertyType">|</span> {{property.essentials.propertyType}}</p>
             </ion-label>
-            <ion-label slot="end">
+            <ion-label class='right-side' slot="end">
               <h3>${{getPriceByStatus(property)}}</h3>
               <p>{{getPriceTypeByStatus(property)}}</p>
             </ion-label>
