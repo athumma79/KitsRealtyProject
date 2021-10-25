@@ -300,7 +300,7 @@ app.put('/contractors', function(req, res) {
     connection.query(query, function(err, rows, fields) {
       if (err) throw err   
     })
-    
+
     res.json()
     connection.release()
   })
@@ -424,7 +424,4 @@ function addQuotes(value) {
   return value ? '"' + value + '"' : value;
 }
 
-// Export the app object. When executing the application local this does nothing. However,
-// to port it to AWS Lambda we will create a wrapper around that will load the app from
-// this file
 module.exports = app
