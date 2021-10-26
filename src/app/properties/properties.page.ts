@@ -132,14 +132,17 @@ export class PropertiesPage implements OnInit {
   }
 
   sortProperties(e){
-    console.log(e.detail.value);
     switch(e.detail.value){
       case "status": this.properties.sort((a, b) => a.status.statusId.localeCompare(b.status.statusId));break
       case "state": this.properties.sort((a, b) => a.address.state.localeCompare(b.address.state));break
       case "type": this.properties.sort((a, b) => a.essentials.propertyType.localeCompare(b.essentials.propertyType));break
       case "city": this.properties.sort((a, b) => a.address.city.localeCompare(b.address.city));break
+      case "numBeds": this.properties.sort((a, b) => a.essentials.numBeds-b.essentials.numBeds);break
+      case "numBaths": this.properties.sort((a, b) => a.essentials.numBaths-b.essentials.numBaths);break
+      case "landFootage": this.properties.sort((a, b) => a.essentials.landFootage-b.essentials.landFootage);break
+      case "propertyFootage": this.properties.sort((a, b) => a.essentials.propertyFootage-b.essentials.propertyFootage);break
+      case "yearBuilt": this.properties.sort((a, b) => a.essentials.yearBuilt-b.essentials.yearBuilt);break
     }
-    console.log(this.properties)
   }
 
 
@@ -166,7 +169,7 @@ export class PropertiesPage implements OnInit {
         return "Buy Value";
       case "For Sale":
         return "Expected Value";
-      case "Sold":
+      case "Sold Price":
         return "Sell Value";
       default:
         return "";
@@ -184,14 +187,12 @@ export class PropertiesPage implements OnInit {
   async getThumbnail(property: Property, callback) {
     await Storage.list("properties/" + property.propertyId + "/thumbnail/")
       .then(async response => {
-        console.log(response);
         if (!response || response.length < 1) {
           return;
         }
         await Storage.get(response[0].key)
           .then(response => {
             callback(response);
-            console.log(response);
           })
           .catch(err => {
             console.log(err);

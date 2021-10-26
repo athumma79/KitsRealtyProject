@@ -16,6 +16,7 @@ export class ContractorsPage implements OnInit {
 
   apiName = 'KitsRealtyAPI2';
 
+  backupContractors: Contractor[] = new Array();
   contractors: Contractor[] = new Array();
 
   constructor(public modalController: ModalController) { }
@@ -53,12 +54,39 @@ export class ContractorsPage implements OnInit {
           contractor.company = dbContractors[i]["COMPANY"];
           
           this.contractors.push(contractor);
+          this.backupContractors.push(contractor);
         }
         console.log(this.contractors);
       })
       .catch(error => {
         console.log(error);
       });
+  }
+  sortProperties(e){
+    switch(e.detail.value){
+      case "fName": this.contractors.sort((a, b) => a.contractorUser.firstName.localeCompare(b.contractorUser.firstName));break
+      case "lName": this.contractors.sort((a, b) => a.contractorUser.lastName.localeCompare(b.contractorUser.lastName));break
+      case "email": this.contractors.sort((a, b) => a.contractorUser.email.localeCompare(b.contractorUser.email));break
+      case "type": this.contractors.sort((a, b) => a.contractorType.contractorTypeDescription.localeCompare(b.contractorType.contractorTypeDescription));break
+      case "company": this.contractors.sort((a, b) => a.company.localeCompare(b.company));break
+    }
+  }
+  
+  async filterList(evt) {
+    this.contractors = this.backupContractors;
+    const searchTerm = evt.srcElement.value;
+    if (!searchTerm) {
+      return;
+    }
+    this.contractors = this.contractors.filter(contractor => {
+      switch(evt.srcElement.value){
+        case (contractor.contractorUser.lastName && searchTerm): return (contractor.contractorUser.lastName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
+        // case (contractor.contractorUser.lastName && searchTerm): return (contractor.contractorUser.lastName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
+        // case (contractor.contractorUser.email && searchTerm): return (contractor.contractorUser.email.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
+        // case (contractor.company && searchTerm): return (contractor.company.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
+        // case (contractor.contractorType.contractorTypeDescription && searchTerm): return (contractor.contractorType.contractorTypeDescription.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
+      }
+    });
   }
 
   async openContractorDetails(index: number) {

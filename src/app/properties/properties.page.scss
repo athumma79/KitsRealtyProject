@@ -1,17 +1,22 @@
 .title{
     margin-left: 3%;
-}
+    }
+
 .description{
+    display: flex;
     width: 100%;
-}
+    height: 7em;
+    }
+
 ion-thumbnail{
-   margin-bottom: 0.9em;
-   margin-top: 0.5em;
-}
+    margin-bottom: 0.9em;
+    margin-top: 0.5em;
+    }
 
 ion-toolbar{
     display: block;
-}
+    }
+
 amplify-sign-out{
     padding-right: 3%;
     }
@@ -21,11 +26,11 @@ amplify-sign-out{
     height: 100%;
     margin-bottom:0.7em;
     margin-left: 1.4em;
-}
+    }
 
 ion-label{
     width: max-content;
-}
+    }
 
 .buttonbox{
     display: flex;
@@ -44,45 +49,49 @@ ion-label{
 #detailsButton{
     color: #3880ff;
     text-align: center;
-}
-ion-fab-button{
-    margin-right: 1em;
-    margin-bottom: 1em;
-}
+    }
+    
 .right-side{
     text-align: right;
-}
+    }
 
 #tools {
     display: flex;
     align-items: center;
-}
+    }
 
 ion-searchbar{
     width: 50%;
     flex: 1;
-}
+    }
 
 ion-thumbnail{
     margin-bottom: 0.3em;
-}
+    }
+
 ion-item{
     display: block;
     --border-radius: 15px 15px 15px 15px;
-}
+    }
+
 ion-list{
     width: 100%;
-}
+    }
 
 .hover:hover{
     border-radius: 0px 15px 15px 0px;
     background-color: #0f439b;
-}
+    }
 
 ion-select{
     text-align: left;
-}
+    }
 
 .accordion-item {
     border-top: 0 !important;
-}
+    }
+
+.accordion{
+    margin-left: 1em;
+    margin-right: 1em;
+    }

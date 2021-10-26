@@ -1,10 +1,46 @@
 h2{
     margin-left: 3%;
-}
+    }
+
 ion-toolbar{
     display: block;
     flex-direction: row;
-}
+    }
+
 amplify-sign-out{
     padding-right: 3%;
     }
+
+#tools {
+    display: flex;
+    align-items: center;
+    }
+
+.buttonbox{
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    padding-left: 0.4em;
+    margin-right: auto;
+    margin-left: 0.4em;
+    margin-bottom: auto;
+    margin-top: auto;
+    background-color: #3880ff;
+    color: white;
+    border-radius: 15px;
+    }
+    
+ion-searchbar{
+    width: 50%;
+    flex: 1;
+    }
+
+.hover:hover{
+    border-radius: 0px 15px 15px 0px;
+    background-color: #0f439b;
+    }
+
+ion-select{
+    text-align: left;
+    }
+   

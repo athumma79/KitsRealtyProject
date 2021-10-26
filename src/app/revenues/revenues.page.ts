@@ -29,6 +29,7 @@ export class RevenuesPage implements OnInit {
   apiName = 'KitsRealtyAPI2';
 
   revenues: Revenue[] = new Array();
+  backupRevenues: Revenue[] = new Array();
 
   constructor(public modalController: ModalController) { }
 
@@ -160,11 +161,32 @@ export class RevenuesPage implements OnInit {
           revenue.dateIncurred = dbRevenues[i]['DATE_INCURRED'] ? new Date(dbRevenues[i]['DATE_INCURRED'].substring(0, dbRevenues[i]['DATE_INCURRED'].lastIndexOf('.'))) : null;
 
           this.revenues.push(revenue);
+          this.backupRevenues.push(revenue);
         }
       })
       .catch(err => {
         console.log(err);
       })
+  }
+  sortProperties(e){
+    switch(e.detail.value){
+      case "type": this.revenues.sort((a, b) => a.revenueType.localeCompare(b.revenueType));break
+      case "description": this.revenues.sort((a, b) => a.revenueDescription.localeCompare(b.revenueDescription));break
+      case "amount": this.revenues.sort((a, b) => a.revenueAmount-b.revenueAmount);break
+      case "amountPaid": this.revenues.sort((a, b) => a.amountPaid-b.amountPaid);break
+    }
+  }
+  async filterList(evt) {
+    this.revenues = this.backupRevenues;
+    const searchTerm = evt.srcElement.value;
+    if (!searchTerm) {
+      return;
+    }
+    this.revenues = this.revenues.filter(revenue => {
+      if (revenue.revenueDescription && searchTerm) {
+        return (revenue.revenueDescription.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
+      }
+    });
   }
 
   getFormattedRevenueAmount(revenue: Revenue) {

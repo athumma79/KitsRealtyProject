@@ -349,7 +349,7 @@ export class PropertyDetailsPage implements OnInit {
 
   async uploadFile(path: string) {
     try {
-      await Storage.put('properties/' + this.property.propertyId + '/' + path + '/' + this.fileToUpload.name + "-" + Date.now(), this.fileToUpload, {});
+      await Storage.put('properties/' + this.property.propertyId + '/' + path + '/' + Date.now() + "-" + this.fileToUpload.name , this.fileToUpload, {});
       this.getFiles(path);
     } catch (err) {
       console.log(err);
@@ -440,6 +440,10 @@ export class PropertyDetailsPage implements OnInit {
       .catch(error => {
         console.log(error);
       });
+  }
+
+  updatePropertyType(e) {
+      this.property.essentials.propertyType = e.detail.value;
   }
 
   updateStatus(e) {
