@@ -87,6 +87,27 @@ app.get('/contractors', function(req, res) {
 
 });
 
+app.get('/employees', function(req, res) {
+
+  pool.getConnection(function(error, connection) {
+
+    var query = "SELECT * \
+    FROM USERS \
+    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID \
+    WHERE USER_ROLE_DESCRIPTION = 'Employee';"
+
+    connection.query(query, function(err, rows, fields) {
+      if (err) throw err
+
+      res.json({ employees: rows })
+
+      connection.release()
+    })
+
+  })
+
+});
+
 app.get('/properties/*', function(req, res) {
   // Add your code here
   res.json({success: 'get call succeed!', url: req.url});
@@ -97,6 +118,12 @@ app.get('/properties/*', function(req, res) {
 ****************************/
 
 app.post('/contractors', function(req, res) {
+
+
+  
+});
+
+app.post('/property-contractor', function(req, res) {
 
   pool.getConnection(function(error, connection) {
 
@@ -117,7 +144,7 @@ app.post('/contractors', function(req, res) {
     })
 
   })
-  
+
 });
 
 app.post('/revenues', function(req, res) {
@@ -397,6 +424,10 @@ app.delete('/properties', function(req, res) {
 });
 
 app.delete('/contractors', function(req, res) {
+  
+});
+
+app.delete('/property-contractor', function(req, res) {
 
   pool.getConnection(function(error, connection) {
 

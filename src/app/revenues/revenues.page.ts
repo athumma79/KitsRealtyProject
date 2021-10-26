@@ -183,9 +183,7 @@ export class RevenuesPage implements OnInit {
       return;
     }
     this.revenues = this.revenues.filter(revenue => {
-      if (revenue.revenueDescription && searchTerm) {
-        return (revenue.revenueDescription.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
-      }
+      return ((revenue.revenueDescription) ? (revenue.revenueDescription.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) : false);
     });
   }
 
@@ -208,6 +206,16 @@ export class RevenuesPage implements OnInit {
       month: "2-digit",
       day: "2-digit"
     });
+  }
+
+  getRevenueType(revenue: Revenue) {
+    if (revenue.property.propertyId) {
+      return "Property";
+    }
+    if (revenue.contractor.contractorCognitoId) {
+      return "Contractor";
+    }
+    return "Company";
   }
 
   async openRevenueDetails(index: number) {

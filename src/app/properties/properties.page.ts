@@ -203,16 +203,19 @@ export class PropertiesPage implements OnInit {
       });
   }
 
-  async filterList(evt) {
+  filterList(evt) {
     this.properties = this.backupProperties;
     const searchTerm = evt.srcElement.value;
     if (!searchTerm) {
       return;
     }
     this.properties = this.properties.filter(property => {
-      if (property.address.address && searchTerm) {
-        return (property.address.address.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
-      }
+      return ((property.address.address) ? (property.address.address.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) : false) ||
+      ((property.address.city) ? (property.address.city.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) : false) ||
+      ((property.address.state) ? (property.address.state.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) : false) ||
+      ((property.address.county) ? (property.address.county.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) : false) ||
+      ((property.address.zipcode) ? (property.address.zipcode.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) : false) ||
+      ((property.status.propertyStatusDescription) ? (property.status.propertyStatusDescription.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) : false);
     });
   }
 

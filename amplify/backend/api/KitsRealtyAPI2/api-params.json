@@ -44,6 +44,36 @@
                 ]
             },
             "policyResourceName": "/revenues"
+        },
+        {
+            "name": "/property-contractor",
+            "lambdaFunction": "KitsRealtyLambdaFunction2",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            },
+            "policyResourceName": "/property-contractor"
+        },
+        {
+            "name": "/employees",
+            "lambdaFunction": "KitsRealtyLambdaFunction2",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            },
+            "policyResourceName": "/employees"
         }
     ],
     "resourceName": "KitsRealtyAPI2",
@@ -54,7 +84,7 @@
         }
     ],
     "privacy": {
-        "auth": 3,
+        "auth": 5,
         "unauth": 0,
         "authRoleName": "amplify-kitsrealtyproject2-dev-155513-authRole",
         "unAuthRoleName": "amplify-kitsrealtyproject2-dev-155513-unauthRole"
@@ -69,5 +99,5 @@
             ]
         }
     ],
-    "uuid": "c79f7507"
+    "uuid": "fd0f1760"
 }

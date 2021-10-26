@@ -32,6 +32,8 @@ export class PropertyDetailsPage implements OnInit {
 
   property: Property;
   contractors: Contractor[] = new Array();
+  potentialContractors: Contractor[] = new Array();
+  potentialCoordinators: User[] = new Array();
   revenues: Revenue[] = new Array();
   purchaseDocs: string[] = new Array();
   purchaseDocsNames: string[] = new Array();
@@ -45,8 +47,6 @@ export class PropertyDetailsPage implements OnInit {
     this.loadContractors();
     this.loadRevenues();
     this.getThumbnail();
-    console.log(this.property.coordinator);
-    console.log(this.contractors);
   }
 
   async loadContractors() {
@@ -56,7 +56,7 @@ export class PropertyDetailsPage implements OnInit {
       }
     };
     API
-      .post(this.apiName, '/contractors', postInit)
+      .post(this.apiName, '/property-contractor', postInit)
       .then(response => {
         var dbContractors = response.contractors;
         for(var i = 0; i < dbContractors.length; i++) {
@@ -94,10 +94,94 @@ export class PropertyDetailsPage implements OnInit {
       })
   }
 
+  async loadPotentialAssignments() {
+    this.loadPotentialContractors();
+    this.loadPotentialEmployees();
+  }
+
+  async loadPotentialContractors() {
+    API
+      .get(this.apiName, '/contractors', {})
+      .then(response => {
+        var dbContractors = response.contractors;
+        for(var i = 0; i < dbContractors.length; i++) {
+          var userRole = new UserRole();
+          userRole.roleId = dbContractors[i]["ROLE_ID"];
+          userRole.userRoleDescription = dbContractors[i]["USER_ROLE_DESCRIPTION"];
+
+          var user = new User();
+          user.userCognitoId = dbContractors[i]["USER_COGNITO_ID"];
+          user.role = userRole;
+          user.firstName = dbContractors[i]["FIRST_NAME"];
+          user.lastName = dbContractors[i]["LAST_NAME"];
+          user.email = dbContractors[i]["EMAIL"];
+          user.username = dbContractors[i]["USERNAME"];
+          user.ssn = dbContractors[i]["SSN"];
+
+          var contractorType = new ContractorType();
+          contractorType.contractorTypeId = dbContractors[i]["CONTRACTOR_TYPE_ID"];
+          contractorType.contractorTypeDescription = dbContractors[i]["CONTRACTOR_TYPE_DESCRIPTION"];
+
+          var contractor = new Contractor();
+          contractor.contractorCognitoId = dbContractors[i]["CONTRACTOR_COGNITO_ID"];
+          contractor.contractorUser = user;
+          contractor.contractorType = contractorType;
+          contractor.dateHired = dbContractors[i]['DATE_HIRED'] ? new Date(dbContractors[i]['DATE_HIRED'].substring(0, dbContractors[i]['DATE_HIRED'].lastIndexOf('.'))) : null;
+          contractor.startDate = dbContractors[i]['START_DATE'] ? new Date(dbContractors[i]['START_DATE'].substring(0, dbContractors[i]['START_DATE'].lastIndexOf('.'))) : null;
+          contractor.endDate = dbContractors[i]['END_DATE'] ? new Date(dbContractors[i]['END_DATE'].substring(0, dbContractors[i]['END_DATE'].lastIndexOf('.'))) : null;
+          contractor.company = dbContractors[i]["COMPANY"];
+            
+          this.potentialContractors.push(contractor);
+        }
+        console.log(this.potentialContractors);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
+  async loadPotentialEmployees() {
+    API
+      .get(this.apiName, '/employees', {})
+      .then(response => {
+        var dbEmployees = response.employees;
+        for(var i = 0; i < dbEmployees.length; i++) {
+          var userRole = new UserRole();
+          userRole.roleId = dbEmployees[i]["ROLE_ID"];
+          userRole.userRoleDescription = dbEmployees[i]["USER_ROLE_DESCRIPTION"];
+
+          var employee = new User();
+          employee.userCognitoId = dbEmployees[i]["USER_COGNITO_ID"];
+          employee.role = userRole;
+          employee.firstName = dbEmployees[i]["FIRST_NAME"];
+          employee.lastName = dbEmployees[i]["LAST_NAME"];
+          employee.email = dbEmployees[i]["EMAIL"];
+          employee.username = dbEmployees[i]["USERNAME"];
+          employee.ssn = dbEmployees[i]["SSN"];
+            
+          this.potentialCoordinators.push(employee);
+        }
+        console.log(this.potentialCoordinators);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
+  addContractor(event: any) {
+    console.log(event.detail.value);
+  }
+
+  addCoordinator(event: any) {
+    console.log(event.detail.value);
+  }
+
   editContractors() {
     $(function() {
       $(".edit-btn-contractors").addClass("d-none");
       $(".save-btn-contractors").removeClass("d-none");
+      $(".add-btn-contractors").removeClass("d-none");
+      $(".add-btn-coordinator").removeClass("d-none");
       $(".delete-btn-contractor").removeClass("d-none");
     });
   }
@@ -106,6 +190,8 @@ export class PropertyDetailsPage implements OnInit {
     $(function() {
       $(".edit-btn-contractors").removeClass("d-none");
       $(".save-btn-contractors").addClass("d-none");
+      $(".add-btn-contractors").addClass("d-none");
+      $(".add-btn-coordinator").addClass("d-none");
       $(".delete-btn-contractor").addClass("d-none");
     });
   }
@@ -131,7 +217,7 @@ export class PropertyDetailsPage implements OnInit {
         }
       };
       API
-      .del(this.apiName, '/contractors', deleteInit)
+      .del(this.apiName, '/property-contractor', deleteInit)
       .then(response => {})
       .catch(error => {
         console.log(error);
@@ -306,17 +392,17 @@ export class PropertyDetailsPage implements OnInit {
   editFiles(filetype: string) {
     $(function() {
       switch (filetype) {
-        case 'purchase':
+        case 'purchase_docs':
           $(".edit-btn-purchase").addClass("d-none");
           $(".save-btn-purchase").removeClass("d-none");
           $(".delete-btn-purchase").removeClass("d-none");
           break;
-        case 'utilities':
+        case 'utilities_docs':
           $(".edit-btn-utilities").addClass("d-none");
           $(".save-btn-utilities").removeClass("d-none");
           $(".delete-btn-utilities").removeClass("d-none");
           break;
-        case 'sales':
+        case 'sales_docs':
           $(".edit-btn-sales").addClass("d-none");
           $(".save-btn-sales").removeClass("d-none");
           $(".delete-btn-sales").removeClass("d-none");
@@ -328,17 +414,17 @@ export class PropertyDetailsPage implements OnInit {
   saveFiles(filetype: string) {
     $(function() {
       switch (filetype) {
-        case 'purchase':
+        case 'purchase_docs':
           $(".edit-btn-purchase").removeClass("d-none");
           $(".save-btn-purchase").addClass("d-none");
           $(".delete-btn-purchase").addClass("d-none");
           break;
-        case 'utilities':
+        case 'utilities_docs':
           $(".edit-btn-utilities").removeClass("d-none");
           $(".save-btn-utilities").addClass("d-none");
           $(".delete-btn-utilities").addClass("d-none");
           break;
-        case 'sales':
+        case 'sales_docs':
           $(".edit-btn-sales").removeClass("d-none");
           $(".save-btn-sales").addClass("d-none");
           $(".delete-btn-sales").addClass("d-none");
@@ -358,12 +444,15 @@ export class PropertyDetailsPage implements OnInit {
 
   async deleteFile(path: string, fileToDelete: string) {
     if (window.confirm("Are you sure that you want to DELETE this file?")) {
-      try {
-        await Storage.remove('properties/' + this.property.propertyId + '/' + path + '/' + fileToDelete, {});
-        this.getFiles(path);
-      } catch (err) {
-        console.log(err);
-      }  
+      Storage.remove('properties/' + this.property.propertyId + '/' + path + '/' + fileToDelete, {})
+        .then(response => {
+          this.getFiles(path).then(() => {
+            this.editFiles(path);
+          });          
+        })
+        .catch(error => {
+          console.log(error);
+        }); 
     }
   }
 

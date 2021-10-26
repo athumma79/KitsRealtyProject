@@ -72,20 +72,18 @@ export class ContractorsPage implements OnInit {
     }
   }
   
-  async filterList(evt) {
+  filterList(evt) {
     this.contractors = this.backupContractors;
     const searchTerm = evt.srcElement.value;
     if (!searchTerm) {
       return;
     }
     this.contractors = this.contractors.filter(contractor => {
-      switch(evt.srcElement.value){
-        case (contractor.contractorUser.lastName && searchTerm): return (contractor.contractorUser.lastName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
-        // case (contractor.contractorUser.lastName && searchTerm): return (contractor.contractorUser.lastName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
-        // case (contractor.contractorUser.email && searchTerm): return (contractor.contractorUser.email.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
-        // case (contractor.company && searchTerm): return (contractor.company.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
-        // case (contractor.contractorType.contractorTypeDescription && searchTerm): return (contractor.contractorType.contractorTypeDescription.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
-      }
+      return ((contractor.contractorUser.lastName) ? (contractor.contractorUser.lastName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) : false) ||
+      ((contractor.contractorUser.firstName) ? (contractor.contractorUser.firstName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) : false) ||
+      ((contractor.contractorUser.email) ? (contractor.contractorUser.email.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) : false) ||
+      ((contractor.company) ? (contractor.company.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) : false) ||
+      ((contractor.contractorType.contractorTypeDescription) ? (contractor.contractorType.contractorTypeDescription.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) : false);
     });
   }
 

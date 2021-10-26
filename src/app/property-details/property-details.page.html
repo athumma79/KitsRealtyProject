@@ -253,7 +253,7 @@
       </div>
     </div>
     <div class="accordion-item">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-C">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-C" (click)="loadPotentialAssignments()">
           Assignments
         </button>
       <div id="collapse-C" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
@@ -273,6 +273,20 @@
             </ion-item>
           </ion-list>
           <ion-button class="edit-btn-contractors" (click)="editContractors()">Edit</ion-button>
+          <ion-button class="add-btn-contractors d-none">
+            <ion-select class="hover" interface="popover" selected-text="Add Contractor" (ionChange)="addContractor($event)">
+              <ion-select-option *ngFor="let contractor of potentialContractors" [value]="contractor">
+                {{contractor.contractorUser.firstName}} {{contractor.contractorUser.lastName}} - {{contractor.contractorType.contractorTypeDescription}}
+              </ion-select-option>
+            </ion-select>
+          </ion-button>
+          <ion-button class="add-btn-coordinator d-none">
+            <ion-select class="hover" interface="popover" selected-text="Add Coordinator" (ionChange)="addCoordinator($event)">
+              <ion-select-option *ngFor="let coordinator of potentialCoordinators" [value]="coordinator">
+                {{coordinator.firstName}} {{coordinator.lastName}}
+              </ion-select-option>
+            </ion-select>
+          </ion-button>
           <ion-button class="save-btn-contractors d-none" (click)="saveContractors()">Save</ion-button>
         </div>
       </div>
@@ -299,8 +313,8 @@
         <div class="accordion-body">
           <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
           <ion-button (click)="uploadFile('purchase_docs')">Upload</ion-button>
-          <ion-button id="button" class="edit-btn-purchase" (click)="editFiles('purchase')">Edit</ion-button>
-          <ion-button id="button" class="save-btn-purchase d-none" (click)="saveFiles('purchase')">Save</ion-button>
+          <ion-button id="button" class="edit-btn-purchase" (click)="editFiles('purchase_docs')">Edit</ion-button>
+          <ion-button id="button" class="save-btn-purchase d-none" (click)="saveFiles('purchase_docs')">Done</ion-button>
           <ion-item-divider>
             <ion-label>Uploaded Files</ion-label>
           </ion-item-divider>
@@ -323,8 +337,8 @@
         <div class="accordion-body">
           <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
           <ion-button (click)="uploadFile('utilities_docs')">Upload</ion-button>
-          <ion-button id="button" class="edit-btn-utilities" (click)="editFiles('utilities')">Edit</ion-button>
-          <ion-button id="button" class="save-btn-utilities d-none" (click)="saveFiles('utilities')">Save</ion-button>
+          <ion-button id="button" class="edit-btn-utilities" (click)="editFiles('utilities_docs')">Edit</ion-button>
+          <ion-button id="button" class="save-btn-utilities d-none" (click)="saveFiles('utilities_docs')">Done</ion-button>
           <ion-item-divider>
             <ion-label>Uploaded Files</ion-label>
           </ion-item-divider>
@@ -347,8 +361,8 @@
         <div class="accordion-body">
           <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
           <ion-button (click)="uploadFile('sales_docs')">Upload</ion-button>
-          <ion-button id="button" class="edit-btn-sales" (click)="editFiles('sales')">Edit</ion-button>
-          <ion-button id="button" class="save-btn-sales d-none" (click)="saveFiles('sales')">Save</ion-button>
+          <ion-button id="button" class="edit-btn-sales" (click)="editFiles('sales_docs')">Edit</ion-button>
+          <ion-button id="button" class="save-btn-sales d-none" (click)="saveFiles('sales_docs')">Done</ion-button>
           <ion-item-divider>
             <ion-label>Uploaded Files</ion-label>
           </ion-item-divider>

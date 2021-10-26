@@ -29,8 +29,8 @@
         <p>Status: {{getRevenueStatus(revenue)}}</p>
         <p>Description: {{revenue.revenueDescription}}</p>
       </ion-label>
-      <ion-label>
-        <!--connected?-->
+      <ion-label slot="end">
+        <h3>{{getRevenueType(revenue)}}</h3>
       </ion-label>
     </ion-item>
   </ion-list>

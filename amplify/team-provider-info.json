@@ -36,7 +36,7 @@
       "function": {
         "KitsRealtyLambdaFunction2": {
           "deploymentBucketName": "amplify-kitsrealtyproject2-dev-155513-deployment",
-          "s3Key": "amplify-builds/KitsRealtyLambdaFunction2-2b513970505367564753-build.zip"
+          "s3Key": "amplify-builds/KitsRealtyLambdaFunction2-4f33434c4a5a504d3655-build.zip"
         }
       },
       "storage": {
