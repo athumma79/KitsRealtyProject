@@ -37,14 +37,14 @@
               <p *ngIf="property.address.county || property.address.zipcode">{{property.address.county}} <span *ngIf="property.address.county && property.address.zipcode">|</span> {{property.address.zipcode}}</p>
               <p *ngIf="property.status.propertyStatusDescription || property.essentials.propertyType">{{property.status.propertyStatusDescription}} <span *ngIf="property.status.propertyStatusDescription && property.essentials.propertyType">|</span> {{property.essentials.propertyType}}</p>
             </ion-label>
-            <ion-label class='right-side' slot="end">
-              <h3>${{getPriceByStatus(property)}}</h3>
-              <p>{{getPriceTypeByStatus(property)}}</p>
-            </ion-label>
           </ion-item>
         <div [attr.id]="'collapse-' + property.propertyId" class="accordion-collapse collapse" data-bs-parent="#accordion">
           <div class="accordion-body" id="body-items">
           <ion-list>
+            <ion-item>
+              <ion-label>{{getPriceTypeByStatus(property)}}</ion-label>
+              <ion-text>${{getPriceByStatus(property)}}</ion-text>
+            </ion-item>
             <ion-item>
               <ion-label>Bedrooms:</ion-label>
               <ion-text> {{property.essentials.numBeds}}</ion-text>
@@ -65,7 +65,7 @@
               <ion-label>Year Built:</ion-label>
               <ion-text> {{property.essentials.yearBuilt}}</ion-text>
             </ion-item>
-            <ion-item button id='detailsButton' (click)="openPropertyDetails(i)">View Details</ion-item>
+            <ion-item button class='detailsButton' (click)="openPropertyDetails(i)">View Details</ion-item>
           </ion-list>
           </div>
         </div>
