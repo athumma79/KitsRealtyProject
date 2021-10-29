@@ -5,6 +5,10 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+  },
+  {
+    path: 'add-user-form',
+    loadChildren: () => import('./add-user-form/add-user-form.module').then( m => m.AddUserFormPageModule)
   }
 ];
 

@@ -33,6 +33,10 @@ var pool = mysql.createPool({
   database: 'KITS_REALTY'
 })
 
+//AWS cognito
+var AWS = require('aws-sdk')
+var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider()
+
 /**********************
  * Example get method *
  **********************/
@@ -239,6 +243,31 @@ app.post('/properties', function(req, res) {
 
   })
 
+});
+
+app.post('/users', function(req, res) {
+  var params = {
+    UserPoolId: 'us-east-1_MQXokLX98',
+    Username: 'cjett@gmu.edu',
+    UserAttributes: [
+      {
+        Name: 'email',
+        Value: 'cjett@gmu.edu'
+      },
+    ],
+    ValidationData: [
+      {
+        Name: 'email_verified',
+        Value: 'true'
+      },
+    ]
+  };
+  
+  cognitoidentityserviceprovider.adminCreateUser(params, function(err, data) {
+    if (err) throw err
+
+    res.json(data);
+  });
 });
 
 app.post('/properties/*', function(req, res) {
@@ -452,7 +481,7 @@ app.listen(3000, function() {
 });
 
 function addQuotes(value) {
-  return value ? '"' + value + '"' : value;
+  return (typeof value == "string") && (value != null) ? `'${value}'` : value;
 }
 
 module.exports = app
