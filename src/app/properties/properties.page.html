@@ -29,15 +29,15 @@
     </div>
     <div class="accordion" id="accordion">
       <div class="accordion-item" *ngFor="let property of properties; index as i">
-          <ion-item  class="accordion-button collapsed description" lines='none' type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse-' + property.propertyId">
-            <ion-thumbnail size="large" [attr.class]="'thumbnail-' + property.propertyId" slot="start"></ion-thumbnail>
+          <div  class="accordion-button collapsed description" lines='none' type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse-' + property.propertyId">
+            <ion-thumbnail [attr.class]="'thumbnail-' + property.propertyId" slot="start"></ion-thumbnail>
             <ion-label>
               <h3>{{property.address.address}}</h3>
               <h3 *ngIf="property.address.city || property.address.state">{{property.address.city}}<span *ngIf="property.address.city && property.address.state">,</span> {{property.address.state}}</h3>
               <p *ngIf="property.address.county || property.address.zipcode">{{property.address.county}} <span *ngIf="property.address.county && property.address.zipcode">|</span> {{property.address.zipcode}}</p>
               <p *ngIf="property.status.propertyStatusDescription || property.essentials.propertyType">{{property.status.propertyStatusDescription}} <span *ngIf="property.status.propertyStatusDescription && property.essentials.propertyType">|</span> {{property.essentials.propertyType}}</p>
             </ion-label>
-          </ion-item>
+          </div>
         <div [attr.id]="'collapse-' + property.propertyId" class="accordion-collapse collapse" data-bs-parent="#accordion">
           <div class="accordion-body" id="body-items">
           <ion-list>

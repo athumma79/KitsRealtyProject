@@ -4,7 +4,7 @@ import { PropertyDetailsPage } from '../property-details/property-details.page';
 
 import { API, Storage } from 'aws-amplify';
 import * as $ from 'jquery';
-
+import { LoadingController } from '@ionic/angular';
 import { Property } from '../models/property.class';
 import { PropertyStatus } from '../models/property-status.class';
 import { OccupancyStatus } from '../models/occupancy-status.class';
@@ -27,7 +27,7 @@ export class PropertiesPage implements OnInit {
   apiName = 'KitsRealtyAPI2';
   filterTerm: string;
 
-  constructor(public modalController: ModalController) {}
+  constructor(public modalController: ModalController, public loadingController: LoadingController) {}
   
   ngOnInit() {
 
@@ -122,6 +122,7 @@ export class PropertiesPage implements OnInit {
           this.properties.push(property);
           this.backupProperties.push(property);
         }
+        this.dismissLoader();
         $(document).ready(function() {
           callback();
         });
@@ -129,6 +130,24 @@ export class PropertiesPage implements OnInit {
       .catch(error => {
         console.log(error);
       });
+  }
+  
+  dismissLoader() {
+    this.loadingController.dismiss().then((response) => {
+        console.log('Loader closed!', response);
+    }).catch((err) => {
+        console.log('Error occured : ', err);
+    });
+}
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      message: 'Please wait...',
+      duration: 1000
+    });
+    await loading.present();
+
+    const { role, data } = await loading.onDidDismiss();
+    console.log('Loading dismissed!');
   }
 
   sortProperties(e){
@@ -179,7 +198,7 @@ export class PropertiesPage implements OnInit {
     for (var i = 0; i < this.properties.length; i++) {
       var property = this.properties[i];
       await this.getThumbnail(this.properties[i], (response) => { 
-        $(".thumbnail-" + property.propertyId).append("<img src=\"" + response + "\">");
+        $(".thumbnail-" + property.propertyId).append("<img height='100px' width='auto'  src=\"" + response + "\">");
       })
     }
   }
@@ -188,6 +207,7 @@ export class PropertiesPage implements OnInit {
     await Storage.list("properties/" + property.propertyId + "/thumbnail/")
       .then(async response => {
         if (!response || response.length < 1) {
+          $(".thumbnail-" + property.propertyId).append("<img height='100px' width='auto'  src=\"/assets/placeholder-image.png\">");
           return;
         }
         await Storage.get(response[0].key)

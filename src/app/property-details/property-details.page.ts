@@ -224,7 +224,7 @@ export class PropertyDetailsPage implements OnInit {
       });
     }
   }
-
+  noRevenues=false;
   async loadRevenues() {
     const postInit = {
       body: {
@@ -253,6 +253,9 @@ export class PropertyDetailsPage implements OnInit {
           revenue.dateIncurred = dbRevenues[i]['DATE_INCURRED'] ? new Date(dbRevenues[i]['DATE_INCURRED'].substring(0, dbRevenues[i]['DATE_INCURRED'].lastIndexOf('.'))) : null;
             
           this.revenues.push(revenue);
+        }
+        if(this.revenues.length < 1){
+          this.noRevenues=true;
         }
       })
       .catch(err => {

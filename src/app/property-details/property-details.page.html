@@ -8,7 +8,7 @@
 <ion-content>
   <ion-item>  
     <img *ngIf="!noThumbnail" height="fit-content" width="80%" src="#" class="thumbnail" />
-    <ion-icon *ngIf="noThumbnail" name="image-outline"></ion-icon>
+    <img *ngIf="noThumbnail" height="fit-content" width="80%" src="/assets/placeholder-image.png" class="thumbnail" >
   </ion-item>
 
 
@@ -168,11 +168,10 @@
       <ion-label>County assessment: </ion-label>
       <ion-input [(ngModel)]="property.countyAssessment" readonly></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-label>Zillow link: </ion-label>
-        <ion-input [(ngModel)]="property.essentials.zillowLink" readonly></ion-input>
+    <ion-item details='true' href={{property.essentials.zillowLink}} target='_blank'>
+      Zillow Link
       </ion-item>
-    <ion-item lines='none'>
+    <ion-item >
       <ion-label position='top'>Notes: </ion-label>
       <ion-textarea       
       [(ngModel)]="property.notes"
@@ -184,7 +183,7 @@
   <div class="accordion" id="modal-accordion">
     <div class="accordion-item">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-A">
-          Financials
+        <h4>Financials</h4>
       </button>
       <div id="collapse-A" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
@@ -236,10 +235,11 @@
     </div>
     <div class="accordion-item">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-B" (click)="colorCodeRevenueAmounts()">
-          Revenues
+          <h4>Revenues</h4>
         </button>
       <div id="collapse-B" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
+          <h3 id='noRevenues' *ngIf='noRevenues'>No Revenues Yet</h3>
           <ion-list *ngFor="let revenue of revenues; index as i">
             <ion-item (click)="openRevenueDetails(i)">
               <ion-label>
@@ -254,7 +254,7 @@
     </div>
     <div class="accordion-item">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-C" (click)="loadPotentialAssignments()">
-          Assignments
+          <h4>Assignments</h4>
         </button>
       <div id="collapse-C" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
@@ -293,7 +293,7 @@
     </div>
     <div class="accordion-item">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-D">
-          Remodeling Progress Images
+          <h4>Remodeling Progress Images</h4>
         </button>
       <div id="collapse-D" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
@@ -307,11 +307,11 @@
     </div>
     <div class="accordion-item">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-E" (click)="getFiles('purchase_docs')">
-          Purchase Documents
+          <h4>Purchase Documents</h4>
         </button>
       <div id="collapse-E" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-          <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
+          <input type="file" (change)="selectFileToUpload($event)"/>
           <ion-button (click)="uploadFile('purchase_docs')">Upload</ion-button>
           <ion-button id="button" class="edit-btn-purchase" (click)="editFiles('purchase_docs')">Edit</ion-button>
           <ion-button id="button" class="save-btn-purchase d-none" (click)="saveFiles('purchase_docs')">Done</ion-button>
@@ -331,11 +331,11 @@
     </div>
     <div class="accordion-item">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-F" (click)="getFiles('utilities_docs')">
-          Utilities Documents
+          <h4>Utilities Documents</h4>
         </button>
       <div id="collapse-F" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-          <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
+          <input type="file" (change)="selectFileToUpload($event)"/>
           <ion-button (click)="uploadFile('utilities_docs')">Upload</ion-button>
           <ion-button id="button" class="edit-btn-utilities" (click)="editFiles('utilities_docs')">Edit</ion-button>
           <ion-button id="button" class="save-btn-utilities d-none" (click)="saveFiles('utilities_docs')">Done</ion-button>
@@ -355,11 +355,11 @@
     </div>
     <div class="accordion-item">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-G" (click)="getFiles('sales_docs')">
-          Sales Documents
+          <h4>Sales Documents</h4>
         </button>
       <div id="collapse-G" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-          <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
+          <input type="file" (change)="selectFileToUpload($event)"/>
           <ion-button (click)="uploadFile('sales_docs')">Upload</ion-button>
           <ion-button id="button" class="edit-btn-sales" (click)="editFiles('sales_docs')">Edit</ion-button>
           <ion-button id="button" class="save-btn-sales d-none" (click)="saveFiles('sales_docs')">Done</ion-button>

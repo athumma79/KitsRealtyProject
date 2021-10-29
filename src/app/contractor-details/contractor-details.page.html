@@ -15,11 +15,11 @@
     <ion-list>
       <ion-item>
         <ion-label>Email:</ion-label>
-        <ion-input [(ngModel)]="contractor.contractorUser.email" readonly></ion-input>
+      <ion-input [(ngModel)]='contractor.contractorUser.email' readonly></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Type:</ion-label>
-        <ion-input [(ngModel)]="contractor.contractorType.contractorTypeDescription" readonly></ion-input>
+        <ion-input [(ngModel)]='contractor.contractorType.contractorTypeDescription' readonly></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Company:</ion-label>
@@ -33,7 +33,7 @@
         <ion-label>Start date:</ion-label>
         <ion-input [ngModel]="getFormattedDate(contractor.startDate)" (ngModelChange)="updateDate($event, 'start_date')" readonly></ion-input>
       </ion-item>
-      <ion-item>
+      <ion-item lines='none'>
         <ion-label>End date:</ion-label>
         <ion-input [ngModel]="getFormattedDate(contractor.endDate)" (ngModelChange)="updateDate($event, 'end_date')" readonly></ion-input>
       </ion-item>

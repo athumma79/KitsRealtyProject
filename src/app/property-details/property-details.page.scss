@@ -21,7 +21,7 @@ ion-item img{
 
 
 ion-item-divider{
-    --background: #3880ff;
+    --background: #46addd;
     --color: white;
     text-align: center;
 }
@@ -37,7 +37,7 @@ ion-label{
 }
 
 .accordion-item {
-    border-top: 0 !important;
+    border-top: 1 !important;
     }
 
 .accordion{
@@ -45,3 +45,17 @@ ion-label{
     margin-left: 0.5em;
     margin-right: 0.5em;
     }
+#noRevenues{
+    text-align: center;
+}    
+
+button{
+    height: 3em;
+}
+h4{
+    color: #3174e7;
+}
+
+#button{
+    align-items: flex-end;
+}

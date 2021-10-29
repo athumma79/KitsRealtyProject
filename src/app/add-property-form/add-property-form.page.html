@@ -8,9 +8,11 @@
 <ion-content>
   <ion-item id='inline'>
     <ion-label>Select thumbnail: </ion-label>
-    <input type="file" (input)="updateInput('thumbnail', $event)" onchange="document.getElementById('thumbnail-output').src = window.URL.createObjectURL(this.files[0])">
-    <ion-thumbnail><img id="thumbnail-output" width="20%" height="20%"/></ion-thumbnail>
+    <input type="file" text='Choose Thumbnail' (input)="updateInput('thumbnail', $event)" onchange="document.getElementById('thumbnail-output').src = window.URL.createObjectURL(this.files[0])">
   </ion-item>
+  <ion-item>
+    <img height='auto' width='80%' id="thumbnail-output"/>
+  </ion-item>  
   <ion-list>
     <ion-item>
       <ion-label>Address: </ion-label>
