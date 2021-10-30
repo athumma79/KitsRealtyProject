@@ -57,7 +57,6 @@ export class RevenuesPage implements OnInit {
           user.firstName = dbRevenues[i]["FIRST_NAME"];
           user.lastName = dbRevenues[i]["LAST_NAME"];
           user.email = dbRevenues[i]["EMAIL"];
-          user.username = dbRevenues[i]["USERNAME"];
           user.ssn = dbRevenues[i]["SSN"];
 
           let contractorType = new ContractorType();
@@ -91,7 +90,6 @@ export class RevenuesPage implements OnInit {
           coordinator.firstName = dbRevenues[i]["FIRST_NAME"];
           coordinator.lastName = dbRevenues[i]["LAST_NAME"];
           coordinator.email = dbRevenues[i]["EMAIL"];
-          coordinator.username = dbRevenues[i]["USERNAME"];
           coordinator.ssn = dbRevenues[i]["SSN"];
           
           var propertyAuction = new PropertyAuction();

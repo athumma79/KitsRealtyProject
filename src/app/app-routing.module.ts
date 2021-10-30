@@ -9,6 +9,10 @@ const routes: Routes = [
   {
     path: 'add-user-form',
     loadChildren: () => import('./add-user-form/add-user-form.module').then( m => m.AddUserFormPageModule)
+  },
+  {
+    path: 'user-details',
+    loadChildren: () => import('./user-details/user-details.module').then( m => m.UserDetailsPageModule)
   }
 ];
 

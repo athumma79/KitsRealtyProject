@@ -112,6 +112,24 @@ app.get('/employees', function(req, res) {
 
 });
 
+app.get('/users', function(req, res) {
+  pool.getConnection(function(error, connection) {
+
+    var query = "SELECT * \
+    FROM USERS \
+    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID;"
+
+    connection.query(query, function(err, rows, fields) {
+      if (err) throw err
+
+      res.json({ users: rows })
+
+      connection.release()
+    })
+
+  })
+});
+
 app.get('/properties/*', function(req, res) {
   // Add your code here
   res.json({success: 'get call succeed!', url: req.url});
@@ -246,13 +264,15 @@ app.post('/properties', function(req, res) {
 });
 
 app.post('/users', function(req, res) {
-  var params = {
+  let user = req.body.user
+
+  var createUserParams = {
     UserPoolId: 'us-east-1_MQXokLX98',
-    Username: 'cjett@gmu.edu',
+    Username: user.email,
     UserAttributes: [
       {
         Name: 'email',
-        Value: 'cjett@gmu.edu'
+        Value: user.email
       },
     ],
     ValidationData: [
@@ -263,10 +283,32 @@ app.post('/users', function(req, res) {
     ]
   };
   
-  cognitoidentityserviceprovider.adminCreateUser(params, function(err, data) {
+  cognitoidentityserviceprovider.adminCreateUser(createUserParams, function(err, data) {
     if (err) throw err
 
-    res.json(data);
+    let addToGroupParams = {
+      GroupName: user.role.userRoleDescription.toLowerCase(),
+      Username: data.User.Username,
+      UserPoolId: 'us-east-1_MQXokLX98'
+    };
+
+    cognitoidentityserviceprovider.adminAddUserToGroup(addToGroupParams, function(err, data) {
+      if (err) throw err
+
+      pool.getConnection(function(error, connection) {
+
+        var query = `INSERT INTO USERS (USER_COGNITO_ID, ROLE_ID, FIRST_NAME, LAST_NAME, EMAIL)
+        VALUES (${addQuotes(addToGroupParams.Username)}, ${addQuotes(user.role.roleId)}, ${addQuotes(user.firstName)}, ${addQuotes(user.lastName)}, ${addQuotes(user.email)})`
+    
+        connection.query(query, function(err, rows, fields) {
+          if (err) throw err
+    
+          res.json()
+    
+          connection.release()
+        })
+      })
+    });
   });
 });
 
@@ -359,6 +401,25 @@ app.put('/contractors', function(req, res) {
 
     res.json()
     connection.release()
+  })
+});
+
+app.put('/users', function(req, res) {
+  let user = req.body.user;
+
+  pool.getConnection(function(error, connection) {
+
+    var query = `UPDATE USERS
+      SET ROLE_ID = ${addQuotes(user.role.roleId)}, FIRST_NAME = ${addQuotes(user.firstName)}, LAST_NAME = ${addQuotes(user.lastName)}
+      WHERE USER_COGNITO_ID = ${addQuotes(user.userCognitoId)};`
+
+    connection.query(query, function(err, rows, fields) {
+      if (err) throw err
+
+      res.json()
+
+      connection.release()
+    })
   })
 });
 

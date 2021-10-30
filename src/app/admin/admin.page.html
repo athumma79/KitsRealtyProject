@@ -11,4 +11,27 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+  <div id='tools'>
+    <div class='buttonbox'>
+      <ion-label >Sort By:</ion-label>
+        <ion-select  class="hover" placeholder="Filter" (ionChange)="sortUsers($event)">
+          <ion-select-option value="firstName">First Name</ion-select-option>
+          <ion-select-option value="lastName">Last Name</ion-select-option>
+          <ion-select-option value="email">Email</ion-select-option>
+          <ion-select-option value="role">Role</ion-select-option>
+        </ion-select>
+      </div>
+      <ion-searchbar showcancelbutton="" (ionInput)="filterList($event)"></ion-searchbar>
+    </div>
+    <ion-list *ngFor="let user of users; index as i">
+      <ion-item button (click)="openUserDetails(i)" details='true'>
+        <ion-label>
+          <h3>{{user.firstName}} {{user.lastName}}</h3>
+          <p>Email: {{user.email}}</p>
+        </ion-label>
+        <ion-label slot="end">
+          <h3>{{user.role.userRoleDescription}}</h3>
+        </ion-label>
+      </ion-item>
+    </ion-list>
 </ion-content>

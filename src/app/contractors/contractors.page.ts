@@ -37,7 +37,6 @@ export class ContractorsPage implements OnInit {
           user.firstName = dbContractors[i]["FIRST_NAME"];
           user.lastName = dbContractors[i]["LAST_NAME"];
           user.email = dbContractors[i]["EMAIL"];
-          user.username = dbContractors[i]["USERNAME"];
           user.ssn = dbContractors[i]["SSN"];
 
           let contractorType = new ContractorType();

@@ -70,7 +70,6 @@ export class PropertyDetailsPage implements OnInit {
           user.firstName = dbContractors[i]["FIRST_NAME"];
           user.lastName = dbContractors[i]["LAST_NAME"];
           user.email = dbContractors[i]["EMAIL"];
-          user.username = dbContractors[i]["USERNAME"];
           user.ssn = dbContractors[i]["SSN"];
 
           var contractorType = new ContractorType();
@@ -115,7 +114,6 @@ export class PropertyDetailsPage implements OnInit {
           user.firstName = dbContractors[i]["FIRST_NAME"];
           user.lastName = dbContractors[i]["LAST_NAME"];
           user.email = dbContractors[i]["EMAIL"];
-          user.username = dbContractors[i]["USERNAME"];
           user.ssn = dbContractors[i]["SSN"];
 
           var contractorType = new ContractorType();
@@ -156,7 +154,6 @@ export class PropertyDetailsPage implements OnInit {
           employee.firstName = dbEmployees[i]["FIRST_NAME"];
           employee.lastName = dbEmployees[i]["LAST_NAME"];
           employee.email = dbEmployees[i]["EMAIL"];
-          employee.username = dbEmployees[i]["USERNAME"];
           employee.ssn = dbEmployees[i]["SSN"];
             
           this.potentialCoordinators.push(employee);

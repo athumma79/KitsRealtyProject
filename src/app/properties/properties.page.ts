@@ -62,7 +62,6 @@ export class PropertiesPage implements OnInit {
           coordinator.firstName = dbProperties[i]["FIRST_NAME"];
           coordinator.lastName = dbProperties[i]["LAST_NAME"];
           coordinator.email = dbProperties[i]["EMAIL"];
-          coordinator.username = dbProperties[i]["USERNAME"];
           coordinator.ssn = dbProperties[i]["SSN"];
           
           var propertyAuction = new PropertyAuction();

@@ -7,4 +7,28 @@
 
 <ion-content>
 
+  <ion-list>
+    <ion-item>
+      <ion-label>First Name: </ion-label>
+      <ion-input required (input)="updateInput('first_name', $event)"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Last Name: </ion-label>
+      <ion-input required (input)="updateInput('last_name', $event)"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Email: </ion-label>
+      <ion-input required (input)="updateInput('email', $event)"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Role: </ion-label>
+      <ion-select (ionChange)="updateInput('role', $event)">
+        <ion-select-option value="1">Admin</ion-select-option>
+        <ion-select-option value="3">Employee</ion-select-option>
+        <ion-select-option value="2">Contractor</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <ion-button (click)="submit()">Submit</ion-button>
+
 </ion-content>
