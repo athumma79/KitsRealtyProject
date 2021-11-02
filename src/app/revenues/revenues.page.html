@@ -22,8 +22,8 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <ion-list *ngFor="let revenue of revenues; index as i">
-    <ion-item button (click)="openRevenueDetails(i)" details='true'>
+  <ion-list >
+    <ion-item button (click)="openRevenueDetails(i)" details='true' *ngFor="let revenue of revenues; index as i">
       <ion-label>
         <h3>{{revenue.revenueType}}: <span [ngStyle]="{'color': this.revenues[i].revenueType.toLowerCase() == 'profit' ? 'green' : 'red'}">{{getFormattedRevenueAmount(revenue)}}</span></h3>
         <p>Status: {{getRevenueStatus(revenue)}}</p>

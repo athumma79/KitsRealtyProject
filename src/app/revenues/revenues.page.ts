@@ -19,6 +19,7 @@ import { PropertyLoan } from '../models/property-loan.class';
 import { PropertyPrices } from '../models/property-prices.class';
 import { PropertyStatus } from '../models/property-status.class';
 import { RevenueDetailsPage } from '../revenue-details/revenue-details.page';
+import { AddRevenueFormPage } from '../add-revenue-form/add-revenue-form.page';
 
 @Component({
   selector: 'app-revenues',
@@ -32,6 +33,7 @@ export class RevenuesPage implements OnInit {
   revenues: Revenue[] = new Array();
   backupRevenues: Revenue[] = new Array();
   property = new Property();
+  contractor = new Contractor();
 
   constructor(public modalController: ModalController, public loadingController: LoadingController) { }
 
@@ -49,30 +51,30 @@ export class RevenuesPage implements OnInit {
           expenseStatus.expenseStatusId = dbRevenues[i]['EXPENSE_STATUS_ID'];
           expenseStatus.expenseStatusDescription = dbRevenues[i]['EXPENSE_STATUS_DESCRIPTION'];
           
-          let userRole = new UserRole();
-          userRole.roleId = dbRevenues[i]["ROLE_ID"];
-          userRole.userRoleDescription = dbRevenues[i]["USER_ROLE_DESCRIPTION"];
+          // let userRole = new UserRole();
+          // userRole.roleId = dbRevenues[i]["ROLE_ID"];
+          // userRole.userRoleDescription = dbRevenues[i]["USER_ROLE_DESCRIPTION"];
 
-          let user = new User();
-          user.userCognitoId = dbRevenues[i]["USER_COGNITO_ID"];
-          user.role = userRole;
-          user.firstName = dbRevenues[i]["FIRST_NAME"];
-          user.lastName = dbRevenues[i]["LAST_NAME"];
-          user.email = dbRevenues[i]["EMAIL"];
-          user.ssn = dbRevenues[i]["SSN"];
+          // let user = new User();
+          // user.userCognitoId = dbRevenues[i]["USER_COGNITO_ID"];
+          // user.role = userRole;
+          // user.firstName = dbRevenues[i]["FIRST_NAME"];
+          // user.lastName = dbRevenues[i]["LAST_NAME"];
+          // user.email = dbRevenues[i]["EMAIL"];
+          // user.ssn = dbRevenues[i]["SSN"];
 
-          let contractorType = new ContractorType();
-          contractorType.contractorTypeId = dbRevenues[i]["CONTRACTOR_TYPE_ID"];
-          contractorType.contractorTypeDescription = dbRevenues[i]["CONTRACTOR_TYPE_DESCRIPTION"];
+          // let contractorType = new ContractorType();
+          // contractorType.contractorTypeId = dbRevenues[i]["CONTRACTOR_TYPE_ID"];
+          // contractorType.contractorTypeDescription = dbRevenues[i]["CONTRACTOR_TYPE_DESCRIPTION"];
 
-          let contractor = new Contractor();
-          contractor.contractorCognitoId = dbRevenues[i]["CONTRACTOR_COGNITO_ID"];
-          contractor.contractorUser = user;
-          contractor.contractorType = contractorType;
-          contractor.dateHired = dbRevenues[i]['DATE_HIRED'] ? new Date(dbRevenues[i]['DATE_HIRED'].substring(0, dbRevenues[i]['DATE_HIRED'].lastIndexOf('.'))) : null;
-          contractor.startDate = dbRevenues[i]['START_DATE'] ? new Date(dbRevenues[i]['START_DATE'].substring(0, dbRevenues[i]['START_DATE'].lastIndexOf('.'))) : null;
-          contractor.endDate = dbRevenues[i]['END_DATE'] ? new Date(dbRevenues[i]['END_DATE'].substring(0, dbRevenues[i]['END_DATE'].lastIndexOf('.'))) : null;
-          contractor.company = dbRevenues[i]["COMPANY"];
+          //let contractor = new Contractor();
+          this.contractor.contractorCognitoId = dbRevenues[i]["CONTRACTOR_COGNITO_ID"];
+          // contractor.contractorUser = user;
+          // contractor.contractorType = contractorType;
+          // contractor.dateHired = dbRevenues[i]['DATE_HIRED'] ? new Date(dbRevenues[i]['DATE_HIRED'].substring(0, dbRevenues[i]['DATE_HIRED'].lastIndexOf('.'))) : null;
+          // contractor.startDate = dbRevenues[i]['START_DATE'] ? new Date(dbRevenues[i]['START_DATE'].substring(0, dbRevenues[i]['START_DATE'].lastIndexOf('.'))) : null;
+          // contractor.endDate = dbRevenues[i]['END_DATE'] ? new Date(dbRevenues[i]['END_DATE'].substring(0, dbRevenues[i]['END_DATE'].lastIndexOf('.'))) : null;
+          // contractor.company = dbRevenues[i]["COMPANY"];
 
           // var propertyStatus = new PropertyStatus();
           // propertyStatus.statusId = dbRevenues[i]["STATUS_ID"];
@@ -150,7 +152,7 @@ export class RevenuesPage implements OnInit {
           let revenue = new Revenue();
           revenue.revenueId = dbRevenues[i]['REVENUE_ID'];
           revenue.property = this.setProperty();
-          revenue.contractor = dbRevenues[i]['CONTRACTOR_COGNITO_ID'] ? contractor : null;
+          revenue.contractor = this.setContractor();
           revenue.expenseStatus = expenseStatus;
           revenue.revenueAmount = dbRevenues[i]['REVENUE_AMOUNT'];
           revenue.revenueType = dbRevenues[i]['REVENUE_TYPE'];
@@ -162,10 +164,18 @@ export class RevenuesPage implements OnInit {
           this.revenues.push(revenue);
           this.backupRevenues.push(revenue);
         }
+        console.log(this.revenues)
       })
       .catch(err => {
         console.log(err);
       })
+  }
+  setContractor(){
+    for(var i = 0; i < this.contractors.length; i++) {
+      if (this.contractor.contractorCognitoId && this.contractor.contractorCognitoId == this.contractors[i].contractorCognitoId) {
+        return this.contractors[i]
+      }
+    }
   }
   setProperty() {
     for(var i = 0; i < this.properties.length; i++) {
@@ -175,9 +185,46 @@ export class RevenuesPage implements OnInit {
     }
   }
   properties: Property[] = new Array();
-  backupProperties: Property[] = new Array();
+  contractors: Contractor[] = new Array();
 
   async loadConnections(callback) {
+    API
+      .get(this.apiName, '/contractors', {})
+      .then(response => {
+        let dbContractors = response.contractors;
+        for(var i = 0; i < dbContractors.length; i++) {
+          let userRole = new UserRole();
+          userRole.roleId = dbContractors[i]["ROLE_ID"];
+          userRole.userRoleDescription = dbContractors[i]["USER_ROLE_DESCRIPTION"];
+
+          let user = new User();
+          user.userCognitoId = dbContractors[i]["USER_COGNITO_ID"];
+          user.role = userRole;
+          user.firstName = dbContractors[i]["FIRST_NAME"];
+          user.lastName = dbContractors[i]["LAST_NAME"];
+          user.email = dbContractors[i]["EMAIL"];
+          user.ssn = dbContractors[i]["SSN"];
+
+          let contractorType = new ContractorType();
+          contractorType.contractorTypeId = dbContractors[i]["CONTRACTOR_TYPE_ID"];
+          contractorType.contractorTypeDescription = dbContractors[i]["CONTRACTOR_TYPE_DESCRIPTION"];
+
+          let contractor = new Contractor();
+          contractor.contractorCognitoId = dbContractors[i]["CONTRACTOR_COGNITO_ID"];
+          contractor.contractorUser = user;
+          contractor.contractorType = contractorType;
+          contractor.dateHired = dbContractors[i]["DATE_HIRED"];
+          contractor.startDate = dbContractors[i]["START_DATE"];
+          contractor.endDate = dbContractors[i]["END_DATE"];
+          contractor.company = dbContractors[i]["COMPANY"];
+          
+          this.contractors.push(contractor);
+        }
+        console.log(this.contractors);
+      })
+      .catch(error => {
+        console.log(error);
+      });
     API
       .get(this.apiName, '/properties', {})
       .then(response => {
@@ -258,7 +305,6 @@ export class RevenuesPage implements OnInit {
           property.notes = dbProperties[i]["NOTES"];
 
           this.properties.push(property);
-          this.backupProperties.push(property);
         }
         this.dismissLoader();
         $(document).ready(function() {
@@ -282,7 +328,7 @@ export class RevenuesPage implements OnInit {
     switch(role){
       case "Property": return "home-sharp"
       case "Contractor": return "hammer-sharp"
-      case "Company": return "folder-sharp"
+      case "General": return "folder-sharp"
     }
   }
 
@@ -327,24 +373,23 @@ export class RevenuesPage implements OnInit {
   }
 
   getRevenueType(revenue: Revenue) {
-    if (revenue.property.propertyId) {
+    if (revenue.property && revenue.property.propertyId) {
       return "Property";
     }
-    if (revenue.contractor.contractorCognitoId) {
+    if (revenue.contractor && revenue.contractor.contractorCognitoId) {
       return "Contractor";
     }
-    return "Company";
+    return "General";
   }
 
   getRevenueValue(revenue: Revenue) {
-    if (revenue.property.propertyId) {
-      console.log(revenue);
+    if (revenue.property && revenue.property.propertyId) {
       return revenue.property.address.address;
     }
-    if (revenue.contractor.contractorCognitoId) {
-      return revenue.contractor.contractorUser.firstName + " " + revenue.contractor.contractorUser.lastName + " - " + revenue.contractor.contractorType;
+    if (revenue.contractor && revenue.contractor.contractorCognitoId) {
+      return revenue.contractor.contractorUser.firstName + " " + revenue.contractor.contractorUser.lastName + " - " + revenue.contractor.contractorType.contractorTypeDescription;
     }
-    return "Company";
+    return "General";
   }
 
   async openRevenueDetails(index: number) {
@@ -356,5 +401,16 @@ export class RevenuesPage implements OnInit {
     });
     return await revenueDetailsModal.present();
   }
+
+async openAddRevenueForm() {
+  const addRevenueFormPage = await this.modalController.create({
+    component: AddRevenueFormPage,
+    componentProps: {
+      'properties': this.properties,
+      'contractors': this.contractors
+    }
+  });
+  return await addRevenueFormPage.present();
+}
 
 }

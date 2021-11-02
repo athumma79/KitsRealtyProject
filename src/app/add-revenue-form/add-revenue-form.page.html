@@ -1,9 +1,84 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>add-revenue-form</ion-title>
+    <ion-title>Add Revenue</ion-title>
+    <i class="fal fa-times-circle" (click)='dismiss()' slot="end"></i>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <!-- revenueId: number
+  property: Property
+  contractor: Contractor
+  expenseStatus: ExpenseStatus
+  revenueAmount: number
+  revenueType: string
+  expenseDueDate: Date
+  amountPaid: number
+  revenueDescription: string
+  dateIncurred: Date -->
+  <form action='#'>
+  <ion-list>
+      <ion-item>
+        <ion-label>Entity: </ion-label>
+        <ion-select required placeholder='Type' (ngModel)='revenueTypeChoice' (ionChange)="updateInput('revenueTypeChoice', $event)">
+          <ion-select-option value='property'>Property</ion-select-option>
+          <ion-select-option value='contractor'>Contractor</ion-select-option>
+          <ion-select-option value='general'>General</ion-select-option>
+        </ion-select>
+      </ion-item>
 
+      <ion-item *ngIf="revenueTypeChoice == 'contractor'">
+        <ion-label position='fixed' >Contractor: </ion-label>
+        <ion-select interface='action-sheet' placeholder="Contractor" (ionChange)="updateInput('contractor', $event)">
+          <ion-select-option *ngFor="let contractor of contractors" [value]="contractor">
+            {{contractor.contractorUser.firstName}} {{contractor.contractorUser.lastName}} - {{contractor.contractorType.contractorTypeDescription}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item *ngIf="revenueTypeChoice == 'property'">
+        <ion-label position='fixed' >Property:</ion-label>
+          <ion-select required interface='action-sheet' placeholder="Property" (ionChange)="updateInput('property', $event)">
+            <ion-select-option *ngFor="let property of properties" [value]="property">
+              {{property.address.address}} - {{property.address.city}}, {{property.address.state}}
+            </ion-select-option>
+          </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Revenue Type: </ion-label>
+          <ion-select placeholder="Status" (ionChange)="updateInput('revenue_type', $event)">
+            <ion-select-option value='Profit'>Profit</ion-select-option>
+            <ion-select-option value='Expense'>Expense</ion-select-option>
+          </ion-select>
+      </ion-item>
+      <ion-item *ngIf="revenue.revenueType == 'Expense'">
+        <ion-label>Expense Status: </ion-label>
+          <ion-select placeholder="Status" (ionChange)="updateInput('expense_status', $event)">
+            <ion-select-option value='2'>Outstanding</ion-select-option>
+            <ion-select-option value='1'>Paid</ion-select-option>
+          </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Amount: </ion-label>
+        <ion-input (input)="updateInput('amount', $event)"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="revenue.revenueType == 'Expense'">
+        <ion-label>Amount Paid: </ion-label>
+        <ion-input (input)="updateInput('amount_paid', $event)"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Date Incurred: </ion-label>
+        <ion-input type='date' (input)="updateInput('date_incurred', $event)"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="revenue.revenueType == 'Expense'">
+        <ion-label>Due Date: </ion-label>
+        <ion-input type='date' (input)="updateInput('due_date', $event)"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Description: </ion-label>
+        <ion-input (input)="updateInput('description', $event)"></ion-input>
+      </ion-item>
+    </ion-list>
+    <ion-button type='submit' (click)="submit()">Submit</ion-button>
+    </form>
+  
 </ion-content>
