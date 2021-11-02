@@ -21,9 +21,10 @@ ion-item img{
 
 
 ion-item-divider{
-    --background: #46addd;
+    --background: #2978f8;
     --color: white;
     text-align: center;
+    height: 2.2em;
 }
 
 amplify-s3-album{
@@ -48,14 +49,16 @@ ion-label{
 #noRevenues{
     text-align: center;
 }    
-
 button{
     height: 3em;
 }
-h4{
-    color: #3174e7;
+
+#deleteButton{
+    float: right;
+    margin: 3%;
 }
 
-#button{
-    align-items: flex-end;
+.button{
+    height: 2.2em;
+    padding: auto;
 }

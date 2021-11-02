@@ -74,6 +74,15 @@ export class AdminPage implements OnInit {
     });
   }
 
+  getSymbol(role){
+    console.log(role);
+    switch(role){
+      case "Admin": return "cog-sharp"
+      case "Employee": return "person-circle"
+      case "Contractor": return "hammer-sharp"
+    }
+  }
+
   async openAddUserForm() {
     const addUserFormModal = await this.modalController.create({
       component: AddUserFormPage

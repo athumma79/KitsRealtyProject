@@ -6,6 +6,7 @@ import { Contractor } from '../models/contractor.class';
 import { UserRole } from '../models/user-role.class';
 import { User } from '../models/user.class';
 import { ModalController } from '@ionic/angular';
+import { AddContractorFormPage } from '../add-contractor-form/add-contractor-form.page';
 
 @Component({
   selector: 'app-contractors',
@@ -86,6 +87,16 @@ export class ContractorsPage implements OnInit {
     });
   }
 
+  getSymbol(role){
+    switch(role){
+      case "Research": return "search-sharp"
+      case "Bidding": return "hand-right-sharp"
+      case "Remodel": return "hammer-sharp"
+      case "Real Estate": return "home-sharp"
+      case "Tax": return "file-tray-full-sharp"
+    }
+  }
+
   async openContractorDetails(index: number) {
     const contractorDetailsModal = await this.modalController.create({
       component: ContractorDetailsPage,
@@ -95,5 +106,13 @@ export class ContractorsPage implements OnInit {
     });
     return await contractorDetailsModal.present();
   }
+
+  async openAddContractorForm() {
+    const addContractorFormModal = await this.modalController.create({
+      component: AddContractorFormPage
+    });
+    return await addContractorFormModal.present();
+  }
+
 
 }

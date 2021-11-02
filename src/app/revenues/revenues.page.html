@@ -3,20 +3,20 @@
     <h2><strong>Revenues</strong></h2>
     <amplify-sign-out slot='end'></amplify-sign-out>
 </ion-toolbar>
+<div id='tools'>  
+  <div class='buttonbox'>    
+    <ion-label >Sort By:</ion-label>
+    <ion-select class="hover" placeholder="Filter" (ionChange)="sortProperties($event)">
+      <ion-select-option value="type">Type</ion-select-option>
+      <ion-select-option value="description">Description</ion-select-option>
+      <ion-select-option value="amount">Amount</ion-select-option>
+      <ion-select-option value="amountPaid">Amount Paid</ion-select-option>
+     </ion-select>
+    </div>   
+    <ion-searchbar showcancelbutton="" (ionInput)="filterList($event)"></ion-searchbar>
+  </div>
 </ion-header>
 <ion-content>    
-    <div id='tools'>  
-      <div class='buttonbox'>    
-        <ion-label >Sort By:</ion-label>
-        <ion-select class="hover" placeholder="Filter" (ionChange)="sortProperties($event)">
-          <ion-select-option value="type">Type</ion-select-option>
-          <ion-select-option value="description">Description</ion-select-option>
-          <ion-select-option value="amount">Amount</ion-select-option>
-          <ion-select-option value="amountPaid">Amount Paid</ion-select-option>
-         </ion-select>
-        </div>   
-        <ion-searchbar showcancelbutton="" (ionInput)="filterList($event)"></ion-searchbar>
-      </div>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="openAddRevenueForm()" color='success'>
       <ion-icon name="add"></ion-icon>
@@ -27,8 +27,9 @@
       <ion-label>
         <h3>{{revenue.revenueType}}: <span [ngStyle]="{'color': this.revenues[i].revenueType.toLowerCase() == 'profit' ? 'green' : 'red'}">{{getFormattedRevenueAmount(revenue)}}</span></h3>
         <p>Status: {{getRevenueStatus(revenue)}}</p>
-        <p>Description: {{revenue.revenueDescription}}</p>
+        <p>{{getRevenueValue(revenue)}}</p>
       </ion-label>
+      <ion-icon name={{getSymbol(getRevenueType(revenue))}}></ion-icon>
       <ion-label slot="end">
         <h3>{{getRevenueType(revenue)}}</h3>
       </ion-label>

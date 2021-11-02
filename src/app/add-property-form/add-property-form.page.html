@@ -6,11 +6,11 @@
 </ion-header>
 
 <ion-content>
-  <ion-item id='inline'>
-    <ion-label>Select thumbnail: </ion-label>
+  <ion-item lines='none'><ion-label>Select thumbnail: </ion-label></ion-item>
+  <ion-item >
     <input type="file" text='Choose Thumbnail' (input)="updateInput('thumbnail', $event)" onchange="document.getElementById('thumbnail-output').src = window.URL.createObjectURL(this.files[0])">
   </ion-item>
-  <ion-item>
+  <ion-item class='img'>
     <img height='auto' width='80%' id="thumbnail-output"/>
   </ion-item>  
   <ion-list>

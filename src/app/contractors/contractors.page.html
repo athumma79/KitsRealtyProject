@@ -3,34 +3,35 @@
     <h2 id='title'><strong>Contractors</strong></h2>
     <amplify-sign-out id='signout' slot='end'></amplify-sign-out>
 </ion-toolbar>
+<div id='tools'>  
+  <div class='buttonbox'>    
+    <ion-label >Sort By:</ion-label>
+      <ion-select class="hover" placeholder="Filter" (ionChange)="sortProperties($event)">
+        <ion-select-option value="fName">First Name</ion-select-option>
+        <ion-select-option value="lName">Last Name</ion-select-option>
+        <ion-select-option value="email">Email</ion-select-option>
+        <ion-select-option value="type">Type</ion-select-option>
+        <ion-select-option value="company">Company Name</ion-select-option>
+       </ion-select>
+    </div>   
+    <ion-searchbar showcancelbutton="" (ionInput)="filterList($event)"></ion-searchbar>
+  </div>
 </ion-header>
 
 <ion-content>
-  <div id='tools'>  
-    <div class='buttonbox'>    
-      <ion-label >Sort By:</ion-label>
-        <ion-select class="hover" placeholder="Filter" (ionChange)="sortProperties($event)">
-          <ion-select-option value="fName">First Name</ion-select-option>
-          <ion-select-option value="lName">Last Name</ion-select-option>
-          <ion-select-option value="email">Email</ion-select-option>
-          <ion-select-option value="type">Type</ion-select-option>
-          <ion-select-option value="company">Company Name</ion-select-option>
-         </ion-select>
-      </div>   
-      <ion-searchbar showcancelbutton="" (ionInput)="filterList($event)"></ion-searchbar>
-    </div>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="openAddContractorForm()" color='success'>
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <ion-list *ngFor="let contractor of contractors; index as i">
-    <ion-item button (click)="openContractorDetails(i)"  details='true'>
+  <ion-list>
+    <ion-item button (click)="openContractorDetails(i)"  details='true'  *ngFor="let contractor of contractors; index as i">
       <ion-label>
         <h3>{{contractor.contractorUser.firstName}} {{contractor.contractorUser.lastName}}</h3>
-        <p>Email: {{contractor.contractorUser.email}}</p>
-        <p>Company: {{contractor.company}}</p>
+        <p>{{contractor.contractorUser.email}}</p>
+        <p>{{contractor.company}}</p>
       </ion-label>
+      <ion-icon name={{getSymbol(contractor.contractorType.contractorTypeDescription)}}></ion-icon>
       <ion-label slot='end'>
         <h3>{{contractor.contractorType.contractorTypeDescription}}</h3>
       </ion-label>

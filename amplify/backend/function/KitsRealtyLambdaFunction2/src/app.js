@@ -140,10 +140,36 @@ app.get('/properties/*', function(req, res) {
 ****************************/
 
 app.post('/contractors', function(req, res) {
+  let addToGroupParams = {
+    GroupName: req.body.group,
+    Username: req.body.user.userCognitoId,
+    UserPoolId: 'us-east-1_MQXokLX98'
+  };
+  var contractorTypeId;
+  switch(req.body.group){
+    case "research_contractor":   contractorTypeId = "1"; break
+    case "bidding_contractor":  contractorTypeId = "2"; break
+    case "remodel_contractor":  contractorTypeId = "3"; break
+    case "realestate_contractor":  contractorTypeId = "4"; break
+    case "tax_contractor":  contractorTypeId = "5"; break
+  }
+  cognitoidentityserviceprovider.adminAddUserToGroup(addToGroupParams, function(err, data) {
+    if (err) throw err
 
+    pool.getConnection(function(error, connection) {
 
+      var query = 'UPDATE CONTRACTORS SET CONTRACTOR_TYPE_ID = ' + contractorTypeId + ' WHERE CONTRACTOR_COGNITO_ID = ' + req.body.user.userCognitoId + ';'
+      connection.query(query, function(err, rows, fields) {
+        if (err) throw err
   
+        res.json("Success! Contractor Type Set.")
+  
+        connection.release()
+      })
+    })
+  });
 });
+
 
 app.post('/property-contractor', function(req, res) {
 

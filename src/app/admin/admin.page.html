@@ -1,16 +1,8 @@
 <ion-header>
   <ion-toolbar>
     <h2 id='title'><strong>Admin</strong></h2>
-    <ion-item slot='end'><amplify-sign-out></amplify-sign-out></ion-item>
+    <amplify-sign-out slot='end'></amplify-sign-out>
   </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="openAddUserForm()" color='success'>
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
   <div id='tools'>
     <div class='buttonbox'>
       <ion-label >Sort By:</ion-label>
@@ -23,12 +15,21 @@
       </div>
       <ion-searchbar showcancelbutton="" (ionInput)="filterList($event)"></ion-searchbar>
     </div>
-    <ion-list *ngFor="let user of users; index as i">
-      <ion-item button (click)="openUserDetails(i)" details='true'>
+</ion-header>
+
+<ion-content>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openAddUserForm()" color='success'>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+    <ion-list >
+      <ion-item button (click)="openUserDetails(i)" details='true' *ngFor="let user of users; index as i">
         <ion-label>
           <h3>{{user.firstName}} {{user.lastName}}</h3>
-          <p>Email: {{user.email}}</p>
+          <p>{{user.email}}</p>
         </ion-label>
+        <ion-icon name={{getSymbol(user.role.userRoleDescription)}}></ion-icon>
         <ion-label slot="end">
           <h3>{{user.role.userRoleDescription}}</h3>
         </ion-label>

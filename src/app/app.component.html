@@ -1,8 +1,7 @@
 <ion-app>
   <!--log in-->
   <amplify-authenticator>
-    <amplify-sign-up slot="sign-up" [formFields]="signUpFormFields"></amplify-sign-up>
-    <amplify-sign-in slot="sign-in" usernameAlias="email" [formFields]="signInFormFields"></amplify-sign-in>
+    <amplify-sign-in slot="sign-in" usernameAlias="email"  hide-sign-up="true" [formFields]="signInFormFields"></amplify-sign-in>
     <amplify-forgot-password slot="forgot-password" usernameAlias="email" [formFields]="resetPasswordFormFields"></amplify-forgot-password>
   </amplify-authenticator>
 

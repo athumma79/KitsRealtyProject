@@ -1,9 +1,37 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>add-contractor-form</ion-title>
+    <ion-title>Add Contractor</ion-title>
+    <i class="fal fa-times-circle" (click)='dismiss()' slot="end"></i>
   </ion-toolbar>
+  <div id='tools'>
+    <div class='buttonbox'>
+      <ion-label >Sort By:</ion-label>
+        <ion-select  class="hover" placeholder="Filter" (ionChange)="sortUsers($event)">
+          <ion-select-option value="firstName">First Name</ion-select-option>
+          <ion-select-option value="lastName">Last Name</ion-select-option>
+          <ion-select-option value="email">Email</ion-select-option>
+        </ion-select>
+      </div>
+      <ion-searchbar showcancelbutton="" (ionInput)="filterList($event)"></ion-searchbar>
+    </div>
 </ion-header>
 
 <ion-content>
-
+    <ion-list>
+      <ion-item *ngFor="let user of users; index as i">
+        <ion-label>
+          <h3>{{user.firstName}} {{user.lastName}}</h3>
+          <p>{{user.email}}</p>
+        </ion-label>
+        <ion-item lines='none' slot="end">
+            <ion-select placeholder='Choose Type' (ionChange)='setContractorType($event, users[i])'>
+              <ion-select-option value='research'>Research</ion-select-option>
+              <ion-select-option value='bidding'>Bidding</ion-select-option>
+              <ion-select-option value='remodel'>Remodel</ion-select-option>
+              <ion-select-option value='realestate'>Real Estate</ion-select-option>
+              <ion-select-option value='tax'>Tax</ion-select-option>
+            </ion-select>
+        </ion-item>
+      </ion-item>
+    </ion-list>
 </ion-content>

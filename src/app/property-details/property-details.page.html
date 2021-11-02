@@ -13,8 +13,8 @@
 
 
   <div class='button-bar'>
-    <ion-button (click)='editProperty()'>Edit</ion-button>
-    <ion-button type='submit' (click)='saveProperty(true)'>Save</ion-button>
+    <ion-button class='button' (click)='editProperty()'>Edit</ion-button>
+    <ion-button class='button' type='submit' (click)='saveProperty(true)'>Save</ion-button>
   </div>
 
   <ion-list class="row">
@@ -152,7 +152,7 @@
     <ion-item>
       <ion-label>Occupancy Status:</ion-label>
       <ion-select (ionChange)="updateOccupancyStatus($event)">
-        <ion-select-option value="unoccupanied">Unoccupanied</ion-select-option>
+        <ion-select-option value="unoccupied">Unoccupied</ion-select-option>
         <ion-select-option value="occupied">Occupied</ion-select-option>
       </ion-select>
     </ion-item>
@@ -239,7 +239,8 @@
         </button>
       <div id="collapse-B" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-          <h3 id='noRevenues' *ngIf='noRevenues'>No Revenues Yet</h3>
+          <ion-item-divider><h3>List of Revenues</h3></ion-item-divider>
+          <ion-item id='noRevenues' *ngIf='noRevenues'>None</ion-item>
           <ion-list *ngFor="let revenue of revenues; index as i">
             <ion-item (click)="openRevenueDetails(i)">
               <ion-label>
@@ -258,22 +259,23 @@
         </button>
       <div id="collapse-C" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
+          <ion-item-divider><h3>List of Assignments</h3></ion-item-divider>
           <ion-item *ngIf="property.coordinator.userCognitoId">
             Coordinator: {{property.coordinator.firstName}} {{property.coordinator.lastName}}
-            <ion-button class="delete-btn delete-btn-contractor d-none" id="button" slot="end" (click)="deleteCoordinator()">
+            <ion-button class="delete-btn delete-btn-contractor button d-none" id="button" slot="end" (click)="deleteCoordinator()">
               <i class="far fa-trash-alt"></i>
             </ion-button>
           </ion-item>
           <ion-list *ngFor="let contractor of contractors">
             <ion-item>
               {{contractor.contractorType.contractorTypeDescription}}: {{contractor.contractorUser.firstName}} {{contractor.contractorUser.lastName}}
-              <ion-button class="delete-btn delete-btn-contractor d-none" id="button" slot="end" (click)="deleteContractor(contractor)">
+              <ion-button class="delete-btn delete-btn-contractor button d-none" slot="end" (click)="deleteContractor(contractor)">
                 <i class="far fa-trash-alt"></i>
               </ion-button>
             </ion-item>
           </ion-list>
-          <ion-button class="edit-btn-contractors" (click)="editContractors()">Edit</ion-button>
-          <ion-button class="add-btn-contractors d-none">
+          <ion-button class="edit-btn-contractors button" (click)="editContractors()">Edit</ion-button>
+          <ion-button class="add-btn-contractors button d-none">
             <ion-select class="hover" interface="popover" selected-text="Add Contractor" (ionChange)="addContractor($event)">
               <ion-select-option *ngFor="let contractor of potentialContractors" [value]="contractor">
                 {{contractor.contractorUser.firstName}} {{contractor.contractorUser.lastName}} - {{contractor.contractorType.contractorTypeDescription}}
@@ -287,7 +289,7 @@
               </ion-select-option>
             </ion-select>
           </ion-button>
-          <ion-button class="save-btn-contractors d-none" (click)="saveContractors()">Save</ion-button>
+          <ion-button class="save-btn-contractors button d-none" (click)="saveContractors()">Save</ion-button>
         </div>
       </div>
     </div>
@@ -297,6 +299,7 @@
         </button>
       <div id="collapse-D" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
+          <ion-item-divider><h3>Progress Images</h3></ion-item-divider>
           <amplify-s3-album 
             framework="ionic"
             path="properties/{{property.propertyId}}/progress_images/"
@@ -312,9 +315,9 @@
       <div id="collapse-E" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
           <input type="file" (change)="selectFileToUpload($event)"/>
-          <ion-button (click)="uploadFile('purchase_docs')">Upload</ion-button>
-          <ion-button id="button" class="edit-btn-purchase" (click)="editFiles('purchase_docs')">Edit</ion-button>
-          <ion-button id="button" class="save-btn-purchase d-none" (click)="saveFiles('purchase_docs')">Done</ion-button>
+          <ion-button class='button' (click)="uploadFile('purchase_docs')">Upload</ion-button>
+          <ion-button class="edit-btn-purchase button" (click)="editFiles('purchase_docs')">Edit</ion-button>
+          <ion-button class="save-btn-purchase button d-none" (click)="saveFiles('purchase_docs')">Done</ion-button>
           <ion-item-divider>
             <ion-label>Uploaded Files</ion-label>
           </ion-item-divider>
@@ -337,8 +340,8 @@
         <div class="accordion-body">
           <input type="file" (change)="selectFileToUpload($event)"/>
           <ion-button (click)="uploadFile('utilities_docs')">Upload</ion-button>
-          <ion-button id="button" class="edit-btn-utilities" (click)="editFiles('utilities_docs')">Edit</ion-button>
-          <ion-button id="button" class="save-btn-utilities d-none" (click)="saveFiles('utilities_docs')">Done</ion-button>
+          <ion-button class="button" class="edit-btn-utilities" (click)="editFiles('utilities_docs')">Edit</ion-button>
+          <ion-button class="button" class="save-btn-utilities d-none" (click)="saveFiles('utilities_docs')">Done</ion-button>
           <ion-item-divider>
             <ion-label>Uploaded Files</ion-label>
           </ion-item-divider>
@@ -361,8 +364,8 @@
         <div class="accordion-body">
           <input type="file" (change)="selectFileToUpload($event)"/>
           <ion-button (click)="uploadFile('sales_docs')">Upload</ion-button>
-          <ion-button id="button" class="edit-btn-sales" (click)="editFiles('sales_docs')">Edit</ion-button>
-          <ion-button id="button" class="save-btn-sales d-none" (click)="saveFiles('sales_docs')">Done</ion-button>
+          <ion-button class="button" class="edit-btn-sales" (click)="editFiles('sales_docs')">Edit</ion-button>
+          <ion-button class="button" class="save-btn-sales d-none" (click)="saveFiles('sales_docs')">Done</ion-button>
           <ion-item-divider>
             <ion-label>Uploaded Files</ion-label>
           </ion-item-divider>
@@ -379,5 +382,5 @@
     </div>
   </div>
 
-  <ion-button color="danger" id="button" (click)='deleteProperty()'>Delete</ion-button>
+  <ion-button color="danger" class='button' id="deleteButton" (click)='deleteProperty()'>Delete</ion-button>
 </ion-content>

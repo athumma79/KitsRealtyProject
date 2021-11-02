@@ -27,30 +27,11 @@ export class AppComponent {
   constructor(private ref: ChangeDetectorRef /*authentication*/) {
 
     //customize authenticator fields
-    this.signUpFormFields = [
-      {
-        type: "username",
-        label: "Username",
-        placeholder: "",
-        inputProps: { required: true },
-      },
-      {
-        type: "email",
-        label: "Email",
-        placeholder: "",
-        inputProps: { required: true },
-      },
-      {
-        type: "password",
-        label: "Password",
-        placeholder: "",
-        inputProps: { required: true },
-      },
-    ];
+
     this.signInFormFields = [
       {
         type: "username",
-        label: "Username / Email",
+        label: "Email",
         placeholder: "",
         inputProps: { required: true },
       },

@@ -3,6 +3,23 @@
     <h2 class='title'><strong>Properties</strong></h2>
     <amplify-sign-out slot='end'></amplify-sign-out>
 </ion-toolbar>
+<div id='tools'>
+  <div class='buttonbox'>
+    <ion-label >Sort By:</ion-label>
+      <ion-select class="hover" placeholder="Filter" (ionChange)="sortProperties($event)">
+        <ion-select-option value="status">Status</ion-select-option>
+        <ion-select-option value="state">State</ion-select-option>
+        <ion-select-option value="type">Type</ion-select-option>
+        <ion-select-option value="city">City</ion-select-option>
+        <ion-select-option value="numBeds">Bedrooms</ion-select-option>
+        <ion-select-option value="numBaths">Bathrooms</ion-select-option>
+        <ion-select-option value="propertyFootage">Property Area (ft²)</ion-select-option>
+        <ion-select-option value="landFootage">Land Area (ft²)</ion-select-option>
+        <ion-select-option value="yearBuilt">Year Built</ion-select-option>
+      </ion-select>
+    </div>
+    <ion-searchbar showcancelbutton="" (ionInput)="filterList($event)"></ion-searchbar>
+  </div>
 </ion-header>
 <ion-content [fullscreen]="true">
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
@@ -10,23 +27,7 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <div id='tools'>
-    <div class='buttonbox'>
-      <ion-label >Sort By:</ion-label>
-        <ion-select  class="hover" placeholder="Filter" (ionChange)="sortProperties($event)">
-          <ion-select-option value="status">Status</ion-select-option>
-          <ion-select-option value="state">State</ion-select-option>
-          <ion-select-option value="type">Type</ion-select-option>
-          <ion-select-option value="city">City</ion-select-option>
-          <ion-select-option value="numBeds">Bedrooms</ion-select-option>
-          <ion-select-option value="numBaths">Bathrooms</ion-select-option>
-          <ion-select-option value="propertyFootage">Property Area (ft²)</ion-select-option>
-          <ion-select-option value="landFootage">Land Area (ft²)</ion-select-option>
-          <ion-select-option value="yearBuilt">Year Built</ion-select-option>
-        </ion-select>
-      </div>
-      <ion-searchbar showcancelbutton="" (ionInput)="filterList($event)"></ion-searchbar>
-    </div>
+  
     <div class="accordion" id="accordion">
       <div class="accordion-item" *ngFor="let property of properties; index as i">
           <div  class="accordion-button collapsed description" lines='none' type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse-' + property.propertyId">

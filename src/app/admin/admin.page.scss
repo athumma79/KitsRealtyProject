@@ -1,5 +1,5 @@
 h2{
-    margin-left: 3%;
+    margin-left: 5%;
 }
 
 ion-toolbar{
@@ -28,6 +28,7 @@ amplify-sign-out{
     display: flex;
     align-items: center;
 }
+
 ion-searchbar{
     width: 50%;
     flex: 1;
@@ -41,3 +42,7 @@ ion-searchbar{
 ion-select{
     text-align: left;
     }
+
+ion-item{
+    text-align: left;
+}
