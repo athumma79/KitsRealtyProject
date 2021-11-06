@@ -7,13 +7,17 @@ import { IonicModule } from '@ionic/angular';
 import { ContractorDetailsPageRoutingModule } from './contractor-details-routing.module';
 
 import { ContractorDetailsPage } from './contractor-details.page';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ContractorDetailsPageRoutingModule
+    ContractorDetailsPageRoutingModule,
+    BrowserAnimationsModule,
+    BrowserModule
   ],
   declarations: [ContractorDetailsPage]
 })

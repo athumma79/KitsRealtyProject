@@ -17,7 +17,7 @@
 </ion-header>
 
 <ion-content>
-    <ion-list>
+    <!-- <ion-list>
       <ion-item *ngFor="let user of users; index as i">
         <ion-label>
           <h3>{{user.firstName}} {{user.lastName}}</h3>
@@ -33,5 +33,48 @@
             </ion-select>
         </ion-item>
       </ion-item>
-    </ion-list>
+    </ion-list> -->
+    <div class="accordion" id="accordion">
+      <div class="accordion-item" *ngFor="let user of users; index as i">
+          <div (click)='setUser(user)' class="accordion-button collapsed description" lines='none' type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse-' + user.userCognitoId">
+            <ion-label>
+              <h3>{{user.firstName}} {{user.lastName}}</h3>
+              <p>{{user.email}}</p>
+            </ion-label>
+          </div>
+        <div [attr.id]="'collapse-' + user.userCognitoId" class="accordion-collapse collapse" data-bs-parent="#accordion">
+          <div class="accordion-body" id="body-items">
+          <ion-list>
+            <ion-item>
+              <ion-label>Choose Type:</ion-label>
+              <ion-select (ionChange)='updateInput("type", $event)'>
+                <ion-select-option value='1'>Research</ion-select-option>
+                <ion-select-option value='2'>Bidding</ion-select-option>
+                <ion-select-option value='3'>Remodel</ion-select-option>
+                <ion-select-option value='4'>Real Estate</ion-select-option>
+                <ion-select-option value='5'>Tax</ion-select-option>
+              </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label>Date Hired: </ion-label>
+            <ion-input type='date' (input)="updateInput('date_hired', $event)"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Start Date: </ion-label>
+            <ion-input type='date' (input)="updateInput('start_date', $event)"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>End Date: </ion-label>
+            <ion-input type='date' (input)="updateInput('end_date', $event)"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Company: </ion-label>
+            <ion-input (input)="updateInput('company', $event)"></ion-input>
+          </ion-item>
+            <ion-item button (click)="submit()">Submit</ion-item>
+          </ion-list>
+          </div>
+        </div>
+        </div>
+      </div>
 </ion-content>

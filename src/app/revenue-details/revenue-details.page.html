@@ -10,6 +10,8 @@
     <h3>{{revenue.revenueType}}: <span [ngStyle]="{'color': this.revenue.revenueType.toLowerCase() == 'profit' ? 'green' : 'red'}">{{getFormattedRevenueAmount(revenue)}}</span></h3>
     <p>Status: {{getRevenueStatus(revenue)}}</p>
     <p>Description: {{revenue.revenueDescription}}</p>
+    <p>Description: {{revenue.revenueDescription}}</p>
+
     <ion-item-divider color='primary'>
       <ion-label>Check Images</ion-label>
     </ion-item-divider>

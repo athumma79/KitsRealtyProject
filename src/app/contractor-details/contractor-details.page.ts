@@ -15,12 +15,15 @@ export class ContractorDetailsPage implements OnInit {
 
   contractor: Contractor;
 
-  constructor(public modalController: ModalController, 
-    public navParams: NavParams) { 
+  constructor(
+    public modalController: ModalController, 
+    public navParams: NavParams
+    ) { 
       this.contractor = navParams.data.contractor;
   }
 
   ngOnInit() {
+    console.log(this.contractor);
   }
 
   dismiss() {
@@ -53,6 +56,18 @@ export class ContractorDetailsPage implements OnInit {
 
   }
 
+  updateType(e){
+    let value = e.target.value;
+    this.contractor.contractorType.contractorTypeId = value;
+    switch(value){
+      case "1": this.contractor.contractorType.contractorTypeDescription = "Research"; break
+      case "2": this.contractor.contractorType.contractorTypeDescription = "Bidding"; break
+      case "3": this.contractor.contractorType.contractorTypeDescription = "Remodel"; break
+      case "4": this.contractor.contractorType.contractorTypeDescription = "Real Estate"; break
+      case "5": this.contractor.contractorType.contractorTypeDescription = "Tax"; break
+    }
+  }
+  
   getFormattedDate(dateString: string) {
     let date = new Date(dateString);
     if (date) { 

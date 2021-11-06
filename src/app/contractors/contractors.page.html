@@ -25,7 +25,7 @@
     </ion-fab-button>
   </ion-fab>
   <ion-list>
-    <ion-item button (click)="openContractorDetails(i)"  details='true'  *ngFor="let contractor of contractors; index as i">
+    <ion-item button details='true'  *ngFor="let contractor of contractors; index as i" (click)="openContractorDetails(i)">
       <ion-label>
         <h3>{{contractor.contractorUser.firstName}} {{contractor.contractorUser.lastName}}</h3>
         <p>{{contractor.contractorUser.email}}</p>

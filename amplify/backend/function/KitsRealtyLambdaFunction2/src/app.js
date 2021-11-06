@@ -69,6 +69,27 @@ app.get('/properties', function(req, res) {
   
 });
 
+app.get('/contractor-users', function(req, res) {
+
+  pool.getConnection(function(error, connection) {
+
+    var query = "SELECT * \
+    FROM USERS \
+    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID \
+    WHERE USER_ROLE_DESCRIPTION = 'Contractor';"
+
+    connection.query(query, function(err, rows, fields) {
+      if (err) throw err
+
+      res.json({ contractors: rows })
+
+      connection.release()
+    })
+
+  })
+
+});
+
 app.get('/contractors', function(req, res) {
 
   pool.getConnection(function(error, connection) {
@@ -140,25 +161,19 @@ app.get('/properties/*', function(req, res) {
 ****************************/
 
 app.post('/contractors', function(req, res) {
+  let contractor = req.body.contractor;
   let addToGroupParams = {
     GroupName: req.body.group,
-    Username: req.body.user.userCognitoId,
+    Username: contractor.contractorUser.userCognitoId,
     UserPoolId: 'us-east-1_MQXokLX98'
   };
-  var contractorTypeId;
-  switch(req.body.group){
-    case "research_contractor":   contractorTypeId = "1"; break
-    case "bidding_contractor":  contractorTypeId = "2"; break
-    case "remodel_contractor":  contractorTypeId = "3"; break
-    case "realestate_contractor":  contractorTypeId = "4"; break
-    case "tax_contractor":  contractorTypeId = "5"; break
-  }
+  
   cognitoidentityserviceprovider.adminAddUserToGroup(addToGroupParams, function(err, data) {
     if (err) throw err
 
     pool.getConnection(function(error, connection) {
 
-      var query = 'UPDATE CONTRACTORS SET CONTRACTOR_TYPE_ID = ' + contractorTypeId + ' WHERE CONTRACTOR_COGNITO_ID = ' + req.body.user.userCognitoId + ';'
+      var query = `INSERT INTO CONTRACTOR VALUES (${addQuotes(addToGroupParams.Username)}, ${addQuotes(contractor.contractorType.contractorTypeId)}, ${addQuotes(contractor.dateHired)}, ${addQuotes(contractor.startDate)}, ${addQuotes(contractor.endDate)}, ${addQuotes(contractor.company)} );`
       connection.query(query, function(err, rows, fields) {
         if (err) throw err
   
@@ -412,14 +427,14 @@ app.put('/contractors', function(req, res) {
 
   pool.getConnection(function(error, connection) {
 
-    let query = "UPDATE CONTRACTOR \
-    SET \
-      CONTRACTOR_TYPE_ID = " + newContractor.contractorType.contractorTypeId + ", \
-      DATE_HIRED = " + addQuotes(newContractor.dateHired) + ", \
-      START_DATE = " + addQuotes(newContractor.startDate) + ", \
-      END_DATE = " + addQuotes(newContractor.endDate) + ", \
-      COMPANY = " + addQuotes(newContractor.company) + ", \
-    WHERE CONTRACTOR_COGNITO_ID = " + newContractor.contractorCognitoId + ";"
+    let query = `UPDATE CONTRACTOR 
+    SET 
+      CONTRACTOR_TYPE_ID = ${addQuotes(newContractor.contractorType.contractorTypeId)}, 
+      DATE_HIRED = ${addQuotes(newContractor.dateHired)}, 
+      START_DATE = ${addQuotes(newContractor.startDate)}, 
+      END_DATE = ${addQuotes(newContractor.endDate)}, 
+      COMPANY = ${addQuotes(newContractor.company)} 
+    WHERE CONTRACTOR_COGNITO_ID = ${addQuotes(newContractor.contractorCognitoId)};`
 
     connection.query(query, function(err, rows, fields) {
       if (err) throw err   
@@ -568,7 +583,7 @@ app.listen(3000, function() {
 });
 
 function addQuotes(value) {
-  return (typeof value == "string") && (value != null) ? `'${value}'` : value;
+  return (typeof value == "string") && (value != null) ? `'${value.replace("'", "\\\'")}'` : value;
 }
 
 module.exports = app

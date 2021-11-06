@@ -3,6 +3,7 @@ import { User } from '../models/user.class';
 import { API, Storage } from 'aws-amplify';
 import { UserRole } from '../models/user-role.class';
 import { ModalController } from '@ionic/angular';
+import { Contractor } from '../models/contractor.class';
 
 
 @Component({
@@ -16,6 +17,8 @@ export class AddContractorFormPage implements OnInit {
 
   users: User[] = new Array();
   backupUsers: User[] = new Array();
+  newContractor: Contractor = new Contractor();
+
   constructor(public modalController: ModalController) { }
 
   ngOnInit() {
@@ -26,9 +29,10 @@ export class AddContractorFormPage implements OnInit {
   async loadUsers() {
     console.log('hello!')
     API
-      .get(this.apiName, '/users', {})
+      .get(this.apiName, '/contractor-users', {})
       .then(response => {
-        var dbUsers = response.users;
+        console.log(response);
+        var dbUsers = response.contractors;
         for(var i = 0; i < dbUsers.length; i++) {
           let userRole = new UserRole();
           userRole.roleId = dbUsers[i]["ROLE_ID"];
@@ -45,18 +49,48 @@ export class AddContractorFormPage implements OnInit {
           this.users.push(user);
           this.backupUsers.push(user);
         }
+        console.log(this.users);
       })
       .catch(err => {
         console.log(err);
       })
   }
-  setContractorType(e, user: User){
-    if(confirm("Set " + user.firstName + " " + user.lastName + " as a " + e.target.value + " contractor?")){
-      var group = e.target.value + "_contractor"
+
+  updateInput(field, event) {
+    let value = event.target.value;
+    switch (field) {
+      case 'type': this.setContractorType(value); break;
+      case 'date_hired': this.newContractor.dateHired = value; break;
+      case 'start_date': this.newContractor.startDate = value; break;
+      case 'end_date': this.newContractor.endDate = value; break;
+      case 'company': this.newContractor.company = value; break;
+
+    }
+  }
+  setContractorType(value: any){
+    this.newContractor.contractorType.contractorTypeId = value;
+    switch(value){
+      case "1": this.newContractor.contractorType.contractorTypeDescription = "Research"; break
+      case "2": this.newContractor.contractorType.contractorTypeDescription = "Bidding"; break
+      case "3": this.newContractor.contractorType.contractorTypeDescription = "Remodel"; break
+      case "4": this.newContractor.contractorType.contractorTypeDescription = "Real Estate"; break
+      case "5": this.newContractor.contractorType.contractorTypeDescription = "Tax"; break
+    }
+  }
+
+  setUser(user: User){
+    this.newContractor.contractorUser = user;
+    this.newContractor.contractorCognitoId = user.userCognitoId;
+  }
+
+  submit(){
+    if(confirm("Set " + this.newContractor.contractorUser.firstName + " " + this.newContractor.contractorUser.lastName + " as a " + this.newContractor.contractorType.contractorTypeDescription + " contractor?")){
+      var group = this.newContractor.contractorType.contractorTypeDescription.replace(' ', '_').toLowerCase() + "_contractor"
+      console.log(group);
       const postInit = {
         body: {
           group: group,
-          user: user
+          contractor: this.newContractor
         }
       };
       API
@@ -69,6 +103,7 @@ export class AddContractorFormPage implements OnInit {
       })
     }
   }
+
   sortUsers(e){
     switch(e.detail.value){
       case "firstName": this.users.sort((a, b) => a.firstName.localeCompare(b.firstName)); break;

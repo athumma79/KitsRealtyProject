@@ -15,15 +15,21 @@
     <ion-list>
       <ion-item>
         <ion-label>Email:</ion-label>
-      <ion-input [(ngModel)]='contractor.contractorUser.email' readonly></ion-input>
+      <ion-input type='email' [(ngModel)]='contractor.contractorUser.email' disabled></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Type:</ion-label>
-        <ion-input [(ngModel)]='contractor.contractorType.contractorTypeDescription' readonly></ion-input>
-      </ion-item>
+        <ion-label>Choose Type:</ion-label>
+        <ion-select disabled placeholder={{contractor.contractorType.contractorTypeDescription}} (ionChange)='updateType($event)'>
+          <ion-select-option value='1'>Research</ion-select-option>
+          <ion-select-option value='2'>Bidding</ion-select-option>
+          <ion-select-option value='3'>Remodel</ion-select-option>
+          <ion-select-option value='4'>Real Estate</ion-select-option>
+          <ion-select-option value='5'>Tax</ion-select-option>
+        </ion-select>
+    </ion-item>
       <ion-item>
         <ion-label>Company:</ion-label>
-        <ion-input [(ngModel)]="contractor.company" readonly></ion-input>
+        <ion-input type='text' [(ngModel)]="contractor.company" readonly></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Date hired:</ion-label>
