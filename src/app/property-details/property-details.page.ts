@@ -229,7 +229,7 @@ export class PropertyDetailsPage implements OnInit {
       }
     };
     API
-      .post(this.apiName, '/revenues', postInit)
+      .post(this.apiName, '/property-revenues', postInit)
       .then(response => {
         var dbRevenues = response.revenues;
         for(var i = 0; i < dbRevenues.length; i++) {

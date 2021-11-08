@@ -73,10 +73,10 @@ app.get('/contractor-users', function(req, res) {
 
   pool.getConnection(function(error, connection) {
 
-    var query = "SELECT * \
-    FROM USERS \
-    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID \
-    WHERE USER_ROLE_DESCRIPTION = 'Contractor';"
+    var query = `SELECT * 
+    FROM USERS 
+    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID 
+    WHERE USER_ROLE_DESCRIPTION = 'Contractor';`
 
     connection.query(query, function(err, rows, fields) {
       if (err) throw err
@@ -94,11 +94,11 @@ app.get('/contractors', function(req, res) {
 
   pool.getConnection(function(error, connection) {
 
-    var query = "SELECT * \
-    FROM CONTRACTOR \
-    LEFT OUTER JOIN CONTRACTOR_TYPE ON CONTRACTOR.CONTRACTOR_TYPE_ID = CONTRACTOR_TYPE.CONTRACTOR_TYPE_ID \
-    LEFT OUTER JOIN USERS ON CONTRACTOR.CONTRACTOR_COGNITO_ID = USERS.USER_COGNITO_ID \
-    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID;"
+    var query = `SELECT * 
+    FROM CONTRACTOR 
+    LEFT OUTER JOIN CONTRACTOR_TYPE ON CONTRACTOR.CONTRACTOR_TYPE_ID = CONTRACTOR_TYPE.CONTRACTOR_TYPE_ID 
+    LEFT OUTER JOIN USERS ON CONTRACTOR.CONTRACTOR_COGNITO_ID = USERS.USER_COGNITO_ID 
+    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID;`
 
     connection.query(query, function(err, rows, fields) {
       if (err) throw err
@@ -116,10 +116,10 @@ app.get('/employees', function(req, res) {
 
   pool.getConnection(function(error, connection) {
 
-    var query = "SELECT * \
-    FROM USERS \
-    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID \
-    WHERE USER_ROLE_DESCRIPTION = 'Employee';"
+    var query = `SELECT * 
+    FROM USERS 
+    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID 
+    WHERE USER_ROLE_DESCRIPTION = 'Employee';`
 
     connection.query(query, function(err, rows, fields) {
       if (err) throw err
@@ -136,9 +136,9 @@ app.get('/employees', function(req, res) {
 app.get('/users', function(req, res) {
   pool.getConnection(function(error, connection) {
 
-    var query = "SELECT * \
-    FROM USERS \
-    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID;"
+    var query = `SELECT * 
+    FROM USERS 
+    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID;`
 
     connection.query(query, function(err, rows, fields) {
       if (err) throw err
@@ -190,13 +190,13 @@ app.post('/property-contractor', function(req, res) {
 
   pool.getConnection(function(error, connection) {
 
-    var query = "SELECT * \
-    FROM PROPERTY_CONTRACTOR \
-    LEFT OUTER JOIN CONTRACTOR ON PROPERTY_CONTRACTOR.CONTRACTOR_COGNITO_ID = CONTRACTOR.CONTRACTOR_COGNITO_ID \
-    LEFT OUTER JOIN CONTRACTOR_TYPE ON CONTRACTOR.CONTRACTOR_TYPE_ID = CONTRACTOR_TYPE.CONTRACTOR_TYPE_ID \
-    LEFT OUTER JOIN USERS ON CONTRACTOR.CONTRACTOR_COGNITO_ID = USERS.USER_COGNITO_ID \
-    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID \
-    WHERE PROPERTY_ID = " + req.body.propertyId + ";"
+    var query = `SELECT * 
+    FROM PROPERTY_CONTRACTOR 
+    LEFT OUTER JOIN CONTRACTOR ON PROPERTY_CONTRACTOR.CONTRACTOR_COGNITO_ID = CONTRACTOR.CONTRACTOR_COGNITO_ID 
+    LEFT OUTER JOIN CONTRACTOR_TYPE ON CONTRACTOR.CONTRACTOR_TYPE_ID = CONTRACTOR_TYPE.CONTRACTOR_TYPE_ID 
+    LEFT OUTER JOIN USERS ON CONTRACTOR.CONTRACTOR_COGNITO_ID = USERS.USER_COGNITO_ID 
+    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID 
+    WHERE PROPERTY_ID = " + req.body.propertyId + ";`
 
     connection.query(query, function(err, rows, fields) {
       if (err) throw err
@@ -209,16 +209,34 @@ app.post('/property-contractor', function(req, res) {
   })
 
 });
-
 app.post('/revenues', function(req, res) {
+  let revenue = req.body.revenue;
+  pool.getConnection(function(error, connection) {
+
+    var query = `INSERT INTO REVENUE (PROPERTY_ID, CONTRACTOR_COGNITO_ID, EXPENSE_STATUS_ID, REVENUE_AMOUNT, REVENUE_TYPE, EXPENSE_DUE_DATE, AMOUNT_PAID, REVENUE_DESCRIPTION, DATE_INCURRED)
+    VALUES (${addQuotes(revenue.property.propertyId)}, ${addQuotes(revenue.contractor.contractorCognitoId)}, ${addQuotes(revenue.expenseStatus.expenseStatusId)}, ${addQuotes(revenue.revenueAmount)}, ${addQuotes(revenue.revenueType)}, ${addQuotes(revenue.expenseDueDate)}, ${addQuotes(revenue.amountPaid)}, ${addQuotes(revenue.revenueDescription)}, ${addQuotes(revenue.dateIncurred)});`
+
+    connection.query(query, function(err, rows, fields) {
+      if (err) throw err
+
+      res.json( "success!" )
+
+      connection.release()
+    })
+
+  })
+  
+});
+
+app.post('/property-revenues', function(req, res) {
 
   pool.getConnection(function(error, connection) {
 
-    var query = "SELECT * \
-    FROM REVENUE \
-    LEFT OUTER JOIN PROPERTY ON REVENUE.PROPERTY_ID = PROPERTY.PROPERTY_ID \
-    LEFT OUTER JOIN CONTRACTOR ON REVENUE.CONTRACTOR_COGNITO_ID = CONTRACTOR.CONTRACTOR_COGNITO_ID \
-    LEFT OUTER JOIN EXPENSE_STATUS ON REVENUE.EXPENSE_STATUS_ID = EXPENSE_STATUS.EXPENSE_STATUS_ID"
+    var query = `SELECT * 
+    FROM REVENUE 
+    LEFT OUTER JOIN PROPERTY ON REVENUE.PROPERTY_ID = PROPERTY.PROPERTY_ID 
+    LEFT OUTER JOIN CONTRACTOR ON REVENUE.CONTRACTOR_COGNITO_ID = CONTRACTOR.CONTRACTOR_COGNITO_ID 
+    LEFT OUTER JOIN EXPENSE_STATUS ON REVENUE.EXPENSE_STATUS_ID = EXPENSE_STATUS.EXPENSE_STATUS_ID`
     
     if (req.body.propertyId) {
       query += " WHERE REVENUE.PROPERTY_ID = " + req.body.propertyId
@@ -244,14 +262,14 @@ app.post('/properties', function(req, res) {
 
   pool.getConnection(function(error, connection) {
 
-    let addressQuery = "INSERT INTO PROPERTY_ADDRESS (ADDRESS, CITY, COUNTY, ZIPCODE, STATE) \
-    VALUES (" + addQuotes(newProperty.address.address) + ", " + addQuotes(newProperty.address.city) + ", " + addQuotes(newProperty.address.county) + ", " + addQuotes(newProperty.address.zipcode) + ", " + addQuotes(newProperty.address.state) + ");"
+    let addressQuery = `INSERT INTO PROPERTY_ADDRESS (ADDRESS, CITY, COUNTY, ZIPCODE, STATE) \
+    VALUES (" + addQuotes(newProperty.address.address) + ", " + addQuotes(newProperty.address.city) + ", " + addQuotes(newProperty.address.county) + ", " + addQuotes(newProperty.address.zipcode) + ", " + addQuotes(newProperty.address.state) + ");`
 
-    let essentialsQuery = "INSERT INTO PROPERTY_ESSENTIALS (PROPERTY_TYPE, NUM_BEDS, NUM_BATHS, LAND_FOOTAGE, PROPERTY_FOOTAGE, YEAR_BUILT, ZILLOW_LINK) \
-    VALUES (" + addQuotes(newProperty.essentials.propertyType) + ", " + newProperty.essentials.numBeds + ", " + newProperty.essentials.numBaths + ", " + newProperty.essentials.landFootage + ", " + newProperty.essentials.propertyFootage + ", " + newProperty.essentials.yearBuilt + ", " + addQuotes(newProperty.essentials.zillowLink) + ");"
+    let essentialsQuery = `INSERT INTO PROPERTY_ESSENTIALS (PROPERTY_TYPE, NUM_BEDS, NUM_BATHS, LAND_FOOTAGE, PROPERTY_FOOTAGE, YEAR_BUILT, ZILLOW_LINK) \
+    VALUES ( ${addQuotes(newProperty.essentials.propertyType)}, ${addQuotes(newProperty.essentials.numBeds)}, ${addQuotes(newProperty.essentials.numBaths)}, ${addQuotes(newProperty.essentials.numBeds)}, ${addQuotes(newProperty.essentials.landFootage)}, ${addQuotes(newProperty.essentials.propertyFootage)}, ${addQuotes(newProperty.essentials.yearBuilt)}, ${addQuotes(newProperty.essentials.zillowLink)});`
 
-    let pricesQuery = "INSERT INTO PROPERTY_PRICES (BUY_VALUE, EXPECTED_VALUE, SELL_VALUE, BIDDING_PRICE, MARKET_PRICE) \
-    VALUES (" + newProperty.prices.buyValue + ", " + newProperty.prices.expectedValue + ", " + newProperty.prices.sellValue + ", " + newProperty.prices.biddingPrice + ", " + newProperty.prices.marketPrice + ");"
+    let pricesQuery = `INSERT INTO PROPERTY_PRICES (BUY_VALUE, EXPECTED_VALUE, SELL_VALUE, BIDDING_PRICE, MARKET_PRICE) \
+    VALUES (${addQuotes(newProperty.prices.buyValue)}, ${addQuotes(newProperty.prices.expectedValue)}, ${addQuotes(newProperty.prices.sellValue)}, ${addQuotes(newProperty.prices.biddingPrice)}, ${addQuotes(newProperty.prices.marketPrice)});`
 
     let auctionQuery = "INSERT INTO PROPERTY_AUCTION (AUCTION_LOCATION, DATE_OF_AUCTION) \
     VALUES (" + addQuotes(newProperty.auction.auctionLocation) + ", " + addQuotes(newProperty.auction.dateOfAuction) + ");"
@@ -303,6 +321,7 @@ app.post('/properties', function(req, res) {
   })
 
 });
+
 
 app.post('/users', function(req, res) {
   let user = req.body.user
@@ -441,6 +460,33 @@ app.put('/contractors', function(req, res) {
     })
 
     res.json()
+    connection.release()
+  })
+});
+
+app.put('/revenues', function(req, res) {
+  let revenue = req.body.revenue;
+
+  pool.getConnection(function(error, connection) {
+
+    let query = `UPDATE REVENUE 
+    SET 
+      PROPERTY_ID = ${addQuotes(revenue.property.propertyId)}, 
+      CONTRACTOR_COGNITO_ID = ${addQuotes(revenue.contractor.contractorCognitoId)}, 
+      EXPENSE_STATUS_ID = ${addQuotes(revenue.expenseStatusId)}, 
+      REVENUE_AMOUNT = ${addQuotes(revenue.revenueAmount)}, 
+      REVENUE_TYPE = ${addQuotes(revenue.revenueType)},
+      EXPENSE_DUE_DATE = ${addQuotes(revenue.expenseDueDate)},
+      AMOUNT_PAID = ${addQuotes(revenue.amountPaid)},
+      REVENUE_DESCRIPTION = ${addQuotes(revenue.revenueDescription)},
+      DATE_INCURRED = ${addQuotes(revenue.dateIncurred)}         
+    WHERE REVENUE_ID = ${addQuotes(revenue.revenueId)};`
+
+    connection.query(query, function(err, rows, fields) {
+      if (err) throw err   
+    })
+
+    res.json("Revenue Updated!")
     connection.release()
   })
 });

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { API, Storage } from 'aws-amplify';
 import * as $ from 'jquery';
+import { Contractor } from '../models/contractor.class';
+import { Property } from '../models/property.class';
 
 import { Revenue } from '../models/revenue.class';
 
@@ -19,22 +21,42 @@ export class RevenueDetailsPage implements OnInit {
   checkNames = new Array();
   receipts = new Array();
   receiptNames = new Array();
+  properties: Property[] = new Array();
+  contractors: Contractor[] = new Array();
 
   constructor(
     public modalController: ModalController, 
     public navParams: NavParams) { 
     this.revenue = this.navParams.data.revenue;
+    this.properties = this.navParams.data.properties;
+    this.contractors = this.navParams.data.contractors;
   }
+  
 
   ngOnInit() {
     this.getFiles('checks');
     this.getFiles('receipts');
+    console.log(this.revenue);
   }
 
   dismiss() {
     this.modalController.dismiss({
       'dismissed': true
     });
+  }
+  updateInput(field, event) {
+    let value = event.target.value;
+    switch (field) {
+      case 'payment': this.revenue.amountPaid += value; break
+      case 'property': this.revenue.property = value; break
+      case 'contractor': this.revenue.contractor = value; break
+      case 'expense_status': this.revenue.expenseStatus.expenseStatusId = value; break
+      case 'amount':  this.revenue.revenueAmount = value; break
+      case 'amount_paid': this.revenue.amountPaid = value; break
+      case 'date_incurred': this.revenue.dateIncurred = value; break
+      case 'due_date': this.revenue.expenseDueDate = value; break
+      case 'description': this.revenue.revenueDescription = value; break
+    }
   }
 
   getFormattedRevenueAmount(revenue: Revenue) {
@@ -51,11 +73,30 @@ export class RevenueDetailsPage implements OnInit {
   }
 
   getFormattedDate(date: Date) {
+    if (!date) return "";
     return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit"
     });
+  }
+  edit() {
+    $("ion-input :not(.disabled)").removeAttr("readonly");
+    $("ion-textarea").removeAttr("readonly");
+    $("ion-select").removeAttr("disabled");
+    $(".edit-button").addClass("d-none");
+    $(".save-button").removeClass("d-none");
+    $(".delete-button").removeClass("d-none");
+  }
+  
+  submit(){
+    $("ion-input").attr("readonly");
+    $("ion-textarea").attr("readonly")
+    $("ion-select").attr("disabled");
+    $(".edit-button").removeClass("d-none");
+    $(".save-button").addClass("d-none");
+    $(".delete-button").addClass("d-none");
+    console.log(this.revenue);
   }
 
   async getFiles(path: string) {

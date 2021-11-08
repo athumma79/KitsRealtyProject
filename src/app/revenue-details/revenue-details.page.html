@@ -6,15 +6,75 @@
 </ion-header>
 
 <ion-content>
-  <div class="content-container">
-    <h3>{{revenue.revenueType}}: <span [ngStyle]="{'color': this.revenue.revenueType.toLowerCase() == 'profit' ? 'green' : 'red'}">{{getFormattedRevenueAmount(revenue)}}</span></h3>
-    <p>Status: {{getRevenueStatus(revenue)}}</p>
-    <p>Description: {{revenue.revenueDescription}}</p>
-    <p>Description: {{revenue.revenueDescription}}</p>
+  <div style='background-color: white' class="content-container">
+    <form action='#'>
+      <ion-button class='edit-button' (click)="edit()">Edit Revenue</ion-button>
+      <ion-button class='save-button d-none' type='submit' (click)="submit()">Save Changes</ion-button>
+      <ion-button color='danger' class='delete-button d-none' (click)="delete()">Delete</ion-button>
+      <ion-list>  
+          <ion-item *ngIf="revenue.contractor">
+            <ion-label position='fixed' >Contractor: </ion-label>
+            <ion-select disabled interface='action-sheet' placeholder="{{revenue.contractor.contractorUser.firstName}} {{revenue.contractor.contractorUser.lastName}}" (ionChange)="updateInput('contractor', $event)">
+              <ion-select-option *ngFor="let contractor of contractors" [value]="contractor">
+                {{contractor.contractorUser.firstName}} {{contractor.contractorUser.lastName}} - {{contractor.contractorType.contractorTypeDescription}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item *ngIf="revenue.property">
+            <ion-label position='fixed' >Property:</ion-label>
+              <ion-select required disabled interface='action-sheet' placeholder={{revenue.property.address.address}} (ionChange)="updateInput('property', $event)">
+                <ion-select-option *ngFor="let property of properties" [value]="property">
+                  {{property.address.address}} - {{property.address.city}}, {{property.address.state}}
+                </ion-select-option>
+              </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label>Revenue Type: </ion-label>
+            {{revenue.revenueType}}
+          </ion-item>
+          <ion-item *ngIf="revenue.revenueType == 'Expense'">
+            <ion-label>Expense Status: </ion-label>
+              <ion-select disabled placeholder={{revenue.expenseStatus.expenseStatusDescription}} (ionChange)="updateInput('expense_status', $event)">
+                <ion-select-option value='2'>Outstanding</ion-select-option>
+                <ion-select-option value='1'>Paid</ion-select-option>
+              </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label>Amount: $</ion-label>
+            <ion-input readonly [ngModel]='revenue.revenueAmount' (input)="updateInput('amount', $event)" name="amount"></ion-input>
+          </ion-item>
+          <!-- <ion-item>
+            <ion-label>Date hired:</ion-label>
+            <ion-input [ngModel]="getFormattedDate(contractor.dateHired)" (ngModelChange)="updateDate($event, 'date_hired')" readonly></ion-input>
+          </ion-item> -->
+
+          <ion-item *ngIf="revenue.revenueType == 'Expense'">
+            <ion-label>Amount Paid: $</ion-label>
+            <ion-input readonly class='disabled' [ngModel]='revenue.amountPaid' (input)="updateInput('amount_paid', $event)" name="amount_paid"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="revenue.revenueType == 'Expense'">
+            <ion-label>Make Payment: $</ion-label>
+            <ion-input readonly (input)="updateInput('payment', $event)"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Date Incurred: </ion-label>
+            <ion-input placeholder='MM/DD/YYYY' [ngModel]="getFormattedDate(revenue.dateIncurred)" (ngModelChange)="updateDate($event, 'date_incurred')" readonly name="date_incurred"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="revenue.revenueType == 'Expense'">
+            <ion-label>Due Date: </ion-label>
+            <ion-input placeholder='MM/DD/YYYY' [ngModel]="getFormattedDate(revenue.dueDate)" (ngModelChange)="updateDate($event, 'due_date')" readonly name="due_date"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Description: </ion-label>
+            <ion-textarea [ngModel]="revenue.revenueDescription" (input)="updateInput('description', $event)" name="revenueDescription" readonly></ion-textarea>
+          </ion-item>
+        </ion-list>
+        </form>
 
     <ion-item-divider color='primary'>
       <ion-label>Check Images</ion-label>
     </ion-item-divider>
+    <input type="file" (change)="selectFileToUpload($event)"/>
     <ion-list *ngFor="let check of checks; index as i">
       <ion-item>            
         <a href={{check}} target="_blank">{{checkNames[i]}}</a>
@@ -23,13 +83,15 @@
         </ion-button>
       </ion-item>
   </ion-list>
-    <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
     <ion-button (click)="uploadFile('checks')">Upload</ion-button>
     <ion-button id="button" class="edit-btn-checks" (click)="editFiles('checks')">Edit</ion-button>
     <ion-button id="button" class="save-btn-checks d-none" (click)="saveFiles('checks')">Save</ion-button>
+
+
     <ion-item-divider color='primary'>
       <ion-label>Receipt Images</ion-label>
     </ion-item-divider>
+    <input type="file" (change)="selectFileToUpload($event)"/>
     <ion-list *ngFor="let receipt of receipts; index as i">
       <ion-item>            
         <a href={{receipt}} target="_blank">{{receiptNames[i]}}</a>
@@ -38,8 +100,7 @@
         </ion-button>
       </ion-item>
   </ion-list>
-    <ion-input type="file" (change)="selectFileToUpload($event)"></ion-input>
-    <ion-button (click)="uploadFile('receipts')">Upload</ion-button>
+      <ion-button (click)="uploadFile('receipts')">Upload</ion-button>
     <ion-button id="button" class="edit-btn-receipts" (click)="editFiles('receipts')">Edit</ion-button>
     <ion-button id="button" class="save-btn-receipts d-none" (click)="saveFiles('receipts')">Save</ion-button>
   </div>

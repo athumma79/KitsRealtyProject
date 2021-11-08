@@ -104,6 +104,21 @@
                 ]
             },
             "policyResourceName": "/contractor-users"
+        },
+        {
+            "name": "/property-revenues",
+            "lambdaFunction": "KitsRealtyLambdaFunction2",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            },
+            "policyResourceName": "/property-revenues"
         }
     ],
     "resourceName": "KitsRealtyAPI2",
@@ -114,7 +129,7 @@
         }
     ],
     "privacy": {
-        "auth": 7,
+        "auth": 8,
         "unauth": 0,
         "authRoleName": "amplify-kitsrealtyproject2-dev-155513-authRole",
         "unAuthRoleName": "amplify-kitsrealtyproject2-dev-155513-unauthRole"
@@ -129,5 +144,5 @@
             ]
         }
     ],
-    "uuid": "1223dd21"
+    "uuid": "4a5d03a1"
 }

@@ -13,10 +13,11 @@ import { AmplifyUIAngularModule } from "@aws-amplify/ui-angular";
 import { AddRevenueFormPage } from './add-revenue-form/add-revenue-form.page';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ContractorDetailsPage } from './contractor-details/contractor-details.page';
+import { RevenueDetailsPage } from './revenue-details/revenue-details.page';
 
 @NgModule({
-  declarations: [AppComponent, AddContractorFormPage, AddRevenueFormPage, ContractorDetailsPage],
-  entryComponents: [AddContractorFormPage, AddRevenueFormPage, ContractorDetailsPage],
+  declarations: [AppComponent, AddContractorFormPage, AddRevenueFormPage, ContractorDetailsPage, RevenueDetailsPage],
+  entryComponents: [AddContractorFormPage, AddRevenueFormPage, ContractorDetailsPage, RevenueDetailsPage],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, BrowserAnimationsModule, AmplifyUIAngularModule, FormsModule, ReactiveFormsModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

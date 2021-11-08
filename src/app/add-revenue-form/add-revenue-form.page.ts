@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
+import { API } from 'aws-amplify';
 import { Contractor } from '../models/contractor.class';
 import { Property } from '../models/property.class';
 import { Revenue } from '../models/revenue.class';
@@ -16,6 +17,7 @@ export class AddRevenueFormPage implements OnInit {
   revenueTypeChoice: string;
   revenue: Revenue = new Revenue();
 
+  apiName = 'KitsRealtyAPI2';
 
   constructor(
     public modalController: ModalController, 
@@ -44,6 +46,21 @@ export class AddRevenueFormPage implements OnInit {
     }
   }
 
+  async submit() {
+    const postInit = {
+      body: {
+        revenue: this.revenue
+      }
+    };
+    API
+      .post(this.apiName, '/revenues', postInit)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
   dismiss() {
     this.modalController.dismiss({
       'dismissed': true
