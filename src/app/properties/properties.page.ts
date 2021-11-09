@@ -121,7 +121,6 @@ export class PropertiesPage implements OnInit {
           this.properties.push(property);
           this.backupProperties.push(property);
         }
-        this.dismissLoader();
         $(document).ready(function() {
           callback();
         });
@@ -131,13 +130,7 @@ export class PropertiesPage implements OnInit {
       });
   }
   
-  dismissLoader() {
-    this.loadingController.dismiss().then((response) => {
-        console.log('Loader closed!', response);
-    }).catch((err) => {
-        console.log('Error occured : ', err);
-    });
-}
+
   async presentLoading() {
     const loading = await this.loadingController.create({
       message: 'Please wait...',

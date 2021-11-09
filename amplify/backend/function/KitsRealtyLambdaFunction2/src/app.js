@@ -85,9 +85,7 @@ app.get('/contractor-users', function(req, res) {
 
       connection.release()
     })
-
   })
-
 });
 
 app.get('/contractors', function(req, res) {
@@ -196,7 +194,7 @@ app.post('/property-contractor', function(req, res) {
     LEFT OUTER JOIN CONTRACTOR_TYPE ON CONTRACTOR.CONTRACTOR_TYPE_ID = CONTRACTOR_TYPE.CONTRACTOR_TYPE_ID 
     LEFT OUTER JOIN USERS ON CONTRACTOR.CONTRACTOR_COGNITO_ID = USERS.USER_COGNITO_ID 
     LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID 
-    WHERE PROPERTY_ID = " + req.body.propertyId + ";`
+    WHERE PROPERTY_ID = ${addQuotes(req.body.propertyId)};`
 
     connection.query(query, function(err, rows, fields) {
       if (err) throw err
@@ -209,6 +207,7 @@ app.post('/property-contractor', function(req, res) {
   })
 
 });
+
 app.post('/revenues', function(req, res) {
   let revenue = req.body.revenue;
   pool.getConnection(function(error, connection) {
@@ -262,20 +261,20 @@ app.post('/properties', function(req, res) {
 
   pool.getConnection(function(error, connection) {
 
-    let addressQuery = `INSERT INTO PROPERTY_ADDRESS (ADDRESS, CITY, COUNTY, ZIPCODE, STATE) \
-    VALUES (" + addQuotes(newProperty.address.address) + ", " + addQuotes(newProperty.address.city) + ", " + addQuotes(newProperty.address.county) + ", " + addQuotes(newProperty.address.zipcode) + ", " + addQuotes(newProperty.address.state) + ");`
+    let addressQuery = `INSERT INTO PROPERTY_ADDRESS (ADDRESS, CITY, COUNTY, ZIPCODE, STATE) 
+    VALUES (${addQuotes(newProperty.address.address)}, ${addQuotes(newProperty.address.city)}, ${addQuotes(newProperty.address.county)}, ${addQuotes(newProperty.address.zipcode)}, ${addQuotes(newProperty.address.state)});`
 
-    let essentialsQuery = `INSERT INTO PROPERTY_ESSENTIALS (PROPERTY_TYPE, NUM_BEDS, NUM_BATHS, LAND_FOOTAGE, PROPERTY_FOOTAGE, YEAR_BUILT, ZILLOW_LINK) \
+    let essentialsQuery = `INSERT INTO PROPERTY_ESSENTIALS (PROPERTY_TYPE, NUM_BEDS, NUM_BATHS, LAND_FOOTAGE, PROPERTY_FOOTAGE, YEAR_BUILT, ZILLOW_LINK) 
     VALUES ( ${addQuotes(newProperty.essentials.propertyType)}, ${addQuotes(newProperty.essentials.numBeds)}, ${addQuotes(newProperty.essentials.numBaths)}, ${addQuotes(newProperty.essentials.numBeds)}, ${addQuotes(newProperty.essentials.landFootage)}, ${addQuotes(newProperty.essentials.propertyFootage)}, ${addQuotes(newProperty.essentials.yearBuilt)}, ${addQuotes(newProperty.essentials.zillowLink)});`
 
-    let pricesQuery = `INSERT INTO PROPERTY_PRICES (BUY_VALUE, EXPECTED_VALUE, SELL_VALUE, BIDDING_PRICE, MARKET_PRICE) \
+    let pricesQuery = `INSERT INTO PROPERTY_PRICES (BUY_VALUE, EXPECTED_VALUE, SELL_VALUE, BIDDING_PRICE, MARKET_PRICE) 
     VALUES (${addQuotes(newProperty.prices.buyValue)}, ${addQuotes(newProperty.prices.expectedValue)}, ${addQuotes(newProperty.prices.sellValue)}, ${addQuotes(newProperty.prices.biddingPrice)}, ${addQuotes(newProperty.prices.marketPrice)});`
 
-    let auctionQuery = "INSERT INTO PROPERTY_AUCTION (AUCTION_LOCATION, DATE_OF_AUCTION) \
-    VALUES (" + addQuotes(newProperty.auction.auctionLocation) + ", " + addQuotes(newProperty.auction.dateOfAuction) + ");"
+    let auctionQuery = `INSERT INTO PROPERTY_AUCTION (AUCTION_LOCATION, DATE_OF_AUCTION) 
+    VALUES (${addQuotes(newProperty.auction.auctionLocation)}, ${addQuotes(newProperty.auction.dateOfAuction)});`
 
-    let loanQuery = "INSERT INTO PROPERTY_LOAN (AMOUNT, MONTH, YEAR) \
-    VALUES (" + newProperty.loan.amount + ", " + newProperty.loan.month + ", " + newProperty.loan.year + ");"
+    let loanQuery = `INSERT INTO PROPERTY_LOAN (AMOUNT, MONTH, YEAR) 
+    VALUES (${addQuotes(newProperty.loan.amount)}, ${addQuotes(newProperty.loan.month)}, ${addQuotes(newProperty.loan.year)});`
 
     connection.query(addressQuery, function(err, addressRows, fields) {
 
@@ -387,41 +386,41 @@ app.put('/properties', function(req, res) {
 
   pool.getConnection(function(error, connection) {
 
-    let propertyQuery = "UPDATE PROPERTY \
-    SET \
-      NOTES = '" + newProperty.notes + "', \
-      DATE_OF_PURCHASE = '" + newProperty.dateOfPurchase + "', \
-      TRUSTEE_NAME = '" + newProperty.trusteeName + "', \
-      DATE_OF_SALE = '" + newProperty.dateOfSale + "', \
-      SUBDIVISION = '" + newProperty.subdivision + "', \
-      COUNTY_ASSESSMENT = '" + newProperty.countyAssessment + "', \
-      STATUS_ID = " + newProperty.status.statusId + ", \
-      OCCUPANCY_STATUS_ID = " + newProperty.occupancyStatus.occupancyStatusId + ", \
-      COORDINATOR_COGNITO_ID = ";
+    let propertyQuery = `UPDATE PROPERTY 
+    SET 
+      NOTES = ${addQuotes(newProperty.notes)}, 
+      DATE_OF_PURCHASE = ${addQuotes(newProperty.dateOfPurchase)}, 
+      TRUSTEE_NAME = ${addQuotes(newProperty.trusteeName)}, 
+      DATE_OF_SALE = ${addQuotes(newProperty.dateOfSale)}, 
+      SUBDIVISION = ${addQuotes(newProperty.subdivision)}, 
+      COUNTY_ASSESSMENT = ${addQuotes(newProperty.countyAssessment)}, 
+      STATUS_ID = ${addQuotes(newProperty.status.statusId)}, 
+      OCCUPANCY_STATUS_ID = ${addQuotes(newProperty.occupancyStatus.occupancyStatusId)}, 
+      COORDINATOR_COGNITO_ID = `;
 
     propertyQuery += (newProperty.coordinator != null) ? newProperty.coordinator.userCognitoId : null;
 
-    propertyQuery += " WHERE PROPERTY_ID = " + newProperty.propertyId + ";"
+    propertyQuery += ` WHERE PROPERTY_ID = ${addQuotes(newProperty.propertyId)}`;
 
-    let addressQuery = "UPDATE PROPERTY_ADDRESS \
-    SET \
-      ADDRESS = '" + newProperty.address.address + "', \
-      CITY = '" + newProperty.address.city + "', \
-      COUNTY = '" + newProperty.address.county + "', \
-      STATE = '" + newProperty.address.state + "', \
-      ZIPCODE = '" + newProperty.address.zipcode + "' \
-    WHERE ADDRESS_ID = " + newProperty.address.addressId + ";"
+    let addressQuery = `UPDATE PROPERTY_ADDRESS 
+    SET 
+      ADDRESS = ${addQuotes(newProperty.address.address)}, 
+      CITY = ${addQuotes(newProperty.address.city)}, 
+      COUNTY = ${addQuotes(newProperty.address.county)}, 
+      STATE = ${addQuotes(newProperty.address.state)}, 
+      ZIPCODE = ${addQuotes(newProperty.address.zipcode)} 
+    WHERE ADDRESS_ID = ${newProperty.address.addressId};`
 
-    let essentialsQuery = "UPDATE PROPERTY_ESSENTIALS \
-    SET \
-      PROPERTY_TYPE = '" + newProperty.essentials.propertyType + "', \
-      NUM_BEDS = " + newProperty.essentials.numBeds + ", \
-      LAND_FOOTAGE = " + newProperty.essentials.landFootage + ", \
-      YEAR_BUILT = " + newProperty.essentials.yearBuilt + ", \
-      NUM_BATHS = " + newProperty.essentials.numBaths + ", \
-      PROPERTY_FOOTAGE = " + newProperty.essentials.propertyFootage + ", \
-      ZILLOW_LINK = '" + newProperty.essentials.zillowLink + "' \
-    WHERE ESSENTIALS_ID = " + newProperty.essentials.essentialsId + ";"
+    let essentialsQuery = `UPDATE PROPERTY_ESSENTIALS 
+    SET 
+      PROPERTY_TYPE = ${addQuotes(newProperty.essentials.propertyType)}, 
+      NUM_BEDS = ${addQuotes(newProperty.essentials.numBeds)}, 
+      LAND_FOOTAGE = ${addQuotes(newProperty.essentials.landFootage)}, 
+      YEAR_BUILT = ${addQuotes(newProperty.essentials.yearBuilt)}, 
+      NUM_BATHS = ${addQuotes(newProperty.essentials.numBaths)}, 
+      PROPERTY_FOOTAGE = ${addQuotes(newProperty.essentials.propertyFootage)}, 
+      ZILLOW_LINK = ${addQuotes(newProperty.essentials.zillowLink)}' 
+    WHERE ESSENTIALS_ID = ${addQuotes(newProperty.essentials.essentialsId)};`
 
     connection.query(propertyQuery, function(err, rows, fields) {
       if (err) throw err   
@@ -437,6 +436,24 @@ app.put('/properties', function(req, res) {
 
     res.json()
     connection.release()
+  })
+
+});
+
+app.put('/property-contractor', function(req, res) {
+
+  pool.getConnection(function(error, connection) {
+
+    var query = `INSERT INTO PROPERTY_CONTRACTOR VALUES (${addQuotes(req.body.contractor.contractorCognitoId)}, ${addQuotes(req.body.propertyId)})`
+
+    connection.query(query, function(err, rows, fields) {
+      if (err) throw err
+
+      res.json("success!")
+
+      connection.release()
+    })
+
   })
 
 });
@@ -528,7 +545,7 @@ app.delete('/properties', function(req, res) {
   pool.getConnection(function(error, connection) {
 
     var propertyRevenuesQuery = "SELECT * FROM REVENUE \
-    WHERE PROPERTY_ID = " + req.body.propertyId;
+    WHERE PROPERTY_ID = " + req.body.propertyId
 
     connection.query(propertyRevenuesQuery, function(err, rows, fields) {
       if (err) throw err
@@ -593,7 +610,7 @@ app.delete('/properties', function(req, res) {
         })
       }
       else {
-        res.json({ error: "property is connected to a revenue" });
+        res.json({ error: "Property is connected to a revenue" });
         connection.release()
       }
     })
@@ -608,9 +625,9 @@ app.delete('/property-contractor', function(req, res) {
 
   pool.getConnection(function(error, connection) {
 
-    var query = "DELETE FROM PROPERTY_CONTRACTOR \
-    WHERE PROPERTY_ID = " + req.body.propertyId + "\
-    AND CONTRACTOR_COGNITO_ID = " + req.body.contractorCognitoId + ";"
+    var query = `DELETE FROM PROPERTY_CONTRACTOR 
+    WHERE PROPERTY_ID = ${addQuotes(req.body.propertyId)}
+    AND CONTRACTOR_COGNITO_ID = ${addQuotes(req.body.contractorCognitoId)};`
 
     connection.query(query, function(err, rows, fields) {
       if (err) throw err

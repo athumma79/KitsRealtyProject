@@ -21,10 +21,12 @@ ion-item img{
 
 
 ion-item-divider{
+    width: 100%;
     --background: #2978f8;
     --color: white;
     text-align: center;
     height: 2.2em;
+    margin-bottom: 0.3em;
 }
 
 amplify-s3-album{
@@ -41,11 +43,11 @@ ion-label{
     border-top: 1 !important;
     }
 
-.accordion{
-    margin-top: 1em;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-    }
+// .accordion{
+//     margin-top: 1em;
+//     margin-left: 0.5em;
+//     margin-right: 0.5em;
+//     }
 #noRevenues{
     text-align: center;
 }    

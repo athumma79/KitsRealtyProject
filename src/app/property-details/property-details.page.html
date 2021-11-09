@@ -234,7 +234,7 @@
       </div>
     </div>
     <div class="accordion-item">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-B" (click)="colorCodeRevenueAmounts()">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-B">
           <h4>Revenues</h4>
         </button>
       <div id="collapse-B" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
@@ -289,7 +289,7 @@
               </ion-select-option>
             </ion-select>
           </ion-button>
-          <ion-button class="save-btn-contractors button d-none" (click)="saveContractors()">Save</ion-button>
+          <ion-button class="save-btn-contractors button d-none" (click)="saveContractors()">Done</ion-button>
         </div>
       </div>
     </div>
@@ -299,7 +299,6 @@
         </button>
       <div id="collapse-D" class="accordion-collapse collapse" data-bs-parent="#modal-accordion">
         <div class="accordion-body">
-          <ion-item-divider><h3>Progress Images</h3></ion-item-divider>
           <amplify-s3-album 
             framework="ionic"
             path="properties/{{property.propertyId}}/progress_images/"

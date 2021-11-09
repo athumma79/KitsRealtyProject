@@ -58,6 +58,7 @@ export class PropertyDetailsPage implements OnInit {
     API
       .post(this.apiName, '/property-contractor', postInit)
       .then(response => {
+        console.log(response)
         var dbContractors = response.contractors;
         for(var i = 0; i < dbContractors.length; i++) {
           var userRole = new UserRole();
@@ -165,12 +166,45 @@ export class PropertyDetailsPage implements OnInit {
       })
   }
 
-  addContractor(event: any) {
-    console.log(event.detail.value);
+  async addContractor(event) {
+    if(window.confirm("Add " + event.detail.value.contractorUser.firstName + " " + event.detail.value.contractorUser.lastName + " to the property?")){
+      if(this.check(event.detail.value)){
+        this.contractors.push(event.detail.value);  
+        const putInit = {
+          body: {
+            propertyId: this.property.propertyId,
+            contractor: event.detail.value
+          }
+        };
+        API
+          .put(this.apiName, '/property-contractor', putInit)
+          .then(response => {
+            window.alert(response);
+          })
+          .catch(err => {
+            console.log(err);
+          })
+        }else{
+          window.alert("ERROR: Contractor is already assigned to this property.")
+        }
+      }
+  }
+
+  check(contractor){
+    var flag = true
+    for (var i = 0; i < this.contractors.length; i++){
+      if (contractor === this.contractors[i]){
+        flag = false;
+      }
+    }
+    return flag;
   }
 
   addCoordinator(event: any) {
-    console.log(event.detail.value);
+    if(window.confirm("Select Coordinator?")){
+      this.property.coordinator = event.detail.value;
+      this.savePropertyToDB();
+    }
   }
 
   editContractors() {
