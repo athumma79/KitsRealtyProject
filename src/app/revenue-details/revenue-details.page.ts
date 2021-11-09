@@ -36,7 +36,6 @@ export class RevenueDetailsPage implements OnInit {
   ngOnInit() {
     this.getFiles('checks');
     this.getFiles('receipts');
-    console.log(this.revenue);
   }
 
   dismiss() {
@@ -80,6 +79,8 @@ export class RevenueDetailsPage implements OnInit {
       day: "2-digit"
     });
   }
+
+
   edit() {
     $("ion-input :not(.disabled)").removeAttr("readonly");
     $("ion-textarea").removeAttr("readonly");
@@ -89,15 +90,51 @@ export class RevenueDetailsPage implements OnInit {
     $(".delete-button").removeClass("d-none");
   }
   
-  submit(){
+ async submit(){
+   if(window.confirm("Save revenue changes?")){
     $("ion-input").attr("readonly");
     $("ion-textarea").attr("readonly")
     $("ion-select").attr("disabled");
     $(".edit-button").removeClass("d-none");
     $(".save-button").addClass("d-none");
     $(".delete-button").addClass("d-none");
-    console.log(this.revenue);
+    const putInit = {
+      body: {
+        revenue: this.revenue
+      }
+    };
+    API
+    .put(this.apiName, '/revenues', putInit)
+    .then(response => {
+      window.alert(response)
+      location.reload();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+   }
+
+
   }
+
+    async delete() {
+      if (window.confirm("Are you sure that you want to DELETE this revenue?")) {
+        const deleteInit = {
+          body: {
+            revenue: this.revenue
+          }
+        };
+        API
+        .del(this.apiName, '/revenues', deleteInit)
+        .then(response => {
+            window.alert(response)
+            location.reload();
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    }
 
   async getFiles(path: string) {
     this.resetFiles(path);

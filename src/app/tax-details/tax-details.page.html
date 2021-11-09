@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Tax Details</ion-title>
+    <i class="fal fa-times-circle" (click)='dismiss()' slot="end"></i>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div style='background-color: white'>
+    <ion-list>
+      <h4 style='text-align: center'>{{tax.user.firstName}} {{tax.user.lastName}}</h4>
+      <ion-item>
+          <ion-label>Tax ID:</ion-label>
+          <ion-input class='tax' type='password' [(ngModel)]='tax.governmentTaxId' readonly></ion-input><ion-icon class='taxShow' (click)='taxShow()' name="eye-sharp"></ion-icon><ion-icon (click)='taxHide()' class='taxHide d-none' name="eye-off-sharp"></ion-icon>
+        </ion-item>
+        <ion-item *ngIf="tax.user">
+          <ion-label>SSN:</ion-label>
+          <ion-input class='ssn' type='password' [(ngModel)]="tax.user.ssn" readonly></ion-input><ion-icon class='ssnShow' (click)='ssnShow()' name="eye-sharp"></ion-icon><ion-icon (click)='ssnHide()' class='ssnHide d-none' name="eye-off-sharp"></ion-icon>
+        </ion-item>
+    </ion-list>     
+    <ion-button style='float: right' class='edit-button' (click)="edit()">Edit</ion-button>
+    <ion-button style='float: right' class='save-button d-none' (click)="save()">Save</ion-button>
+
+    <ion-item-divider style='margin-top: 3em' color='primary'>
+      <ion-label>Tax Documents</ion-label>
+    </ion-item-divider>
+    <input type="file" (change)="selectFileToUpload($event)"/>
+    <ion-list *ngFor="let document of documents; index as i">
+      <ion-item>            
+        <a href={{document}} target="_blank">{{documentNames[i]}}</a>
+        <ion-button class="delete-btn d-none" slot="end" (click)="deleteFile(documentNames[i])">
+          <i class="far fa-trash-alt"></i>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+      <ion-button (click)="uploadFile()">Upload</ion-button>
+    <ion-button id="button" class="edit-btn" (click)="editFiles()">Edit</ion-button>
+    <ion-button id="button" class="save-btn d-none" (click)="saveFiles()">Save</ion-button>
+  </div>
+</ion-content>

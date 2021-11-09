@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 
 import { API, Storage } from 'aws-amplify';
 import * as $ from 'jquery';
@@ -35,7 +35,7 @@ export class RevenuesPage implements OnInit {
   property = new Property();
   contractor = new Contractor();
 
-  constructor(public modalController: ModalController, public loadingController: LoadingController) { }
+  constructor(public modalController: ModalController) { }
 
   ngOnInit() {
     this.loadConnections(() => this.loadRevenues());
@@ -301,7 +301,6 @@ export class RevenuesPage implements OnInit {
   
             this.properties.push(property);
           }
-          this.dismissLoader();
           $(document).ready(function() {
             callback();
           });
@@ -315,15 +314,8 @@ export class RevenuesPage implements OnInit {
       });
   }
 
-  dismissLoader() {
-    this.loadingController.dismiss().then((response) => {
-        console.log('Loader closed!', response);
-    }).catch((err) => {
-        console.log('Error occured : ', err);
-    });
-}
+
   getSymbol(role){
-    console.log(role);
     switch(role){
       case "Property": return "home-sharp"
       case "Contractor": return "hammer-sharp"
@@ -334,7 +326,7 @@ export class RevenuesPage implements OnInit {
   sortProperties(e){
     switch(e.detail.value){
       case "type": this.revenues.sort((a, b) => a.revenueType.localeCompare(b.revenueType));break
-      case "description": this.revenues.sort((a, b) => a.revenueDescription.localeCompare(b.revenueDescription));break
+      case "connection": this.revenues.sort((a, b) => this.getRevenueType(a).localeCompare(this.getRevenueType(b)));break
       case "amount": this.revenues.sort((a, b) => a.revenueAmount-b.revenueAmount);break
       case "amountPaid": this.revenues.sort((a, b) => a.amountPaid-b.amountPaid);break
     }
@@ -358,9 +350,9 @@ export class RevenuesPage implements OnInit {
 
   getRevenueStatus(revenue: Revenue) {
     if (revenue.revenueType.toLowerCase() == "profit") {
-      return "profit";
+      return "Profit";
     }
-    return (revenue.expenseStatus.expenseStatusDescription == "paid") ? "paid" : "due " + this.getFormattedDate(revenue.expenseDueDate);
+    return (revenue.expenseStatus.expenseStatusDescription == "Paid") ? "Paid" : "Due " + this.getFormattedDate(revenue.expenseDueDate);
   }
 
   getFormattedDate(date: Date) {

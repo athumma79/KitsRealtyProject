@@ -63,6 +63,7 @@ export class UserDetailsPage implements OnInit {
         .put(this.apiName, '/users', putInit)
         .then(response => {
           console.log(response);
+          location.reload();
         })
         .catch(error => {
           console.log(error);

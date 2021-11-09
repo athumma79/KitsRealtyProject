@@ -131,17 +131,6 @@ export class PropertiesPage implements OnInit {
   }
   
 
-  async presentLoading() {
-    const loading = await this.loadingController.create({
-      message: 'Please wait...',
-      duration: 1000
-    });
-    await loading.present();
-
-    const { role, data } = await loading.onDidDismiss();
-    console.log('Loading dismissed!');
-  }
-
   sortProperties(e){
     switch(e.detail.value){
       case "status": this.properties.sort((a, b) => a.status.statusId.localeCompare(b.status.statusId));break
@@ -238,11 +227,17 @@ export class PropertiesPage implements OnInit {
         'property': this.properties[index],
       }
     });
+    propertyDetailsModal.onDidDismiss().then((dismissed) => {
+      location.reload();
+  });
     return await propertyDetailsModal.present();
   }
   async openAddPropertyForm() {
     const AddPropertyFormModal = await this.modalController.create({
       component: AddPropertyFormPage
+    });
+    AddPropertyFormModal.onDidDismiss().then((dismissed) => {
+        location.reload();
     });
     return await AddPropertyFormModal.present();
   }

@@ -27,8 +27,6 @@ export class AddRevenueFormPage implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.properties)
-    console.log(this.contractors)
   }
   updateInput(field, event) {
     let value = event.target.value;

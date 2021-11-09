@@ -154,6 +154,25 @@ app.get('/properties/*', function(req, res) {
   res.json({success: 'get call succeed!', url: req.url});
 });
 
+app.get('/taxes', function(req, res) {
+  pool.getConnection(function(error, connection) {
+
+    var query = `SELECT * 
+    FROM TAX 
+    LEFT OUTER JOIN USERS ON USERS.USER_COGNITO_ID = TAX.USER_COGNITO_ID
+    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID;`
+
+    connection.query(query, function(err, rows, fields) {
+      if (err) throw err
+
+      res.json({ taxes: rows })
+
+      connection.release()
+    })
+
+  })
+});
+
 /****************************
 * Example post method *
 ****************************/
@@ -356,15 +375,21 @@ app.post('/users', function(req, res) {
 
       pool.getConnection(function(error, connection) {
 
-        var query = `INSERT INTO USERS (USER_COGNITO_ID, ROLE_ID, FIRST_NAME, LAST_NAME, EMAIL)
-        VALUES (${addQuotes(addToGroupParams.Username)}, ${addQuotes(user.role.roleId)}, ${addQuotes(user.firstName)}, ${addQuotes(user.lastName)}, ${addQuotes(user.email)})`
+        var userQuery = `INSERT INTO USERS (USER_COGNITO_ID, ROLE_ID, FIRST_NAME, LAST_NAME, EMAIL)
+        VALUES (${addQuotes(addToGroupParams.Username)}, ${addQuotes(user.role.roleId)}, ${addQuotes(user.firstName)}, ${addQuotes(user.lastName)}, ${addQuotes(user.email)});`
+
+        var taxQuery = `INSERT INTO TAX (USER_COGNITO_ID) VALUES (${addQuotes(addToGroupParams.Username)});`
     
-        connection.query(query, function(err, rows, fields) {
+        connection.query(userQuery, function(err, rows, fields) {
           if (err) throw err
-    
-          res.json()
-    
-          connection.release()
+          
+          connection.query(taxQuery, function(err, rows, fields) {
+            if (err) throw err
+            
+            res.json("User Created")
+      
+            connection.release()
+          })
         })
       })
     });
@@ -434,8 +459,44 @@ app.put('/properties', function(req, res) {
       if (err) throw err   
     })
 
-    res.json()
+    res.json("Property Updated")
     connection.release()
+  })
+
+});
+
+app.put('/taxes', function(req, res) {
+
+  let tax = req.body.tax;
+
+  pool.getConnection(function(error, connection) {
+
+    var taxQuery = `UPDATE TAX SET
+     GOVERNMENT_TAX_ID = ${addQuotes(tax.governmentTaxId)}
+     WHERE TAX_ID = ${addQuotes(tax.taxId)};`
+
+    connection.query(taxQuery, function(err, rows, fields) {
+      if (err) throw err
+
+      if (tax.user){
+        var userQuery = `UPDATE USERS SET
+        SSN = ${addQuotes(tax.user.ssn)}
+        WHERE USER_COGNITO_ID = ${addQuotes(tax.user.userCognitoId)};`
+
+        connection.query(userQuery, function(err, rows, fields) {
+          if (err) throw err
+    
+          res.json("Tax Information Updated")
+    
+          connection.release()
+        })
+      }else{
+        res.json("Tax Information Updated")
+        connection.release()
+      }
+
+    })
+
   })
 
 });
@@ -449,7 +510,7 @@ app.put('/property-contractor', function(req, res) {
     connection.query(query, function(err, rows, fields) {
       if (err) throw err
 
-      res.json("success!")
+      res.json("Contractor Added")
 
       connection.release()
     })
@@ -476,7 +537,7 @@ app.put('/contractors', function(req, res) {
       if (err) throw err   
     })
 
-    res.json()
+    res.json("Contractor Updated")
     connection.release()
   })
 });
@@ -488,9 +549,9 @@ app.put('/revenues', function(req, res) {
 
     let query = `UPDATE REVENUE 
     SET 
-      PROPERTY_ID = ${addQuotes(revenue.property.propertyId)}, 
-      CONTRACTOR_COGNITO_ID = ${addQuotes(revenue.contractor.contractorCognitoId)}, 
-      EXPENSE_STATUS_ID = ${addQuotes(revenue.expenseStatusId)}, 
+      PROPERTY_ID = ${(revenue.property != null) ? addQuotes(revenue.property.propertyId) : null}, 
+      CONTRACTOR_COGNITO_ID = ${(revenue.contractor != null) ? addQuotes(revenue.contractor.contractorCognitoId) : null}, 
+      EXPENSE_STATUS_ID = ${addQuotes(revenue.expenseStatus.expenseStatusId)}, 
       REVENUE_AMOUNT = ${addQuotes(revenue.revenueAmount)}, 
       REVENUE_TYPE = ${addQuotes(revenue.revenueType)},
       EXPENSE_DUE_DATE = ${addQuotes(revenue.expenseDueDate)},
@@ -503,7 +564,7 @@ app.put('/revenues', function(req, res) {
       if (err) throw err   
     })
 
-    res.json("Revenue Updated!")
+    res.json("Revenue Updated")
     connection.release()
   })
 });
@@ -520,7 +581,7 @@ app.put('/users', function(req, res) {
     connection.query(query, function(err, rows, fields) {
       if (err) throw err
 
-      res.json()
+      res.json("User Updated")
 
       connection.release()
     })
@@ -544,13 +605,12 @@ app.delete('/properties/*', function(req, res) {
 app.delete('/properties', function(req, res) {
   pool.getConnection(function(error, connection) {
 
-    var propertyRevenuesQuery = "SELECT * FROM REVENUE \
-    WHERE PROPERTY_ID = " + req.body.propertyId
+    var propertyRevenuesQuery = "DELETE FROM REVENUE \
+    WHERE PROPERTY_ID = " + req.body.propertyId;
 
     connection.query(propertyRevenuesQuery, function(err, rows, fields) {
       if (err) throw err
 
-      if (rows.length == 0) {
         var propertyDependenciesQuery = "SELECT PRICES_ID, ADDRESS_ID, ESSENTIALS_ID, LOAN_ID \
         FROM PROPERTY \
         WHERE PROPERTY_ID = " + req.body.propertyId;
@@ -603,22 +663,60 @@ app.delete('/properties', function(req, res) {
                 })
               }
               
-              res.json();
+              res.json("Property Deleted");
               connection.release()
             })
           })
         })
-      }
-      else {
-        res.json({ error: "Property is connected to a revenue" });
-        connection.release()
-      }
     })
   })
 });
 
 app.delete('/contractors', function(req, res) {
-  
+  let contractor = req.body.contractor;
+  pool.getConnection(function(error, connection) {
+
+    var contractorQuery = `DELETE FROM CONTRACTOR 
+    WHERE CONTRACTOR_COGNITO_ID = ${addQuotes(contractor.contractorCognitoId)}`
+
+    var revenueQuery = `DELETE FROM CONTRACTOR 
+    WHERE CONTRACTOR_COGNITO_ID = ${addQuotes(contractor.contractorCognitoId)}`
+
+    var propertyQuery = `DELETE FROM PROPERTY_CONTRACTOR 
+    WHERE CONTRACTOR_COGNITO_ID = ${addQuotes(contractor.contractorCognitoId)}`
+    connection.query(revenueQuery, function(err, rows, fields) {
+      if (err) throw err
+     
+      connection.query(propertyQuery, function(err, rows, fields) {
+        if (err) throw err
+
+        connection.query(contractorQuery, function(err, rows, fields) {
+          if (err) throw err
+
+          res.json("Contractor Deleted")
+          connection.release()
+          })
+      })
+    })
+
+  })
+});
+
+app.delete('/revenues', function(req, res) {
+  let revenue = req.body.revenue;
+  pool.getConnection(function(error, connection) {
+
+    var query = `DELETE FROM REVENUE 
+    WHERE REVENUE_ID = ${addQuotes(revenue.revenueId)}`
+
+    connection.query(query, function(err, rows, fields) {
+      if (err) throw err
+
+      res.json("Revenue Deleted")
+
+      connection.release()
+    })
+  })
 });
 
 app.delete('/property-contractor', function(req, res) {
@@ -632,7 +730,7 @@ app.delete('/property-contractor', function(req, res) {
     connection.query(query, function(err, rows, fields) {
       if (err) throw err
 
-      res.json()
+      res.json("Contractor Disconnected")
 
       connection.release()
     })

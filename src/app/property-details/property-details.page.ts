@@ -495,7 +495,7 @@ export class PropertyDetailsPage implements OnInit {
   }
 
   async deleteProperty() {
-    if (window.confirm("Are you sure that you want to DELETE this property?")) {
+    if (window.confirm("Are you sure that you want to DELETE this property? This will delete any files, assignments, or yrevenues connected to this property.")) {
       const deleteInit = {
         body: {
           propertyId: this.property.propertyId
@@ -504,9 +504,7 @@ export class PropertyDetailsPage implements OnInit {
       API
       .del(this.apiName, '/properties', deleteInit)
       .then(response => {
-        if (response.error) {
-          window.alert("You cannot delete this property because it is referenced by a revenue.")
-        }
+        this.dismiss();
         Storage.list("properties/" + this.property.propertyId + "/")
         .then(response => {
           for (let i = 0; i < response.length; i++) {
@@ -518,7 +516,6 @@ export class PropertyDetailsPage implements OnInit {
                 console.log(err);
               })
           }
-          location.reload();
         })
         .catch(err => {
           console.log(err);

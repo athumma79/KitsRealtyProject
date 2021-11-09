@@ -48,15 +48,16 @@ export class AddUserFormPage implements OnInit {
         user: this.newUser
       }
     };
-    console.log(this.newUser);
     API
       .post(this.apiName, '/users', postInit)
       .then(response => {
         console.log(response);
+        location.reload();
       })
       .catch(err => {
         alert("User with this email already exists.");
       })
+
   }
 
   dismiss() {

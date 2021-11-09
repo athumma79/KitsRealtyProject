@@ -119,6 +119,21 @@
                 ]
             },
             "policyResourceName": "/property-revenues"
+        },
+        {
+            "name": "/taxes",
+            "lambdaFunction": "KitsRealtyLambdaFunction2",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            },
+            "policyResourceName": "/taxes"
         }
     ],
     "resourceName": "KitsRealtyAPI2",
@@ -129,7 +144,7 @@
         }
     ],
     "privacy": {
-        "auth": 8,
+        "auth": 9,
         "unauth": 0,
         "authRoleName": "amplify-kitsrealtyproject2-dev-155513-authRole",
         "unAuthRoleName": "amplify-kitsrealtyproject2-dev-155513-unauthRole"
@@ -144,5 +159,5 @@
             ]
         }
     ],
-    "uuid": "4a5d03a1"
+    "uuid": "9c262ab4"
 }

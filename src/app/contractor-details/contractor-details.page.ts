@@ -84,6 +84,26 @@ export class ContractorDetailsPage implements OnInit {
     $("ion-select").removeAttr("disabled");
   }
 
+  async delete() {
+    if (window.confirm("Delete this contractor? This will also delete any connected revenues and assignments.")) {
+      const delInit = {
+        body: {
+          contractor: this.contractor
+        }
+      };
+      API
+        .del(this.apiName, '/contractors', delInit)
+        .then(response => {
+          console.log(response);
+          location.reload();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  }
+
+
   async saveContractor() {
     if (window.confirm("Save contractor information?")) {
       $("ion-input").attr("readonly", "readonly");
@@ -97,6 +117,7 @@ export class ContractorDetailsPage implements OnInit {
         .put(this.apiName, '/contractors', putInit)
         .then(response => {
           console.log(response);
+          location.reload();
         })
         .catch(error => {
           console.log(error);

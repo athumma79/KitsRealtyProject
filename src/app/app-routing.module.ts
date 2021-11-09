@@ -13,7 +13,11 @@ const routes: Routes = [
   {
     path: 'user-details',
     loadChildren: () => import('./user-details/user-details.module').then( m => m.UserDetailsPageModule)
+  },  {
+    path: 'tax-details',
+    loadChildren: () => import('./tax-details/tax-details.module').then( m => m.TaxDetailsPageModule)
   }
+
 ];
 
 @NgModule({
