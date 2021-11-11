@@ -324,7 +324,8 @@ export class PropertyDetailsPage implements OnInit {
       let month = Number(date.substring(0, 2));
       let day = Number(date.substring(3, 5));
       let year = Number(date.substring(6, 10));
-      let newDate = new Date(year, month, day);
+      let newDate = new Date(year, month-1, day);
+
       
       switch (type) {
         case 'date_of_purchase':

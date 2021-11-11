@@ -37,6 +37,7 @@ export class UserDetailsPage implements OnInit {
     }
   }
 
+
   getUserRole(roleId) {
     switch (roleId) {
       case "1": return "Admin";
@@ -47,13 +48,57 @@ export class UserDetailsPage implements OnInit {
 
   editUser() {
     $("ion-input").removeAttr("readonly");
-    $("ion-select").removeAttr("disabled");
+    $(".edit-button").addClass("d-none");
+    $(".save-button").removeClass("d-none");
+    $(".inactive-button").removeClass("d-none");
+    $(".active-button").removeClass("d-none");
   }
 
+  async inactivate() {
+    if (window.confirm("Are you sure that you want to INACTIVATE " + this.user.firstName + " " + this.user.lastName + "?")) {
+      this.user.role.userRoleDescription = "Inactive"; 
+      this.user.role.roleId = '0';
+      const putInit = {
+        body: {
+          user: this.user
+        }
+      };
+      API
+        .put(this.apiName, '/users', putInit)
+        .then(response => {
+          location.reload();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  }
+
+  async activate() {
+    if (window.confirm("Are you sure that you want to ACTIVATE " + this.user.firstName + " " + this.user.lastName + "?")) {
+      const putInit = {
+        body: {
+          user: this.user
+        }
+      };
+      API
+        .put(this.apiName, '/activate', putInit)
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  }
   async saveUser() {
     if (window.confirm("Save user information?")) {
       $("ion-input").attr("readonly", "readonly");
       $("ion-select").attr("disabled", "disabled");
+      $(".edit-button").removeClass("d-none");
+      $(".save-button").addClass("d-none");
+      $(".active-button").addClass("d-none");
+      $(".inactive-button").addClass("d-none");
       const putInit = {
         body: {
           user: this.user

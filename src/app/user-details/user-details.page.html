@@ -7,8 +7,10 @@
 
 <ion-content>
   <div>
-    <ion-button (click)='editUser()'>Edit</ion-button>
-    <ion-button (click)='saveUser()'>Save</ion-button>
+    <ion-button class='edit-button' (click)="editUser()">Edit</ion-button>
+    <ion-button class='save-button d-none' (click)="saveUser()">Save Changes</ion-button>
+    <ion-button *ngIf='user.role.roleId != "0"' color='danger' class='inactive-button d-none' (click)="inactivate()">Inactivate</ion-button>
+    <ion-button *ngIf='user.role.roleId == "0"' color='success' class='active-button d-none' (click)="activate()">Activate</ion-button>
   </div>
   <div class="content-container">
     <ion-list>

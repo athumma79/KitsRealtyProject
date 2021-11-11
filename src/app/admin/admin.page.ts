@@ -75,7 +75,6 @@ export class AdminPage implements OnInit {
   }
 
   getSymbol(role){
-    console.log(role);
     switch(role){
       case "Admin": return "cog-sharp"
       case "Employee": return "person-circle"

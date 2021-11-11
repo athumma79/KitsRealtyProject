@@ -239,7 +239,9 @@ export class RevenueDetailsPage implements OnInit {
     if (window.confirm("Are you sure that you want to DELETE this image?")) {
       try {
         await Storage.remove('revenues/' + this.revenue.revenueId + '/' + path + '/' + fileToDelete, {});
-        this.getFiles(path);
+        this.getFiles(path).then(() => {
+          this.editFiles(path);
+        });        
       } catch (err) {
         console.log(err);
       }  

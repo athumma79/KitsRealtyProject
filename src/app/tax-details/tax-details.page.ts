@@ -21,6 +21,7 @@ export class TaxDetailsPage implements OnInit {
     }
 
   ngOnInit() {
+    this.getFiles();
   }
 
   edit() {
@@ -33,7 +34,20 @@ export class TaxDetailsPage implements OnInit {
     $("ion-input").attr("readonly", "readonly");
     $(".edit-button").removeClass("d-none");
     $(".save-button").addClass("d-none");
+    const putInit = {
+      body: {
+        tax: this.tax
+      }
+    };
     API
+    .put(this.apiName, '/taxes', putInit)
+    .then(response => {
+      window.alert(response)
+      location.reload();
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
 
   dismiss() {
@@ -71,7 +85,6 @@ export class TaxDetailsPage implements OnInit {
     this.resetFiles();
     await Storage.list("taxes/" + this.tax.taxId + "/tax_docs")
       .then(async response => {
-        console.log(response);
         if (!response || response.length < 1 || (response.length < 2 && response[0].size == 0)) {
           return;
         }
@@ -112,43 +125,25 @@ export class TaxDetailsPage implements OnInit {
     this.fileToUpload = e.target.files[0]
   }
 
-  editFiles(filetype: string) {
-    $(function() {
-      switch (filetype) {
-        case 'checks':
-          $(".edit-btn-checks").addClass("d-none");
-          $(".save-btn-checks").removeClass("d-none");
-          $(".delete-btn-checks").removeClass("d-none");
-          break;
-        case 'receipts':
-          $(".edit-btn-receipts").addClass("d-none");
-          $(".save-btn-receipts").removeClass("d-none");
-          $(".delete-btn-receipts").removeClass("d-none");
-          break;
-      }
+  editFiles() {
+      $(function() {
+        $(".edit-btn").addClass("d-none");
+        $(".save-btn").removeClass("d-none");
+        $(".delete-btn").removeClass("d-none");
     });
   }
 
-  saveFiles(filetype: string) {
+  saveFiles() {
     $(function() {
-      switch (filetype) {
-        case 'checks':
-          $(".edit-btn-checks").removeClass("d-none");
-          $(".save-btn-checks").addClass("d-none");
-          $(".delete-btn-checks").addClass("d-none");
-          break;
-        case 'receipts':
-          $(".edit-btn-receipts").removeClass("d-none");
-          $(".save-btn-receipts").addClass("d-none");
-          $(".delete-btn-receipts").addClass("d-none");
-          break;
-      }
+          $(".edit-btn").removeClass("d-none");
+          $(".save-btn").addClass("d-none");
+          $(".delete-btn").addClass("d-none");
     });
   }
 
   async uploadFile() {
     try {
-      await Storage.put('taxes/' + this.tax.taxId + '/tax_docs/' + this.fileToUpload.name + "-" + Date.now(), this.fileToUpload, {});
+      await Storage.put('taxes/' + this.tax.taxId + '/tax_docs/' + Date.now() + "-" + this.fileToUpload.name, this.fileToUpload, {});
       this.getFiles();
     } catch (err) {
       console.log(err);
@@ -159,7 +154,9 @@ export class TaxDetailsPage implements OnInit {
     if (window.confirm("Are you sure that you want to DELETE this image?")) {
       try {
         await Storage.remove('taxes/' + this.tax.taxId + '/tax_docs/' + fileToDelete, {});
-        this.getFiles();
+        this.getFiles().then(() => {
+          this.editFiles();
+        });        
       } catch (err) {
         console.log(err);
       }  

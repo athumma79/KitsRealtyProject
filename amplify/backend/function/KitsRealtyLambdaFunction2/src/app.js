@@ -96,7 +96,8 @@ app.get('/contractors', function(req, res) {
     FROM CONTRACTOR 
     LEFT OUTER JOIN CONTRACTOR_TYPE ON CONTRACTOR.CONTRACTOR_TYPE_ID = CONTRACTOR_TYPE.CONTRACTOR_TYPE_ID 
     LEFT OUTER JOIN USERS ON CONTRACTOR.CONTRACTOR_COGNITO_ID = USERS.USER_COGNITO_ID 
-    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID;`
+    LEFT OUTER JOIN USER_ROLE ON USERS.ROLE_ID = USER_ROLE.ROLE_ID
+    WHERE USER_ROLE_DESCRIPTION = 'Contractor';`
 
     connection.query(query, function(err, rows, fields) {
       if (err) throw err
@@ -444,7 +445,7 @@ app.put('/properties', function(req, res) {
       YEAR_BUILT = ${addQuotes(newProperty.essentials.yearBuilt)}, 
       NUM_BATHS = ${addQuotes(newProperty.essentials.numBaths)}, 
       PROPERTY_FOOTAGE = ${addQuotes(newProperty.essentials.propertyFootage)}, 
-      ZILLOW_LINK = ${addQuotes(newProperty.essentials.zillowLink)}' 
+      ZILLOW_LINK = ${addQuotes(newProperty.essentials.zillowLink)} 
     WHERE ESSENTIALS_ID = ${addQuotes(newProperty.essentials.essentialsId)};`
 
     connection.query(propertyQuery, function(err, rows, fields) {
@@ -580,13 +581,72 @@ app.put('/users', function(req, res) {
 
     connection.query(query, function(err, rows, fields) {
       if (err) throw err
-
-      res.json("User Updated")
-
-      connection.release()
+      if(user.role.roleId == "0"){
+        let addToGroupParams = {
+          GroupName: user.role.userRoleDescription.toLowerCase(),
+          Username: user.userCognitoId,
+          UserPoolId: 'us-east-1_MQXokLX98'
+        };
+    
+        cognitoidentityserviceprovider.adminAddUserToGroup(addToGroupParams, function(err, data) {
+          if (err) throw err
+        res.json("User Updated")
+  
+        connection.release()
+      })
+      }
+      })
     })
+  });
+
+  app.put('/activate', function(req, res) {
+    let user = req.body.user;
+
+    let removeFromGroupParams = {
+      GroupName: "inactive",
+      Username: user.userCognitoId,
+      UserPoolId: 'us-east-1_MQXokLX98'
+    };
+
+    cognitoidentityserviceprovider.adminRemoveUserFromGroup(removeFromGroupParams, function(err, data) {
+      if (err) throw err
+      let userParams = {
+        Username: user.userCognitoId,
+        UserPoolId: 'us-east-1_MQXokLX98'
+      };
+
+      cognitoidentityserviceprovider.adminListGroupsForUser(userParams, function(err, data) {
+        if (err) throw err
+        let minRole = 0;
+        let minPrecedence = getPrecedence(data["Groups"][0]["GroupName"]);
+  
+        for(let i = 0; i < data["Groups"].length; i++){
+          let curPrec = getPrecedence(data["Groups"][i]["GroupName"])
+          if (curPrec < minPrecedence){
+              minRole = i;
+              minPrecedence = curPrec;
+          }
+        }
+      pool.getConnection(function(error, connection) {
+  
+        var query = `UPDATE USERS
+          SET ROLE_ID = ${addQuotes(getRoleId(data["Groups"][minRole]["GroupName"]))}
+          WHERE USER_COGNITO_ID = ${addQuotes(user.userCognitoId)};`
+    
+        connection.query(query, function(err, rows, fields) {
+          if (err) throw err
+          res.json("User Activated")
+  
+          connection.release()
+            
+          })
+        })
+    })
+
   })
-});
+  
+    
+    });
 
 app.put('/properties/*', function(req, res) {
   // Add your code here
@@ -746,5 +806,34 @@ app.listen(3000, function() {
 function addQuotes(value) {
   return (typeof value == "string") && (value != null) ? `'${value.replace("'", "\\\'")}'` : value;
 }
+
+function getPrecedence(role){
+  switch(role){
+    case "admin": return 2
+    case "bidding_contractor": return 2
+    case "contractor": return 3
+    case "employee": return 2
+    case "inactive": return 1
+    case "real_estate_contractor": return 2
+    case "research_contractor": return 2
+    case "remodeling_contractor": return 2
+    case "taxes_contractor": return 2
+  }
+}
+
+function getRoleId(role){
+  switch(role){
+    case "admin": return 1
+    case "bidding_contractor": return 2
+    case "contractor": return 2
+    case "employee": return 3
+    case "inactive": return 0
+    case "real_estate_contractor": return 2
+    case "research_contractor": return 2
+    case "remodeling_contractor": return 2
+    case "taxes_contractor": return 2
+  }
+}
+
 
 module.exports = app
