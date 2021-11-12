@@ -66,7 +66,8 @@ export class UserDetailsPage implements OnInit {
       API
         .put(this.apiName, '/users', putInit)
         .then(response => {
-          location.reload();
+          window.alert(response)
+          this.dismiss();
         })
         .catch(error => {
           console.log(error);
@@ -84,7 +85,8 @@ export class UserDetailsPage implements OnInit {
       API
         .put(this.apiName, '/activate', putInit)
         .then(response => {
-          console.log(response);
+          window.alert(response)
+          this.dismiss();
         })
         .catch(error => {
           console.log(error);
@@ -108,7 +110,7 @@ export class UserDetailsPage implements OnInit {
         .put(this.apiName, '/users', putInit)
         .then(response => {
           console.log(response);
-          location.reload();
+          this.dismiss();
         })
         .catch(error => {
           console.log(error);

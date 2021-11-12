@@ -50,6 +50,34 @@ export class AdminPage implements OnInit {
         console.log(err);
       })
   }
+  async reloadUsers() {
+    this.users = new Array();
+    this.backupUsers = new Array();
+    API
+      .get(this.apiName, '/users', {})
+      .then(response => {
+        var dbUsers = response.users;
+        for(var i = 0; i < dbUsers.length; i++) {
+          let userRole = new UserRole();
+          userRole.roleId = dbUsers[i]["ROLE_ID"];
+          userRole.userRoleDescription = dbUsers[i]["USER_ROLE_DESCRIPTION"];
+
+          let user = new User();
+          user.userCognitoId = dbUsers[i]["USER_COGNITO_ID"];
+          user.role = userRole;
+          user.firstName = dbUsers[i]["FIRST_NAME"];
+          user.lastName = dbUsers[i]["LAST_NAME"];
+          user.email = dbUsers[i]["EMAIL"];
+          user.ssn = dbUsers[i]["SSN"];
+
+          this.users.push(user);
+          this.backupUsers.push(user);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
 
   sortUsers(e){
     switch(e.detail.value){
@@ -86,6 +114,9 @@ export class AdminPage implements OnInit {
     const addUserFormModal = await this.modalController.create({
       component: AddUserFormPage
     });
+    addUserFormModal.onDidDismiss().then((dismissed) => {
+      this.reloadUsers()
+    });
     return await addUserFormModal.present();
   }
 
@@ -95,6 +126,9 @@ export class AdminPage implements OnInit {
       componentProps: {
         'user': this.users[index],
       }
+    });
+    userDetailsModal.onDidDismiss().then((dismissed) => {
+      this.reloadUsers()
     });
     return await userDetailsModal.present();
   }

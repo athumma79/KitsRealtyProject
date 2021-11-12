@@ -6,7 +6,7 @@
 <div id='tools'>
   <div class='buttonbox'>
     <ion-label >Sort By:</ion-label>
-      <ion-select class="hover" placeholder="Filter" (ionChange)="sortProperties($event)">
+      <ion-select class="hover" placeholder="..." (ionChange)="sortProperties($event)">
         <ion-select-option value="status">Status</ion-select-option>
         <ion-select-option value="state">State</ion-select-option>
         <ion-select-option value="type">Type</ion-select-option>
@@ -28,6 +28,7 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+  
     <div class="accordion" id="accordion">
       <div class="accordion-item" *ngFor="let property of properties; index as i">
           <div  class="accordion-button collapsed description" lines='none' type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse-' + property.propertyId">

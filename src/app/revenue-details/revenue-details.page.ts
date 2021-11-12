@@ -107,7 +107,7 @@ export class RevenueDetailsPage implements OnInit {
     .put(this.apiName, '/revenues', putInit)
     .then(response => {
       window.alert(response)
-      location.reload();
+      this.dismiss();
     })
     .catch(err => {
       console.log(err);
@@ -128,7 +128,7 @@ export class RevenueDetailsPage implements OnInit {
         .del(this.apiName, '/revenues', deleteInit)
         .then(response => {
             window.alert(response)
-            location.reload();
+            this.dismiss();
           })
           .catch(err => {
             console.log(err);
@@ -246,6 +246,28 @@ export class RevenueDetailsPage implements OnInit {
         console.log(err);
       }  
     }
+  }
+
+  updateDate(date: string, type: string) {
+    var date_regex = /^(0?[1-9]|1[0-2])\/(0?[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
+
+    if (date_regex.test(date)) {
+      let month = Number(date.substring(0, 2));
+      let day = Number(date.substring(3, 5));
+      let year = Number(date.substring(6, 10));
+      let newDate = new Date(year, month-1, day);
+
+      
+      switch (type) {
+        case 'date_incurred':
+          this.revenue.dateIncurred = newDate;
+          break;
+        case 'due_date':
+          this.revenue.expenseDueDate = newDate;
+          break;
+      }
+    }
+
   }
 
   

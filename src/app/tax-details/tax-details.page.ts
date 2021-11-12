@@ -43,7 +43,7 @@ export class TaxDetailsPage implements OnInit {
     .put(this.apiName, '/taxes', putInit)
     .then(response => {
       window.alert(response)
-      location.reload();
+      this.dismiss();
     })
     .catch(err => {
       console.log(err);

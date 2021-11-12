@@ -97,6 +97,7 @@ export class AddContractorFormPage implements OnInit {
       .post(this.apiName, '/contractors', postInit)
       .then(response => {
         alert(response);
+        this.dismiss();
       })
       .catch(err => {
         console.log(err);

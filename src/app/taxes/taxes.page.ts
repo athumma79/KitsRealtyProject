@@ -30,6 +30,9 @@ export class TaxesPage implements OnInit {
         'tax': this.taxes[index]
       }
     });
+    taxDetailsModal.onDidDismiss().then((dismissed) => {
+      this.reloadTaxes();
+  });
     return await taxDetailsModal.present();
   }
 
@@ -66,5 +69,41 @@ export class TaxesPage implements OnInit {
         console.log(error);
       });
   }
+
+  async reloadTaxes() {
+    this.taxes = new Array();
+    this.backupTaxes = new Array();
+    API
+      .get(this.apiName, '/taxes', {})
+      .then(response => {
+        let dbTaxes = response.taxes
+        for(let i = 0; i < dbTaxes.length; i++){
+          let userRole = new UserRole();
+          userRole.roleId = dbTaxes[i]["ROLE_ID"];
+          userRole.userRoleDescription = dbTaxes[i]["USER_ROLE_DESCRIPTION"];
+  
+          let user = new User();
+          user.userCognitoId = dbTaxes[i]["USER_COGNITO_ID"];
+          user.role = userRole;
+          user.firstName = dbTaxes[i]["FIRST_NAME"];
+          user.lastName = dbTaxes[i]["LAST_NAME"];
+          user.email = dbTaxes[i]["EMAIL"];
+          user.ssn = dbTaxes[i]["SSN"];
+
+          let tax = new Tax();
+          tax.user = user;
+          tax.taxId = dbTaxes[i]["TAX_ID"];
+          tax.governmentTaxId = dbTaxes[i]["GOVERNMENT_TAX_ID"];
+
+  
+          this.taxes.push(tax);
+          this.backupTaxes.push(tax);
+        }
+        })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
 
 }

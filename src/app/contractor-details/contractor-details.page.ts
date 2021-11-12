@@ -81,6 +81,9 @@ export class ContractorDetailsPage implements OnInit {
   editContractor() {
     $("ion-input").removeAttr("readonly");
     $("ion-select").removeAttr("disabled");
+    $(".edit-btn").addClass("d-none");
+    $(".save-btn").removeClass("d-none");
+    $(".delete-btn").removeClass("d-none");
   }
 
   async delete() {
@@ -94,7 +97,7 @@ export class ContractorDetailsPage implements OnInit {
         .del(this.apiName, '/contractors', delInit)
         .then(response => {
           console.log(response);
-          location.reload();
+          this.dismiss();
         })
         .catch(error => {
           console.log(error);
@@ -107,6 +110,9 @@ export class ContractorDetailsPage implements OnInit {
     if (window.confirm("Save contractor information?")) {
       $("ion-input").attr("readonly", "readonly");
       $("ion-select").attr("disabled", "disabled");
+      $(".edit-btn").removeClass("d-none");
+      $(".save-btn").addClass("d-none");
+      $(".delete-btn").addClass("d-none");
       const putInit = {
         body: {
           contractor: this.contractor

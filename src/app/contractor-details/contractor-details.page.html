@@ -7,9 +7,9 @@
 
 <ion-content>
   <div>
-    <ion-button (click)='editContractor()'>Edit</ion-button>
-    <ion-button (click)='saveContractor()'>Save</ion-button>
-    <ion-button color='danger' (click)='delete()'>Delete</ion-button>
+    <ion-button class='edit-btn' (click)='editContractor()'>Edit</ion-button>
+    <ion-button class='save-btn d-none' (click)='saveContractor()'>Save</ion-button>
+    <ion-button class='delete-btn d-none' color='danger' (click)='delete()'>Delete</ion-button>
   </div>
   <div class="content-container" style='background-color: white'>
     <h3 class="center">{{contractor.contractorUser.firstName}} {{contractor.contractorUser.lastName}}</h3>

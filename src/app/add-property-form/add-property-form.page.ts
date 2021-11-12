@@ -35,9 +35,6 @@ export class AddPropertyFormPage implements OnInit {
     this.newProperty.status = defaultStatus;
   }
 
-  renderThumbnail(event: Event) {
-
-  }
 
   updateInput(field, event) {
     let value = event.target.value;
@@ -86,13 +83,13 @@ export class AddPropertyFormPage implements OnInit {
         if (this.thumbnail) {
           Storage.put('properties/' + response + '/thumbnail/' + this.thumbnail.name + "-" + Date.now(), this.thumbnail, {})
             .then((response) => {
-              location.reload();
+              this.dismiss();
             })
             .catch((err) => {
               console.log(err);
             });
         } else {
-          location.reload();
+          this.dismiss();
         }
       })
       .catch(err => {

@@ -51,8 +51,8 @@ export class AddUserFormPage implements OnInit {
     API
       .post(this.apiName, '/users', postInit)
       .then(response => {
-        console.log(response);
-        location.reload();
+        window.alert(response)
+        this.dismiss();
       })
       .catch(err => {
         alert("User with this email already exists.");

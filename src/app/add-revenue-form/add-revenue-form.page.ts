@@ -53,7 +53,8 @@ export class AddRevenueFormPage implements OnInit {
     API
       .post(this.apiName, '/revenues', postInit)
       .then(response => {
-        console.log(response);
+        window.alert(response)
+        this.dismiss();
       })
       .catch(err => {
         console.log(err);

@@ -9,3 +9,34 @@ ion-toolbar{
 amplify-sign-out{
     padding-right: 3%;
     }
+
+ion-list{
+    margin: 0.5em;
+}    
+
+.buttonbox{
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    padding-left: 0.4em;
+    margin-right: auto;
+    margin-left: 0.4em;
+    margin-bottom: auto;
+    margin-top: auto;
+    background-color: #3880ff;
+    color: white;
+    border-radius: 15px;
+}
+#tools {
+    display: flex;
+    align-items: center;
+}
+ion-searchbar{
+    width: 50%;
+    flex: 1;
+    }
+    
+.hover:hover{
+    border-radius: 0px 15px 15px 0px;
+    background-color: #0f439b;
+    }

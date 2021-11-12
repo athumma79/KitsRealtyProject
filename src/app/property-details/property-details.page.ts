@@ -552,7 +552,6 @@ export class PropertyDetailsPage implements OnInit {
         property: this.property
       }
     };
-    console.log(this.property);
     API
       .put(this.apiName, '/properties', putInit)
       .then(response => {
@@ -600,7 +599,6 @@ export class PropertyDetailsPage implements OnInit {
         break;
     }
     this.property.status = updatedStatus;
-    console.log(this.property.status);
   }
   
   updateState(e) {
