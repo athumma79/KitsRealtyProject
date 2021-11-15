@@ -12,7 +12,7 @@
   </ion-item>
 
 
-  <div class='button-bar'>
+  <div class='button-bar' style='background-color: white'>
     <ion-button class='button' (click)='editProperty()'>Edit</ion-button>
     <ion-button class='button' type='submit' (click)='saveProperty(true)'>Save</ion-button>
   </div>
@@ -22,8 +22,6 @@
       <ion-label>Address: </ion-label>
       <ion-input required [(ngModel)]="property.address.address" readonly></ion-input>
     </ion-item>
-
-    <div class="col-6">
       <ion-item>
         <ion-label>City: </ion-label>
         <ion-input [(ngModel)]="property.address.city" readonly></ion-input>
@@ -32,11 +30,8 @@
         <ion-label>County: </ion-label>
         <ion-input [(ngModel)]="property.address.county" readonly></ion-input>
       </ion-item>
-    </div>
-
-    <div class="col-6">
       <ion-item>
-        <ion-label class='state-select'>State:</ion-label>
+        <ion-label position='fixed' class='state-select'>State:</ion-label>
         <ion-select disabled placeholder={{property.address.state}} (ionChange)="updateState($event)">
           <ion-select-option value="AL">Alabama</ion-select-option>
           <ion-select-option value="AK">Alaska</ion-select-option>
@@ -95,7 +90,6 @@
         <ion-label>Zipcode: </ion-label>
         <ion-input [(ngModel)]="property.address.zipcode" readonly></ion-input>
       </ion-item>
-    </div>
 
     <ion-item>
       <ion-label position='fixed' class='status-select'>Status:</ion-label>

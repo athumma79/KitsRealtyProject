@@ -67,7 +67,7 @@
               <ion-label>Year Built:</ion-label>
               <ion-text> {{property.essentials.yearBuilt}}</ion-text>
             </ion-item>
-            <ion-item button class='detailsButton' (click)="openPropertyDetails(i)">View Details</ion-item>
+            <ion-item button (click)="openPropertyDetails(i)" details="false"><ion-label class='detailsButton'>View Details</ion-label></ion-item>
           </ion-list>
           </div>
         </div>

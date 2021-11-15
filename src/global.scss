@@ -32,10 +32,26 @@ ion-fab-button{
     margin-right: 1em;
     margin-bottom: 1em;
     }
+
 ion-content{
-    --ion-background-color: #383a3e;
+    --ion-background-color: #f0f0f0;
     --ion-item-background: white;	
+    --ion-item-color: black;
 }    
 ion-list {
     margin: 0.5em;
     }
+
+ion-header{
+    background-color: black;
+    --ion-toolbar-background: black;
+    --ion-toolbar-color: white;	
+}
+
+ion-searchbar{
+    --background: rgb(185, 183, 183) !important;
+}
+
+:root{
+    --amplify-primary-color: #428cff;
+}

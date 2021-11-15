@@ -59,25 +59,28 @@ export class AppComponent {
     onAuthUIStateChange((authState, authData) => {
       this.authState = authState;
       this.user = authData as CognitoUserInterface;
-      let minRole = 0;
-      let minPrecedence = this.getPrecedence(this.user.signInUserSession.idToken.payload["cognito:groups"][0]);
-
-      for(let i = 0; i < this.user.signInUserSession.idToken.payload["cognito:groups"].length; i++){
-        let curPrec = this.getPrecedence(this.user.signInUserSession.idToken.payload["cognito:groups"][i])
-        if (curPrec < minPrecedence){
-            minRole = i;
-            minPrecedence = curPrec;
-        }
-      }
-      localStorage.setItem('role', this.user.signInUserSession.idToken.payload["cognito:groups"][minRole]);
-      
-      console.log(localStorage.getItem('role'));
-
       if (!this.ref['destroyed']) {
         this.ref.detectChanges();
       }
     })
   }
+  login(){
+    let minRole = 0;
+    let minPrecedence = this.getPrecedence(this.user.signInUserSession.idToken.payload["cognito:groups"][0]);
+
+    for(let i = 0; i < this.user.signInUserSession.idToken.payload["cognito:groups"].length; i++){
+      let curPrec = this.getPrecedence(this.user.signInUserSession.idToken.payload["cognito:groups"][i])
+      if (curPrec < minPrecedence){
+          minRole = i;
+          minPrecedence = curPrec;
+      }
+    }
+    localStorage.setItem('role', this.user.signInUserSession.idToken.payload["cognito:groups"][minRole]);
+    
+    console.log(localStorage.getItem('role'));
+  }
+
+
 
   getPrecedence(role){
     switch(role){
