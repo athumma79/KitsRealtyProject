@@ -2,5 +2,20 @@
   "authSelections": "identityPoolAndUserPool",
   "resourceName": "kitsrealtyproject240eb1985",
   "serviceType": "imported",
-  "region": "us-east-1"
+  "region": "us-east-1",
+  "usernameAttributes": [
+    "email"
+  ],
+  "requiredAttributes": [
+    "email"
+  ],
+  "passwordPolicyMinLength": 8,
+  "passwordPolicyCharacters": [
+    "Requires Lowercase",
+    "Requires Uppercase",
+    "Requires Numbers",
+    "Requires Symbols"
+  ],
+  "mfaConfiguration": "OFF",
+  "mfaTypes": []
 }

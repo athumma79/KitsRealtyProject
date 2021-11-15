@@ -9,7 +9,8 @@
       "UnauthRoleName": "amplify-kitsrealtyproject2-dev-155513-unauthRole",
       "StackName": "amplify-kitsrealtyproject2-dev-155513",
       "StackId": "arn:aws:cloudformation:us-east-1:189599045699:stack/amplify-kitsrealtyproject2-dev-155513/849fecc0-14cc-11ec-b81e-1269b8fe901f",
-      "AmplifyAppId": "dy2272uc2xngc"
+      "AmplifyAppId": "dy2272uc2xngc",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-kitsrealtyproject2-dev-155513-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "hosting": {
