@@ -285,7 +285,7 @@ app.post('/properties', function(req, res) {
     VALUES (${addQuotes(newProperty.address.address)}, ${addQuotes(newProperty.address.city)}, ${addQuotes(newProperty.address.county)}, ${addQuotes(newProperty.address.zipcode)}, ${addQuotes(newProperty.address.state)});`
 
     let essentialsQuery = `INSERT INTO PROPERTY_ESSENTIALS (PROPERTY_TYPE, NUM_BEDS, NUM_BATHS, LAND_FOOTAGE, PROPERTY_FOOTAGE, YEAR_BUILT, ZILLOW_LINK) 
-    VALUES ( ${addQuotes(newProperty.essentials.propertyType)}, ${addQuotes(newProperty.essentials.numBeds)}, ${addQuotes(newProperty.essentials.numBaths)}, ${addQuotes(newProperty.essentials.numBeds)}, ${addQuotes(newProperty.essentials.landFootage)}, ${addQuotes(newProperty.essentials.propertyFootage)}, ${addQuotes(newProperty.essentials.yearBuilt)}, ${addQuotes(newProperty.essentials.zillowLink)});`
+    VALUES ( ${addQuotes(newProperty.essentials.propertyType)}, ${addQuotes(newProperty.essentials.numBeds)}, ${addQuotes(newProperty.essentials.numBaths)}, ${addQuotes(newProperty.essentials.landFootage)}, ${addQuotes(newProperty.essentials.propertyFootage)}, ${addQuotes(newProperty.essentials.yearBuilt)}, ${addQuotes(newProperty.essentials.zillowLink)});`
 
     let pricesQuery = `INSERT INTO PROPERTY_PRICES (BUY_VALUE, EXPECTED_VALUE, SELL_VALUE, BIDDING_PRICE, MARKET_PRICE) 
     VALUES (${addQuotes(newProperty.prices.buyValue)}, ${addQuotes(newProperty.prices.expectedValue)}, ${addQuotes(newProperty.prices.sellValue)}, ${addQuotes(newProperty.prices.biddingPrice)}, ${addQuotes(newProperty.prices.marketPrice)});`
