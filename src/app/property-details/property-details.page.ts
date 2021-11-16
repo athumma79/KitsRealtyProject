@@ -334,6 +334,9 @@ export class PropertyDetailsPage implements OnInit {
         case 'date_of_sale':
           this.property.dateOfSale = newDate;
           break;
+        case 'date_of_auction':
+          this.property.auction.dateOfAuction = newDate;
+          break;
       }
     }
 
@@ -496,7 +499,7 @@ export class PropertyDetailsPage implements OnInit {
   }
 
   async deleteProperty() {
-    if (window.confirm("Are you sure that you want to DELETE this property? This will delete any files, assignments, or yrevenues connected to this property.")) {
+    if (window.confirm("Are you sure that you want to DELETE this property? This will delete any files, assignments, or revenues connected to this property.")) {
       const deleteInit = {
         body: {
           propertyId: this.property.propertyId

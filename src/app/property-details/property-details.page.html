@@ -162,9 +162,10 @@
       <ion-label>County assessment: </ion-label>
       <ion-input [(ngModel)]="property.countyAssessment" readonly></ion-input>
     </ion-item>
-    <ion-item details='true' href={{property.essentials.zillowLink}} target='_blank'>
-      Zillow Link
-      </ion-item>
+    <ion-item>
+      <ion-label>Zillow Link: </ion-label>
+      <ion-input (ngModel)="property.essentials.zillowLink" readonly><a href={{property.essentials.zillowLink}} target='_blank'>{{property.essentials.zillowLink}}</a></ion-input>
+    </ion-item>
     <ion-item >
       <ion-label position='top'>Notes: </ion-label>
       <ion-textarea       
@@ -209,11 +210,11 @@
           </ion-item>
           <ion-item>
             <ion-label>Date of Auction: </ion-label>
-            <ion-input [(ngModel)]="property.auction.dateOfAuction" readonly></ion-input>
+            <ion-input placeholder="MM/DD/YYYY" [ngModel]="getFormattedDate(property.auction.dateOfAuction)" (ngModelChange)="updateDate($event, 'date_of_auction')" readonly></ion-input>
           </ion-item>  
             <ion-item-divider><h3>Loan Info</h3></ion-item-divider>
           <ion-item>
-            <ion-label>Loan Amount: </ion-label>
+            <ion-label>Loan Amount: $</ion-label>
             <ion-input [(ngModel)]="property.loan.amount" readonly></ion-input>
           </ion-item>
           <ion-item>
