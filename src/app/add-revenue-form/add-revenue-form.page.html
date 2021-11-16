@@ -45,7 +45,7 @@
       </ion-item>
       <ion-item>
         <ion-label>Revenue Type: </ion-label>
-          <ion-select placeholder="Status" (ionChange)="updateInput('revenue_type', $event)">
+          <ion-select (ionChange)="updateInput('revenue_type', $event)">
             <ion-select-option value='Profit'>Profit</ion-select-option>
             <ion-select-option value='Expense'>Expense</ion-select-option>
           </ion-select>
