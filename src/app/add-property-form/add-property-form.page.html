@@ -156,10 +156,18 @@
     <ion-item>
       <ion-label>Zillow link: </ion-label>
         <ion-input (input)="updateInput('zillowLink', $event)"></ion-input>
-      </ion-item>
+    </ion-item>
+    <ion-item>
+      <ion-label>Market Price: $</ion-label>
+      <ion-input type="number" min="0" (input)="updateInput('marketPrice', $event)"></ion-input>
+    </ion-item>
     <ion-item>
       <ion-label>Buy Value: $</ion-label>
       <ion-input type="number" min="0" (input)="updateInput('buyValue', $event)"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Bidding Price: $</ion-label>
+      <ion-input type="number" min="0" (input)="updateInput('biddingPrice', $event)"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>Expected Value: $</ion-label>
@@ -168,14 +176,6 @@
     <ion-item>
       <ion-label>Sell Value: $</ion-label>
       <ion-input type="number" min="0" (input)="updateInput('sellValue', $event)"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Bidding Price: $</ion-label>
-      <ion-input type="number" min="0" (input)="updateInput('biddingPrice', $event)"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Market Price: $</ion-label>
-      <ion-input type="number" min="0" (input)="updateInput('marketPrice', $event)"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>Auction Location: </ion-label>
