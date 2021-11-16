@@ -20,7 +20,7 @@
   <ion-list>
       <ion-item>
         <ion-label>Entity: </ion-label>
-        <ion-select required placeholder='Type' (ngModel)='revenueTypeChoice' (ionChange)="updateInput('revenueTypeChoice', $event)">
+        <ion-select required (ngModel)='revenueTypeChoice' (ionChange)="updateInput('revenueTypeChoice', $event)">
           <ion-select-option value='property'>Property</ion-select-option>
           <ion-select-option value='contractor'>Contractor</ion-select-option>
           <ion-select-option value='general'>General</ion-select-option>
